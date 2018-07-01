@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Flyingcamera : MonoBehaviour {
+public class FlyingCamera : MonoBehaviour {
 
     
 
