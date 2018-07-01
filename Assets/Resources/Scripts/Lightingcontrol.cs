@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightingControl : MonoBehaviour
+public class Lightingcontrol : MonoBehaviour
 {
 
     //public GameObject light0, light1, light2, light3, light4, light5, light6, light7, light8;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayAnimation : MonoBehaviour {
+public class Playanimation : MonoBehaviour {
 
     public Animation anim;
     //public bool Play(PlayMode mode = PlayMode.StopSameLayer);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterToggle : MonoBehaviour
+public class Watertoggle : MonoBehaviour
 {
 
     public GameObject abovewater, belowwater, invertedsphere, simpleWater;
