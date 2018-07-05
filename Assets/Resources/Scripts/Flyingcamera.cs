@@ -280,14 +280,12 @@ public class Flyingcamera : MonoBehaviour {
         //rb.velocity = new Vector3(xSpeed * Time.deltaTime, rb.velocity.y, rb.velocity.z);
         //rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, ySpeed * Time.deltaTime);
 
-
-        rb.AddForce(transform.forward * 50 * ySpeed);
-
         //rb.MovePosition(Vector3.right * xSpeed * Time.deltaTime);
         //rb.MovePosition(Vector3.forward * ySpeed * Time.deltaTime);
 
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
         {
+            rb.AddForce(transform.forward * 50 * ySpeed);
             gravity = 0.0f;
             if (rb.velocity.y < 0) {
                 rb.velocity = new Vector3(0, 0, 0);
