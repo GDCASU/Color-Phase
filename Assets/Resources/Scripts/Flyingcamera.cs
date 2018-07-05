@@ -14,7 +14,10 @@ public class Flyingcamera : MonoBehaviour {
     public float verticalSpeed = 2.0F;
     public float speed = 2.0F;
     public float direction = 0.0F;
-    public GameObject Cam;
+
+    //An array of cameras to switch between
+    public GameObject[] cams = new GameObject[3]; //Third,overhead,side
+    public int activecam = 0;
     //public GameObject water1, water2;
 
     private float h = 0F;
@@ -100,6 +103,7 @@ public class Flyingcamera : MonoBehaviour {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         h = direction*90f; // 180f;
+
 	}
 	
 	// Update is called once per frame
@@ -301,8 +305,17 @@ public class Flyingcamera : MonoBehaviour {
         transform.Rotate(v, 0, 0);
 
         transform.Translate(Vector3.forward * -2.5f);
+        switch(activecam)
+        {
+            case 0: cams[0].transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y + 0.4f, transform.position.z), new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w));
+                break;
+            case 1: //cams[1].transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y + 0.4f, transform.position.z), new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w));
+                //edit to look down
+                break;
+            case 3:
+                break;
+        }
 
-        Cam.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y+0.4f, transform.position.z), new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w));
         //Cam.transform.Translate(Vector3.right * 0.3f);
 
         //water1.transform.SetPositionAndRotation(new Vector3(transform.position.x, 24f, transform.position.z), new Quaternion(0, 0, 0, 0));
@@ -317,13 +330,25 @@ public class Flyingcamera : MonoBehaviour {
 
 
     }
+    public void ChangeCamera()
+    {
+        cams[activecam].SetActive(false);
+        activecam++;
+        activecam = activecam % 3;
+        cams[activecam].SetActive(true);
+    }
+    public void ChangeCamera(int n)
+    {
+        cams[activecam].SetActive(false);
+        activecam = n;
+        cams[activecam].SetActive(true);
+    }
 
 
 
 
 
 
-    
 
 
 
