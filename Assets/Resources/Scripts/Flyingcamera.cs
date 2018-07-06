@@ -16,6 +16,7 @@ public class Flyingcamera : MonoBehaviour {
     public float direction = 0.0F;
 
     //An array of cameras to switch between
+    [Header("Cameras")]
     public GameObject[] cams = new GameObject[3]; //Third,overhead,side
     public int activecam = 0;
     //public GameObject water1, water2;
@@ -32,6 +33,7 @@ public class Flyingcamera : MonoBehaviour {
 
     private float tempNum = 0.0f;
 
+    [Header("Inputs")]
     public int forwardInput = 109; // w = 109
     public int backwardInput = 105; // s = 105
     public int rightInput = 90; // d = 90
@@ -330,18 +332,28 @@ public class Flyingcamera : MonoBehaviour {
 
 
     }
-    public void ChangeCamera()
+    public void ChangeCamera(int camNumber)
     {
-        cams[activecam].SetActive(false);
-        activecam++;
-        activecam = activecam % 3;
-        cams[activecam].SetActive(true);
-    }
-    public void ChangeCamera(int n)
-    {
-        cams[activecam].SetActive(false);
-        activecam = n;
-        cams[activecam].SetActive(true);
+        if (camNumber == -1)
+        {
+            if (cams[activecam] != null)
+                cams[activecam].SetActive(false);
+            activecam++;
+            activecam = activecam % cams.Length;
+            if (cams[activecam] != null)
+                cams[activecam].SetActive(true);
+            else
+                ChangeCamera(camNumber);
+        }
+        else
+        {
+            if (cams[camNumber] != null)
+            {
+                cams[activecam].SetActive(false);
+                activecam = camNumber;
+                cams[activecam].SetActive(true);
+            }
+        }
     }
 
 
