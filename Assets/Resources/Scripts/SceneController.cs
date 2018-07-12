@@ -38,7 +38,7 @@ public class SceneController : MonoBehaviour
 	public static void GoToScene(string targetSceneName)
 	{
 		// Should this funtion be made a coroutine so that the caller is forced to be aware of the asynchronicity?
-		SceneManager.LoadSceneAsync(targetSceneName);
+		SceneManager.LoadSceneAsync(targetSceneName, LoadSceneMode.Single);
 	}
 	
 	/// <summary>
