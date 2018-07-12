@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+	// currentScene populates in Start, previous and next need to be set manually
 	public string currentScene;
 	public string previousScene;
 	public string nextScene;
@@ -34,32 +31,35 @@ public class SceneController : MonoBehaviour
 		}
 	}
 
-	private void Update()
+	/// <summary>
+	/// Loads scene with specified name. Scene must be in build settings.
+	/// </summary>
+	/// <param name="targetSceneName"></param>
+	public static void GoToScene(string targetSceneName)
 	{
-		// for testing
-		if (Input.GetKeyDown(KeyCode.LeftAlt))
-		{
-			GoToScene("Old SampleScene");
-		}
+		// Should this funtion be made a coroutine so that the caller is forced to be aware of the asynchronicity?
+		SceneManager.LoadSceneAsync(targetSceneName);
 	}
-
+	
+	/// <summary>
+	/// Loads current scene
+	/// </summary>
 	public void RestartScene()
 	{
 		GoToScene(currentScene);
 	}
 
-	// Should this be made a coroutine so that the caller is forced to be aware?
-	// You can only load/go to a scene if it is in the build settings
-	public static void GoToScene(string targetSceneName)
-	{
-		SceneManager.LoadSceneAsync(targetSceneName);
-	}
-
+	/// <summary>
+	/// Loads scene with name set in nextScene
+	/// </summary>
 	public void GoToNextScene()
 	{
 		GoToScene(nextScene);
 	}
 
+	/// <summary>
+	/// Loads scene with name set in nextScene
+	/// </summary>
 	public void GoToPreviousScene()
 	{
 		GoToScene(previousScene);
