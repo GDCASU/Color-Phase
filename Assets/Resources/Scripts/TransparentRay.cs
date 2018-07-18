@@ -23,9 +23,10 @@ public class TransparentRay : MonoBehaviour {
         
         if (resetCounter == 0)
         {
-            
+            //zooming
+            transform.Translate(transform.forward * 10);
+
             try
-            //while (transparentObjects.Peek() != null)
             {
                 while (transparentObjects.Peek() != null)
                 {
@@ -39,6 +40,22 @@ public class TransparentRay : MonoBehaviour {
 
             }
         }
+        //zooming
+        for (int x = 0; x < players.Length; x++)
+        {
+            bool onScreen = false;
+            while (!onScreen)
+            {
+                Vector3 screenPoint = GetComponent<Camera>().WorldToViewportPoint(players[x].transform.position);
+                onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
+                if (!onScreen)
+                {
+                    transform.Translate(transform.forward * -1);
+                }
+                
+            }
+        }
+        //transparent raycasting
         for (int x = 0; x < players.Length; x++)
         {
             bool keepGoing= true;
