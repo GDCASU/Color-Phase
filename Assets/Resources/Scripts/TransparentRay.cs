@@ -41,9 +41,11 @@ public class TransparentRay : MonoBehaviour {
             }
         }
         //zooming
-        
+        float xSum=0, zSum=0;
         for (int x = 0; x < players.Length; x++)
         {
+            xSum+=players[x].transform.position.x;
+            zSum += players[x].transform.position.z;
             bool onScreen = false;
             int s = 0;
             while (!onScreen)
@@ -62,7 +64,9 @@ public class TransparentRay : MonoBehaviour {
                 }
             }
         }
-        
+        transform.position=new Vector3(xSum / players.Length, transform.position.y, zSum / players.Length);
+
+
         //transparent raycasting
         for (int x = 0; x < players.Length; x++)
         {
