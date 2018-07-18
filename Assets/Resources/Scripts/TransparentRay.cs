@@ -24,7 +24,7 @@ public class TransparentRay : MonoBehaviour {
         if (resetCounter == 0)
         {
             //zooming
-            transform.Translate(transform.forward * 10);
+            transform.Translate(Vector3.forward * 10);
 
             try
             {
@@ -41,20 +41,28 @@ public class TransparentRay : MonoBehaviour {
             }
         }
         //zooming
+        
         for (int x = 0; x < players.Length; x++)
         {
             bool onScreen = false;
+            int s = 0;
             while (!onScreen)
             {
                 Vector3 screenPoint = GetComponent<Camera>().WorldToViewportPoint(players[x].transform.position);
-                onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
+                onScreen = screenPoint.z > 0 && screenPoint.x > .05 && screenPoint.x < .95 && screenPoint.y > .05 && screenPoint.y < .95;
                 if (!onScreen)
                 {
-                    transform.Translate(transform.forward * -1);
+                    transform.Translate(Vector3.back);
                 }
-                
+                s++;
+                if (s > 10)
+                {
+                    Debug.Log("overflowing");
+                    break;
+                }
             }
         }
+        
         //transparent raycasting
         for (int x = 0; x < players.Length; x++)
         {
