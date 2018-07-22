@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class TransparentRay : MonoBehaviour {
 
+    /* To start the testing, turn the red player around and touch the blue thing in the starting room.  This will trigger the overhead camera with this script.
+     * The script currently works as desired, zooming in and out so everyone can be seen and centering on the middle of the players.
+     * The problem is that my code only works if the camera is directly overhead.
+     * The code should work for any angle and work as before except at an angle
+     * Thank you for your help and feel free to ask me any questions or to share work
+     * Sincerely, Kevin
+     */
 
     private Stack<transparentObjectClass> transparentObjects=new Stack<transparentObjectClass>();
     public Material tranparent;
@@ -20,10 +27,10 @@ public class TransparentRay : MonoBehaviour {
     //Else add a seperate tag for the ground
 	void Update () {
         RaycastHit hit;
-        
+        //resets things to retry to make things better
         if (resetCounter == 0)
         {
-            //zooming
+            //zooming- zooms in incase the players are close together
             transform.Translate(Vector3.forward * 10);
 
             try
@@ -54,7 +61,7 @@ public class TransparentRay : MonoBehaviour {
                 onScreen = screenPoint.z > 0 && screenPoint.x > .05 && screenPoint.x < .95 && screenPoint.y > .05 && screenPoint.y < .95;
                 if (!onScreen)
                 {
-                    transform.Translate(Vector3.back);
+                    transform.Translate(Vector3.back); //if everyone is not on screen, ove back a bit and try again
                 }
                 s++;
                 if (s > 10)
@@ -64,6 +71,7 @@ public class TransparentRay : MonoBehaviour {
                 }
             }
         }
+        //calculates the average player position and centers the camera on it
         transform.position=new Vector3(xSum / players.Length, transform.position.y, zSum / players.Length);
 
 
