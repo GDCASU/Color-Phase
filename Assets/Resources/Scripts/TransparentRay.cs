@@ -13,7 +13,7 @@ public class TransparentRay : MonoBehaviour {
      */
 
     private Stack<transparentObjectClass> transparentObjects=new Stack<transparentObjectClass>();
-    public Material tranparent;
+    public Material[] tranparent;
     public int resetCounter=0;
     public GameObject[] players;
 
@@ -38,6 +38,34 @@ public class TransparentRay : MonoBehaviour {
                 while (transparentObjects.Peek() != null)
                 {
                     transparentObjectClass reset = transparentObjects.Pop();
+                    reset.transparentObject.layer = reset.originalLayer;
+                    //does not work
+                    for (int x = 0; x < players.Length; x++)
+                    {
+                        bool keepGoing = true;
+                        while (keepGoing)
+                        {
+                            if (Physics.Raycast(transform.position, /*transform.forward*/ players[x].transform.position - transform.position, out hit, 100, layerMask))
+                            {
+                                //Debug.DrawRay(transform.position, transform.TransformDirection(transform.forward/*players[x].transform.position-transform.position*/) * hit.distance, Color.yellow);
+                                if (!hit.collider.tag.StartsWith("Player"))
+                                {
+                                    GameObject G = hit.collider.gameObject;
+                                    transparentObjects.Push(new transparentObjectClass(G, G.GetComponent<Renderer>().material, G.layer));
+                                    if (!hit.collider.tag.StartsWith("PermamentWall"))
+                                    {
+                                        G.layer = 2;
+                                    }
+                                    else
+                                    {
+                                        G.layer = 17;
+                                    }
+                                }
+                                else keepGoing = false;
+                            }
+                            else keepGoing = false;
+                        }
+                    }
                     reset.transparentObject.GetComponent<Renderer>().material = reset.originalMaterial;
                     reset.transparentObject.layer = reset.originalLayer;
                 }
@@ -90,7 +118,8 @@ public class TransparentRay : MonoBehaviour {
                         transparentObjects.Push(new transparentObjectClass(G, G.GetComponent<Renderer>().material, G.layer));
                         if (!hit.collider.tag.StartsWith("PermamentWall"))
                         {
-                            G.GetComponent<Renderer>().material = tranparent;
+                            //G.GetComponent<Renderer>().material = tranparent;
+                            Fade(G.GetComponent<Renderer>());
                             G.layer = 2;
                         }
                         else
@@ -106,6 +135,16 @@ public class TransparentRay : MonoBehaviour {
         resetCounter= (resetCounter+1)%20;
 
     }
+
+    IEnumerator Fade(Renderer r)
+    {
+        for (int f = 0; f < tranparent.Length; f++)
+        {
+            r.material = tranparent[f];
+            yield return new WaitForSeconds(.1f);
+        }
+    }
+
     private class transparentObjectClass
     {
         public GameObject transparentObject;
