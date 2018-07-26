@@ -10,22 +10,17 @@ public class ChangeCameraPerspective : MonoBehaviour {
 
     public void OnTriggerEnter(Collider other)
     {
-        if (addCamera)
+        if (other.tag.StartsWith("Player"))
         {
-            if (other.tag.StartsWith("Player"))
+            if (addCamera)
             {
-                other.GetComponent<Flyingcamera>().cams[2]=cam;
+                other.GetComponent<Flyingcamera>().cams[2] = cam;
             }
-        }
-        if (changeCamera)
-        {
-            //Debug.Log(other);
-            if (other.tag.StartsWith("Player"))
+            if (changeCamera)
+            {
                 other.GetComponent<Flyingcamera>().ChangeCamera(changeTo);
-        }
-        if (removeCamera)
-        {
-            if (other.tag.StartsWith("Player"))
+            }
+            if (removeCamera)
             {
                 other.GetComponent<Flyingcamera>().cams[2] = null;
                 if (other.GetComponent<Flyingcamera>().activecam == 2)
