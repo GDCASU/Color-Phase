@@ -33,19 +33,13 @@ public class TransparentRay : MonoBehaviour {
             //zooming- zooms in incase the players are close together
             transform.Translate(Vector3.forward * 10);
 
-            //try
-            //{
-                while (transparentObjects.Peek() != null)
-                {
-                    transparentObjectClass reset = transparentObjects.Pop();
-                    reset.transparentObject.layer = reset.originalLayer;
-                    reset.transparentObject.GetComponent<Renderer>().material = reset.originalMaterial;
-                }
-            //}
-            //catch
-            //{
 
-            //}
+            while (transparentObjects.Count != 0)
+            {
+                transparentObjectClass reset = transparentObjects.Pop();
+                reset.transparentObject.layer = reset.originalLayer;
+                reset.transparentObject.GetComponent<Renderer>().material = reset.originalMaterial;
+            }
         }
         //zooming
         float xSum=0, zSum=0;
