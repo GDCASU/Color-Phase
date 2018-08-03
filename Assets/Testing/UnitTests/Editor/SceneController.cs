@@ -12,6 +12,9 @@ namespace Testing.UnitTests.Editor
 		public void SceneControllerSimplePasses() {
 			// Use the Assert class to test conditions.
 			Assert.IsTrue(true);
+			var go = new GameObject("Test_Object");
+			var sc = go.AddComponent<Resources.Scripts.SceneController>();
+			
 		}
 
 		// A UnityTest behaves like a coroutine in PlayMode
