@@ -35,33 +35,32 @@ public class SceneController : MonoBehaviour
 	/// Loads scene with specified name. Scene must be in build settings.
 	/// </summary>
 	/// <param name="targetSceneName"></param>
-	public static void GoToScene(string targetSceneName)
+	public static AsyncOperation GoToScene(string targetSceneName)
 	{
-		// Should this funtion be made a coroutine so that the caller is forced to be aware of the asynchronicity?
-		SceneManager.LoadSceneAsync(targetSceneName, LoadSceneMode.Single);
+		return SceneManager.LoadSceneAsync(targetSceneName, LoadSceneMode.Single);
 	}
 	
 	/// <summary>
 	/// Loads current scene
 	/// </summary>
-	public void RestartScene()
+	public AsyncOperation RestartScene()
 	{
-		GoToScene(currentScene);
+		return GoToScene(currentScene);
 	}
 
 	/// <summary>
 	/// Loads scene with name set in nextScene
 	/// </summary>
-	public void GoToNextScene()
+	public AsyncOperation GoToNextScene()
 	{
-		GoToScene(nextScene);
+		return GoToScene(nextScene);
 	}
 
 	/// <summary>
 	/// Loads scene with name set in nextScene
 	/// </summary>
-	public void GoToPreviousScene()
+	public AsyncOperation GoToPreviousScene()
 	{
-		GoToScene(previousScene);
+		return GoToScene(previousScene);
 	}
 }
