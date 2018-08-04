@@ -35,7 +35,7 @@ public class SceneController : MonoBehaviour
 	/// Loads scene with specified name. Scene must be in build settings.
 	/// </summary>
 	/// <param name="targetSceneName"></param>
-	public static AsyncOperation GoToScene(string targetSceneName)
+	public AsyncOperation GoToScene(string targetSceneName)
 	{
 		return SceneManager.LoadSceneAsync(targetSceneName, LoadSceneMode.Single);
 	}
