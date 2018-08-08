@@ -23,7 +23,7 @@ public class SceneController : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Loads scene with specified name. Target scene must be in build settings.
+	/// Loads scene with specified name. Scenes must be in build settings.
 	/// </summary>
 	public AsyncOperation GoToScene(string targetSceneName)
 	{

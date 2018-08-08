@@ -19,7 +19,7 @@ public class SceneChanger : MonoBehaviour
 	{
 		return sceneController.GoToScene(targetScene);
 	}
-	
+
 	private void TryToPopulateController()
 	{
 		// Tries progressively slower methods to find sceneController;
@@ -28,11 +28,9 @@ public class SceneChanger : MonoBehaviour
 			var obj = GameObject.FindGameObjectWithTag("SceneController");
 			if (obj == null)
 			{
-				print("~~did not find sceneController by tag");
 				obj = GameObject.Find("SceneController");
 				if (obj == null)
 				{
-					print("~~did not find sceneController by name");
 					sceneController = FindObjectOfType<SceneController>();
 					return;
 				}
