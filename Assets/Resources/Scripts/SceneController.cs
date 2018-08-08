@@ -4,10 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-	// currentScene populates in Start, previous and next need to be set manually
+	// This field updates each time a new scene is loaded
 	public string currentScene;
-	public string previousScene;
-	public string nextScene;
+
+	private void Awake()
+	{
+		DontDestroyOnLoad(gameObject);
+	}
 
 	private void Start () 
 	{
@@ -16,25 +19,12 @@ public class SceneController : MonoBehaviour
 		PrintSceneInfo();
 
 		currentScene = SceneManager.GetActiveScene().name;
-		
-		// Not sure whether LevelController should be persistent or not
-		// If it is persistent, events can be used to make sure that currentScene stays accurate
-	}
-
-	private static void PrintSceneInfo()
-	{
-		print("~~Scene count: " + SceneManager.sceneCount);
-		print("~~Scene count in build settings: " + SceneManager.sceneCountInBuildSettings);
-		foreach (var scene in EditorBuildSettings.scenes)
-		{
-			print("~~Scene path: " + scene.path);
-		}
+		SceneManager.sceneLoaded += OnSceneLoaded;
 	}
 
 	/// <summary>
-	/// Loads scene with specified name. Scene must be in build settings.
+	/// Loads scene with specified name. Target scene must be in build settings.
 	/// </summary>
-	/// <param name="targetSceneName"></param>
 	public AsyncOperation GoToScene(string targetSceneName)
 	{
 		return SceneManager.LoadSceneAsync(targetSceneName, LoadSceneMode.Single);
@@ -47,20 +37,19 @@ public class SceneController : MonoBehaviour
 	{
 		return GoToScene(currentScene);
 	}
-
-	/// <summary>
-	/// Loads scene with name set in nextScene
-	/// </summary>
-	public AsyncOperation GoToNextScene()
+	
+	private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
 	{
-		return GoToScene(nextScene);
+		currentScene = SceneManager.GetActiveScene().name;
 	}
-
-	/// <summary>
-	/// Loads scene with name set in nextScene
-	/// </summary>
-	public AsyncOperation GoToPreviousScene()
+	
+	private static void PrintSceneInfo()
 	{
-		return GoToScene(previousScene);
+		print("~~Scene count: " + SceneManager.sceneCount);
+		print("~~Scene count in build settings: " + SceneManager.sceneCountInBuildSettings);
+		foreach (var scene in EditorBuildSettings.scenes)
+		{
+			print("~~Scene path: " + scene.path);
+		}
 	}
 }
