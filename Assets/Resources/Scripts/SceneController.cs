@@ -12,7 +12,7 @@ public class SceneController : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 	}
 
-	private void Start () 
+	private void Start() 
 	{
 		// If we had a separate folder for build scenes, adding scenes to the build
 		// settings could be automated

@@ -7,12 +7,9 @@ public class SceneChanger : MonoBehaviour
 	// sceneController will find an existing SceneController if you don't supply one
 	public SceneController sceneController;
 
-	private void Start()
+	private void Awake()
 	{
-		if (!sceneController)
-		{
-			sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();	
-		}
+		TryToPopulateController();
 	}
 
 	/// <summary>
@@ -21,5 +18,27 @@ public class SceneChanger : MonoBehaviour
 	public AsyncOperation ChangeScene()
 	{
 		return sceneController.GoToScene(targetScene);
+	}
+	
+	private void TryToPopulateController()
+	{
+		// Tries progressively slower methods to find sceneController;
+		if (sceneController == null)
+		{
+			var obj = GameObject.FindGameObjectWithTag("SceneController");
+			if (obj == null)
+			{
+				print("~~did not find sceneController by tag");
+				obj = GameObject.Find("SceneController");
+				if (obj == null)
+				{
+					print("~~did not find sceneController by name");
+					sceneController = FindObjectOfType<SceneController>();
+					return;
+				}
+			}
+
+			sceneController = obj.GetComponent<SceneController>();
+		}
 	}
 }
