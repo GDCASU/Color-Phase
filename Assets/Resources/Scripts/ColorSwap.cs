@@ -13,9 +13,7 @@ public class ColorSwap : MonoBehaviour {
     public Material[] blueMaterials;
     public Material[] yellowMaterials;
 
-    public CustomInput control;
-
-    public int colorChangeInput = 134; // left mouse input = 134
+    public KeyCode colorChangeInput = KeyCode.Mouse0; // left mouse input = 134
 
     private int colorChangeInputToggle = 0;
 
@@ -25,14 +23,14 @@ public class ColorSwap : MonoBehaviour {
     void Start () {
         // swap materials for color
         // swap lights for color
-        setColor(currentColor);
+        SetColor(currentColor);
 
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        if (control.GetInputf(colorChangeInput) == 1f)
+        if (Input.GetKey(colorChangeInput))
         {
             if (colorChangeInputToggle == 0)
             {
@@ -42,7 +40,7 @@ public class ColorSwap : MonoBehaviour {
                 {
                     currentColor = 0;
                 }
-                setColor(currentColor);
+                SetColor(currentColor);
                 colorChangeInputToggle = 1;
             }
         } else
@@ -52,12 +50,7 @@ public class ColorSwap : MonoBehaviour {
 		
 	}
 
-
-
-
-
-
-    public void setColor(int color)
+    public void SetColor(int color)
     {
 
         switch (color)

@@ -15,7 +15,7 @@ public class ColorChangeTrigger : MonoBehaviour {
         {
             if (other.GetComponent<ColorSwap>().currentColor != colorValue)
             {
-                other.GetComponent<ColorSwap>().setColor(colorValue);
+                other.GetComponent<ColorSwap>().SetColor(colorValue);
                 other.GetComponent<ColorSwap>().currentColor = colorValue;
                 if (destroyOnContact)
                 {

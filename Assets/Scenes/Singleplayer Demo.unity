@@ -4282,7 +4282,7 @@ Prefab:
         type: 2}
       propertyPath: control
       value: 
-      objectReference: {fileID: 1002178280}
+      objectReference: {fileID: 0}
     - target: {fileID: 114570201349825478, guid: 136d7d7a09c069d47bce0a0b481ae98f,
         type: 2}
       propertyPath: Cam
@@ -4297,7 +4297,7 @@ Prefab:
         type: 2}
       propertyPath: control
       value: 
-      objectReference: {fileID: 1002178280}
+      objectReference: {fileID: 0}
     - target: {fileID: 114555592764724260, guid: 136d7d7a09c069d47bce0a0b481ae98f,
         type: 2}
       propertyPath: colorChangeInput
@@ -7594,7 +7594,7 @@ Transform:
   - {fileID: 1123531894}
   - {fileID: 162543596}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &397166656
 GameObject:
@@ -14045,7 +14045,7 @@ Transform:
   - {fileID: 1625205912}
   - {fileID: 884736370}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &793395634 stripped
 Transform:
@@ -17976,54 +17976,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4633116941220910, guid: 5f2741af9c785a145813d7f29a102895,
     type: 2}
   m_PrefabInternal: {fileID: 42058712}
---- !u!1 &1002178279
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1002178281}
-  - component: {fileID: 1002178280}
-  - component: {fileID: 1002178282}
-  m_Layer: 0
-  m_Name: GameMaster
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1002178280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1002178279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae1cc9e369a993548ba33ca752460281, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1002178281
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1002178279}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.2541494, y: 2.5049877, z: -3.1410153}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &1002178282
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1002178279}
-  m_Enabled: 1
 --- !u!1001 &1003825328
 Prefab:
   m_ObjectHideFlags: 0
@@ -18545,7 +18497,7 @@ Prefab:
         type: 2}
       propertyPath: control
       value: 
-      objectReference: {fileID: 1002178280}
+      objectReference: {fileID: 0}
     - target: {fileID: 114898057032863776, guid: 9d490a65e71b1144a83381737f1f6438,
         type: 2}
       propertyPath: Cam
@@ -18560,7 +18512,7 @@ Prefab:
         type: 2}
       propertyPath: control
       value: 
-      objectReference: {fileID: 1002178280}
+      objectReference: {fileID: 0}
     - target: {fileID: 114770889072979504, guid: 9d490a65e71b1144a83381737f1f6438,
         type: 2}
       propertyPath: colorChangeInput
@@ -18604,6 +18556,41 @@ Prefab:
     - target: {fileID: 114898057032863776, guid: 9d490a65e71b1144a83381737f1f6438,
         type: 2}
       propertyPath: leftCamInput
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 54493684210109354, guid: 9d490a65e71b1144a83381737f1f6438,
+        type: 2}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 114898057032863776, guid: 9d490a65e71b1144a83381737f1f6438,
+        type: 2}
+      propertyPath: speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 54493684210109354, guid: 9d490a65e71b1144a83381737f1f6438,
+        type: 2}
+      propertyPath: m_Drag
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553648586413580, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.7069834
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553648586413580, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553648586413580, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553648586413580, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.7072302
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553648586413580, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -26837,7 +26824,7 @@ Prefab:
         type: 2}
       propertyPath: control
       value: 
-      objectReference: {fileID: 1002178280}
+      objectReference: {fileID: 0}
     - target: {fileID: 114625259222462240, guid: b81a2bd2d1d37ee4f973ef68caf363f5,
         type: 2}
       propertyPath: Cam
@@ -26852,7 +26839,7 @@ Prefab:
         type: 2}
       propertyPath: control
       value: 
-      objectReference: {fileID: 1002178280}
+      objectReference: {fileID: 0}
     - target: {fileID: 114946194142706428, guid: b81a2bd2d1d37ee4f973ef68caf363f5,
         type: 2}
       propertyPath: colorChangeInput
@@ -29106,7 +29093,7 @@ Transform:
   - {fileID: 1553771894}
   - {fileID: 422011616}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1553771889
 GameObject:
@@ -32323,7 +32310,7 @@ Prefab:
         type: 2}
       propertyPath: control
       value: 
-      objectReference: {fileID: 1002178280}
+      objectReference: {fileID: 0}
     - target: {fileID: 114730902593612144, guid: 24912b56661b18344bb2bfead861dd35,
         type: 2}
       propertyPath: Cam
@@ -32338,7 +32325,7 @@ Prefab:
         type: 2}
       propertyPath: control
       value: 
-      objectReference: {fileID: 1002178280}
+      objectReference: {fileID: 0}
     - target: {fileID: 114932680164586026, guid: 24912b56661b18344bb2bfead861dd35,
         type: 2}
       propertyPath: colorChangeInput
@@ -34943,7 +34930,7 @@ Transform:
   - {fileID: 623428254}
   - {fileID: 127681244}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1906383536
 GameObject:
