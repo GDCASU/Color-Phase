@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationStateDemo : MonoBehaviour {
-
+public class AnimationStateDemo : MonoBehaviour
+{
     // Blender Character To Unity part 1 of 2: https://www.youtube.com/watch?v=h8oI0n5kAIg
 
     // Bug Note: Some of the animations appear to have a slight delay in the transitions, it might be a problem with the animator
@@ -17,8 +17,9 @@ public class AnimationStateDemo : MonoBehaviour {
     private int actionGrappleFly;
     private int actionSwing;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         anim = gameObject.GetComponentInChildren<Animator>();
         animationState = 0;
         jumpCounter = 0;
@@ -29,10 +30,9 @@ public class AnimationStateDemo : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
-
+    void Update()
+    {
         animationState = 0; // always default to idle
-
 
         // Note: Run and Walk animations may need to be programmed based on the velocity of the characters as well as detecting if the character is on solid ground
         if (Input.GetKey("up")) // Demo Running animation
@@ -45,17 +45,11 @@ public class AnimationStateDemo : MonoBehaviour {
             animationState = 1;
         }
 
-
-
-
-
-
         if (Input.GetKey("space")) // Demo Jump animation
         {
             animationState = 4;
             jumpCounter = 1; //starts jump counter
         }
-
 
         // Similar to the jump animation this animation is for when the player walks off of an edge and falls
         if (Input.GetKey("left")) // Demo Falling animation
@@ -63,7 +57,6 @@ public class AnimationStateDemo : MonoBehaviour {
             animationState = 5;
             jumpCounter = 60; //starts jump counter
         }
-
 
         // For the jump and fall animations it may be better to calculate the animation counter/state transitions using the characters velocity
         if (jumpCounter > 0)
@@ -82,12 +75,6 @@ public class AnimationStateDemo : MonoBehaviour {
                 jumpCounter = 0; // back to idle animation
             }
         }
-
-
-
-
-
-
 
         if (Input.GetKey("1")) // Demo waving arm animation
         {
@@ -140,7 +127,6 @@ public class AnimationStateDemo : MonoBehaviour {
             animationState = 21;
         }
 
-
         // For damageFlying animations 19-20 this may need to calculate environment collision for the character to stop.
         if (damageFlyingCounter > 0)
         {
@@ -154,13 +140,6 @@ public class AnimationStateDemo : MonoBehaviour {
                 damageFlyingCounter = 0; // back to idle animation
             }
         }
-
-
-
-
-
-
-
 
         if (Input.GetKey("q")) // Demo action punch
         {
@@ -187,9 +166,6 @@ public class AnimationStateDemo : MonoBehaviour {
             }
         }
 
-
-
-
         if (Input.GetKey("e")) // Demo action punch + Fly animation
         {
             animationState = 10;
@@ -209,13 +185,6 @@ public class AnimationStateDemo : MonoBehaviour {
                 actionGrappleFly = 0; // back to idle animation
             }
         }
-
-
-
-
-
-
-
 
         if (Input.GetKey("a")) // Demo action punch angled without swing animation
         {
@@ -243,12 +212,6 @@ public class AnimationStateDemo : MonoBehaviour {
             }
         }
 
-
-
-
-
-
-
         // As of 8/22/2018
         // There are animation states ranging from -1 to 21
         if (animationState < -1)
@@ -261,9 +224,5 @@ public class AnimationStateDemo : MonoBehaviour {
         }
 
         anim.SetInteger("AnimPar", animationState); // this sets animation states and will transition based on the state chart
-
-
-
-
-	}
+    }
 }

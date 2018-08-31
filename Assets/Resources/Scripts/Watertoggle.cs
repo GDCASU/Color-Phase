@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Watertoggle : MonoBehaviour
 {
-
     public GameObject abovewater, belowwater, invertedsphere, simpleWater;
     public int waterQuality = 1;
     public int gravity = 0;
@@ -12,11 +11,9 @@ public class Watertoggle : MonoBehaviour
     private int mode = 0;
     private float waterHeight;
 
-
     // Use this for initialization
     void Start()
     {
-
         //RenderSettings.fog = true;
         //RenderSettings.fogDensity = 0.01f;
 
@@ -44,8 +41,6 @@ public class Watertoggle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         if (transform.position.y < waterHeight)
         {
             GetComponent<Rigidbody>().velocity.Set(0, 2, 0);
@@ -56,7 +51,6 @@ public class Watertoggle : MonoBehaviour
             if (gravity == 1) GetComponent<Rigidbody>().useGravity = true;
             //GetComponent<Rigidbody>().setA
         }
-
 
         //transform.position.x
         if (waterQuality == 1)
@@ -72,8 +66,6 @@ public class Watertoggle : MonoBehaviour
                 //RenderSettings.fog = true;
                 //RenderSettings.fogDensity = 0.1f;
                 //RenderSettings.fogColor = new Color(43f / 255f, 52f / 255f, 63f / 255f);
-
-
 
                 //GetComponent<Rigidbody>().velocity.Set(0, 2, 0);
             }
@@ -94,8 +86,6 @@ public class Watertoggle : MonoBehaviour
             }
         }
         else
-
-
         {
             /*
             if (transform.position.y < 24.14 && mode == 0)
@@ -118,7 +108,5 @@ public class Watertoggle : MonoBehaviour
             }
             */
         }
-
-
     }
 }

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColorBarrier : MonoBehaviour {
-
+public class ColorBarrier : MonoBehaviour
+{
     public int barrierColor = 0;
 
     // Needs to do a search for player Layers
@@ -23,16 +23,19 @@ public class ColorBarrier : MonoBehaviour {
     public Material yellowMaterial;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         setBarrierColor(barrierColor);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         if (player1Color.currentColor == barrierColor)
         {
             Physics.IgnoreCollision(player1.GetComponent<Collider>(), GetComponent<Collider>(), true);
-        } else
+        }
+        else
         {
             Physics.IgnoreCollision(player1.GetComponent<Collider>(), GetComponent<Collider>(), false);
         }
@@ -65,13 +68,8 @@ public class ColorBarrier : MonoBehaviour {
         }
     }
 
-
-
-
-
     private void setBarrierColor(int color)
     {
-
         switch (color)
         {
             case 0:
@@ -87,10 +85,5 @@ public class ColorBarrier : MonoBehaviour {
                 GetComponent<MeshRenderer>().material = yellowMaterial;
                 break;
         }
-
     }
-
-
-
-
 }

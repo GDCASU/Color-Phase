@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonToggle : MonoBehaviour {
-
+public class ButtonToggle : MonoBehaviour
+{
     public ColorSwap playerColor1;
     public ColorSwap playerColor2;
     public ColorSwap playerColor3;
@@ -73,7 +73,6 @@ public class ButtonToggle : MonoBehaviour {
     // Used for the hold down button trigger collision
     public void OnTriggerStay(Collider other)
     {
-
         if (holdState == true)
         {
             if (other.gameObject.tag == "Player 1")
@@ -129,21 +128,19 @@ public class ButtonToggle : MonoBehaviour {
                 }
             }
         }
-
     }
 
 
     private void Update()
     {
-
         // Animate and detect state of the hold down buttons
         if (holdState == true)
         {
-
             if (offset > 0.60f)
             {
                 state = 1;
-            } else
+            }
+            else
             {
                 state = 0;
             }
@@ -158,12 +155,11 @@ public class ButtonToggle : MonoBehaviour {
 
             if (onButton > 0)
             {
-                onButton = onButton -1;
+                onButton = onButton - 1;
             }
 
             transform.position = new Vector3(startPosition.x, startPosition.y, startPosition.z);
             transform.Translate(Vector3.back * offset);
-
         }
     }
 
@@ -178,17 +174,14 @@ public class ButtonToggle : MonoBehaviour {
 
     private void setMaterialState(int state)
     {
-
         switch (state)
         {
             case 0:
-                this.GetComponent<MeshRenderer>().material = off;
+                GetComponent<MeshRenderer>().material = off;
                 break;
             case 1:
-                this.GetComponent<MeshRenderer>().material = on;
+                GetComponent<MeshRenderer>().material = on;
                 break;
         }
     }
-
-
 }

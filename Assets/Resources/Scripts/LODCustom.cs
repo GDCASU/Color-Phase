@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LODCustom : MonoBehaviour {
-
+public class LODCustom : MonoBehaviour
+{
     public GameObject cam;
     public GameObject[] objects;
     public float[] range;
@@ -14,18 +14,20 @@ public class LODCustom : MonoBehaviour {
     private int LODState = -1;
     private float distance = 0f;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         for (int i = 0; i < objects.Length; i++)
         {
             objects[i].SetActive(false);
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
 
-        
+    // Update is called once per frame
+    void Update()
+    {
+
+
         // Get the distance from the camera and the object
         //distance = getDistance(this.transform, cam.transform);
 
@@ -78,20 +80,15 @@ public class LODCustom : MonoBehaviour {
             toggle = -1;
         }
         */
-    
-
-	}
+    }
 
 
     float getDistance(Transform obj1, Transform obj2)
     {
-
         float numX = (obj1.position.x - obj2.position.x);
         float numY = (obj1.position.y - obj2.position.y);
         float numZ = (obj1.position.z - obj2.position.z);
 
         return Mathf.Sqrt(numX * numX + numY * numY + numZ * numZ);
     }
-
-
 }

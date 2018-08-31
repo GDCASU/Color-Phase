@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GateOpen : MonoBehaviour {
-
+public class GateOpen : MonoBehaviour
+{
     public ButtonToggle[] buttonToggleScript;
     public float range = 3.5f;
     public float speed = 0.1f;
@@ -14,8 +14,9 @@ public class GateOpen : MonoBehaviour {
     private float gateOffset = 0f;
     private int count;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         startPosition = transform.position;
         if (startOpen == true)
         {
@@ -24,9 +25,11 @@ public class GateOpen : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
-        if (invertState == false) {
+        if (invertState == false)
+        {
             count = 0;
             for (int i = 0; i < buttonToggleScript.Length; i++)
             {
@@ -67,9 +70,8 @@ public class GateOpen : MonoBehaviour {
                     }
                 }
             }
-
-            
-        } else
+        }
+        else
         {
             count = 0;
             for (int i = 0; i < buttonToggleScript.Length; i++)
@@ -93,7 +95,8 @@ public class GateOpen : MonoBehaviour {
                         gateOffset = gateOffset + speed;
                     }
                 }
-            } else
+            }
+            else
             {
                 if (count > 0)
                 {

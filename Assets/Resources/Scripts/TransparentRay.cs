@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TransparentRay : MonoBehaviour {
-
+public class TransparentRay : MonoBehaviour
+{
     /* To start the testing, turn the red player around and touch the blue thing in the starting room.  This will trigger the overhead camera with this script.
      * The script currently works as desired, zooming in and out so everyone can be seen and centering on the middle of the players.
      * The problem is that my code only works if the camera is directly overhead.
@@ -12,27 +12,28 @@ public class TransparentRay : MonoBehaviour {
      * Sincerely, Kevin
      */
 
-    private Stack<transparentObjectClass> transparentObjects=new Stack<transparentObjectClass>();
+    private Stack<transparentObjectClass> transparentObjects = new Stack<transparentObjectClass>();
     public Material[] tranparent;
-    public int resetCounter=0;
+    public int resetCounter = 0;
     public GameObject[] players;
 
-    private int layerMask=1<<2;
+    private int layerMask = 1 << 2;
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         layerMask = ~(layerMask | (1 << 17));
-	}
-	
-	// This code only works if the camera is centered on the player
+    }
+
+    // This code only works if the camera is centered on the player
     //Else add a seperate tag for the ground
-	void Update () {
+    void Update()
+    {
         RaycastHit hit;
         //resets things to retry to make things better
         if (resetCounter == 0)
         {
             //zooming- zooms in incase the players are close together
             transform.Translate(Vector3.forward * 10);
-
 
             while (transparentObjects.Count != 0)
             {
@@ -42,10 +43,10 @@ public class TransparentRay : MonoBehaviour {
             }
         }
         //zooming
-        float xSum=0, zSum=0;
+        float xSum = 0, zSum = 0;
         for (int x = 0; x < players.Length; x++)
         {
-            xSum+=players[x].transform.position.x;
+            xSum += players[x].transform.position.x;
             zSum += players[x].transform.position.z;
             bool onScreen = false;
             int s = 0;
@@ -66,16 +67,15 @@ public class TransparentRay : MonoBehaviour {
             }
         }
         //calculates the average player position and centers the camera on it
-        transform.position=new Vector3(xSum / players.Length, transform.position.y, zSum / players.Length);
-
+        transform.position = new Vector3(xSum / players.Length, transform.position.y, zSum / players.Length);
 
         //transparent raycasting
         for (int x = 0; x < players.Length; x++)
         {
-            bool keepGoing= true;
+            bool keepGoing = true;
             while (keepGoing)
             {
-                if (Physics.Raycast(transform.position, /*transform.forward*/ players[x].transform.position-transform.position, out hit, 100, layerMask))
+                if (Physics.Raycast(transform.position, /*transform.forward*/ players[x].transform.position - transform.position, out hit, 100, layerMask))
                 {
                     //Debug.DrawRay(transform.position, transform.TransformDirection(transform.forward/*players[x].transform.position-transform.position*/) * hit.distance, Color.yellow);
                     if (!hit.collider.tag.StartsWith("Player"))
@@ -98,8 +98,7 @@ public class TransparentRay : MonoBehaviour {
                 else keepGoing = false;
             }
         }
-        resetCounter= (resetCounter+1)%20;
-
+        resetCounter = (resetCounter + 1) % 20;
     }
 
     public IEnumerator Fade(Renderer r)
@@ -116,7 +115,7 @@ public class TransparentRay : MonoBehaviour {
         public GameObject transparentObject;
         public Material originalMaterial;
         public int originalLayer;
-        public transparentObjectClass(GameObject to, Material om,int ol)
+        public transparentObjectClass(GameObject to, Material om, int ol)
         {
             transparentObject = to;
             originalMaterial = om;

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChangeCameraPerspective : MonoBehaviour {
+public class ChangeCameraPerspective : MonoBehaviour
+{
     public int changeTo;
     public int removeNumber;
-    public bool addCamera, changeCamera,removeCamera;
+    public bool addCamera, changeCamera, removeCamera;
     public GameObject cam;
 
     public void OnTriggerEnter(Collider other)

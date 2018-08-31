@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColorSwap : MonoBehaviour {
-
+public class ColorSwap : MonoBehaviour
+{
     public GameObject playerModel;
     public GameObject crossHair;
     public GameObject[] lights;
@@ -20,16 +20,16 @@ public class ColorSwap : MonoBehaviour {
     public int currentColor = 0; // The current color of the player
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         // swap materials for color
         // swap lights for color
         SetColor(currentColor);
-
     }
-	
-	// Update is called once per frame
-	void Update () {
 
+    // Update is called once per frame
+    void Update()
+    {
         if (Input.GetKey(colorChangeInput))
         {
             if (colorChangeInputToggle == 0)
@@ -43,16 +43,15 @@ public class ColorSwap : MonoBehaviour {
                 SetColor(currentColor);
                 colorChangeInputToggle = 1;
             }
-        } else
+        }
+        else
         {
             colorChangeInputToggle = 0; // allows input for the color toggle
         }
-		
-	}
+    }
 
     public void SetColor(int color)
     {
-
         switch (color)
         {
             case 0:
@@ -100,10 +99,5 @@ public class ColorSwap : MonoBehaviour {
                 }
                 break;
         }
-
     }
-
-
-
-
 }

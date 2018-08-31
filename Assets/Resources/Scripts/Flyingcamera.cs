@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Flyingcamera : MonoBehaviour
 {
-    
     public int controlState = 0;
     public float speed = 2.0F;
     public float direction = 0.0F;
@@ -93,7 +92,7 @@ public class Flyingcamera : MonoBehaviour
             xAxis *= Mathf.Sqrt(2) / 2;
             zAxis *= Mathf.Sqrt(2) / 2;
         }
-        
+
         if (Input.GetKey(KeyCode.Q))
         {
             Cursor.visible = true;

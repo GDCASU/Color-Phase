@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Lightingcontrol : MonoBehaviour
 {
-
     //public GameObject light0, light1, light2, light3, light4, light5, light6, light7, light8;
 
     public int LightQuality = 1;

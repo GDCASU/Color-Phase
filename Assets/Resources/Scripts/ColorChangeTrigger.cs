@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColorChangeTrigger : MonoBehaviour {
-
+public class ColorChangeTrigger : MonoBehaviour
+{
     // Use this for initialization
     public int colorValue = 0;
     public bool destroyOnContact = false;
@@ -19,10 +19,9 @@ public class ColorChangeTrigger : MonoBehaviour {
                 other.GetComponent<ColorSwap>().currentColor = colorValue;
                 if (destroyOnContact)
                 {
-                    Destroy(this.gameObject);
+                    Destroy(gameObject);
                 }
             }
         }
     }
-
 }
