@@ -7,12 +7,6 @@ public class Spin : MonoBehaviour
     public float speed = 10.0f;
     public int axis = 0;
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {

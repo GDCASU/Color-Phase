@@ -33,7 +33,7 @@ public class GateOpen : MonoBehaviour
             count = 0;
             for (int i = 0; i < buttonToggleScript.Length; i++)
             {
-                if (buttonToggleScript[i].state == 1) { count++; }
+                if (buttonToggleScript[i].state) { count++; }
             }
 
             if (orType == false)
@@ -76,7 +76,7 @@ public class GateOpen : MonoBehaviour
             count = 0;
             for (int i = 0; i < buttonToggleScript.Length; i++)
             {
-                if (buttonToggleScript[i].state == 1) { count++; }
+                if (buttonToggleScript[i].state) { count++; }
             }
 
             if (orType == false)
@@ -113,26 +113,6 @@ public class GateOpen : MonoBehaviour
                     }
                 }
             }
-
-            /*
-            for (int i = 0; i < buttonToggleScript.Length; i++)
-            {
-                if (buttonToggleScript[i].state == 0)
-                {
-                    if (gateOffset < 3.5f)
-                    {
-                        gateOffset = gateOffset + 0.02f;
-                    }
-                }
-                if (buttonToggleScript[i].state == 1)
-                {
-                    if (gateOffset > 0f)
-                    {
-                        gateOffset = gateOffset - 0.02f;
-                    }
-                }
-            }
-            */
         }
         transform.position = new Vector3(startPosition.x, startPosition.y, startPosition.z);
         transform.Translate(Vector3.forward * gateOffset);

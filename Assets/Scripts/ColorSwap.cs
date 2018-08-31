@@ -52,51 +52,25 @@ public class ColorSwap : MonoBehaviour
 
     public void SetColor(int color)
     {
+        for (int i = 0; i < lights.Length; i++)
+            lights[i].SetActive(i == color);
         switch (color)
         {
             case 0:
                 playerModel.GetComponent<MeshRenderer>().materials = redMaterials;
                 crossHair.GetComponent<SpriteRenderer>().color = new Color(0.5490196f, 0.2614016f, 0.2588235f);
-                if (lights.Length >= 4)
-                {
-                    lights[0].SetActive(true);
-                    lights[1].SetActive(false);
-                    lights[2].SetActive(false);
-                    lights[3].SetActive(false);
-                }
                 break;
             case 1:
                 playerModel.GetComponent<MeshRenderer>().materials = greenMaterials;
                 crossHair.GetComponent<SpriteRenderer>().color = new Color(0.2659206f, 0.5471698f, 0.26068f);
-                if (lights.Length >= 4)
-                {
-                    lights[0].SetActive(false);
-                    lights[1].SetActive(true);
-                    lights[2].SetActive(false);
-                    lights[3].SetActive(false);
-                }
                 break;
             case 2:
                 playerModel.GetComponent<MeshRenderer>().materials = blueMaterials;
                 crossHair.GetComponent<SpriteRenderer>().color = new Color(0.2588235f, 0.4211917f, 0.5490196f);
-                if (lights.Length >= 4)
-                {
-                    lights[0].SetActive(false);
-                    lights[1].SetActive(false);
-                    lights[2].SetActive(true);
-                    lights[3].SetActive(false);
-                }
                 break;
             case 3:
                 playerModel.GetComponent<MeshRenderer>().materials = yellowMaterials;
                 crossHair.GetComponent<SpriteRenderer>().color = new Color(0.5490196f, 0.5487493f, 0.2588235f);
-                if (lights.Length >= 4)
-                {
-                    lights[0].SetActive(false);
-                    lights[1].SetActive(false);
-                    lights[2].SetActive(false);
-                    lights[3].SetActive(true);
-                }
                 break;
         }
     }
