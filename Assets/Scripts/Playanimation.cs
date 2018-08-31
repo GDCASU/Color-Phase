@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Playanimation : MonoBehaviour
 {
-
     public Animation anim;
     //public bool Play(PlayMode mode = PlayMode.StopSameLayer);
 
