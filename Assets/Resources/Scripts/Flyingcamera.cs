@@ -115,7 +115,7 @@ public class Flyingcamera : MonoBehaviour
 
             if (Input.GetKey(jumpInput) && !jumping)
             {
-                rb.velocity = new Vector3(0, 10, 0);
+                rb.velocity = new Vector3(rb.velocity.x, 10, rb.velocity.z);
                 jumping = true;
             }
         }
