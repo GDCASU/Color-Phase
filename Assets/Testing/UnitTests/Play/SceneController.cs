@@ -7,23 +7,22 @@ using UnityEngine.SceneManagement;
 namespace Testing.UnitTests.Play
 {
 	public class SceneController {
-
 		[Test]
-		public void SceneControllerSimplePasses() {
-			// Use the Assert class to test conditions.
+		public void GetsSceneNameInitially() {
 			var go = new GameObject("Test_Object");
-			var sc = go.AddComponent<Resources.Scripts.SceneController>();
+			var sc = go.AddComponent<Scripts.SceneController>();
 			string currentSceneName = SceneManager.GetActiveScene().name;
 			Assert.AreEqual(currentSceneName, sc.currentScene);
 		}
 
-		// A UnityTest behaves like a coroutine in PlayMode
-		// and allows you to yield null to skip a frame in EditMode
 		[UnityTest]
-		public IEnumerator SceneControllerWithEnumeratorPasses() {
-			// Use the Assert class to test conditions.
-			// yield to skip a frame
-			yield return null;
+		public IEnumerator GetsSceneNameAfterSceneChange()
+		{
+			var go = new GameObject("Test_Object");
+			var sc = go.AddComponent<Scripts.SceneController>();
+			var sceneLoaded = SceneManager.LoadSceneAsync("TestScene1", LoadSceneMode.Single);
+			while (!sceneLoaded.isDone) yield return null;
+			Assert.AreEqual("TestScene1", sc.currentScene);
 		}
 	}
 }
