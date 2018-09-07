@@ -4,16 +4,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-	// This field updates each time a new scene is loaded
+	/// <summary>
+	/// Updates each time a new scene is loaded
+	/// </summary>
 	public string currentScene;
 
 	private void Awake()
 	{
 		DontDestroyOnLoad(gameObject);
-	}
-
-	private void Start() 
-	{
+		
 		// If we had a separate folder for build scenes, adding scenes to the build
 		// settings could be automated
 		PrintSceneInfo();

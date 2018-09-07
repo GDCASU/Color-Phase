@@ -2,9 +2,13 @@
 
 public class SceneChanger : MonoBehaviour
 {
-	// targetScene is meant to be set by level designers
+	/// <summary>
+	/// Set by level designers.
+	/// </summary>
 	public string targetScene;
-	// sceneController will find an existing SceneController if you don't supply one
+	/// <summary>
+	/// Populates with an existing SceneController if you don't supply one.
+	/// </summary>
 	public SceneController sceneController;
 
 	private void Awake()
@@ -13,7 +17,7 @@ public class SceneChanger : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Goes to targetScene
+	/// Goes to targetScene. This could be tied to a collision or something like that.
 	/// </summary>
 	public AsyncOperation ChangeScene()
 	{
