@@ -1,46 +1,49 @@
 ﻿using UnityEngine;
 
-public class SceneChanger : MonoBehaviour
+namespace Scripts
 {
-	/// <summary>
-	/// Set by level designers.
-	/// </summary>
-	public string targetScene;
-	/// <summary>
-	/// Populates with an existing SceneController if you don't supply one.
-	/// </summary>
-	public SceneController sceneController;
-
-	private void Awake()
+	public class SceneChanger : MonoBehaviour
 	{
-		TryToPopulateController();
-	}
+		/// <summary>
+		/// Set by level designers.
+		/// </summary>
+		public string targetScene;
+		/// <summary>
+		/// Populates with an existing SceneController if you don't supply one.
+		/// </summary>
+		public SceneController sceneController;
 
-	/// <summary>
-	/// Goes to targetScene. This could be tied to a collision or something like that.
-	/// </summary>
-	public AsyncOperation ChangeScene()
-	{
-		return sceneController.GoToScene(targetScene);
-	}
-
-	private void TryToPopulateController()
-	{
-		// Tries progressively slower methods to find sceneController;
-		if (sceneController == null)
+		private void Awake()
 		{
-			var obj = GameObject.FindGameObjectWithTag("SceneController");
-			if (obj == null)
+			TryToPopulateController();
+		}
+
+		/// <summary>
+		/// Goes to targetScene. This could be tied to a collision or something like that.
+		/// </summary>
+		public AsyncOperation ChangeScene()
+		{
+			return sceneController.GoToScene(targetScene);
+		}
+
+		private void TryToPopulateController()
+		{
+			// Tries progressively slower methods to find sceneController;
+			if (sceneController == null)
 			{
-				obj = GameObject.Find("SceneController");
+				var obj = GameObject.FindGameObjectWithTag("SceneController");
 				if (obj == null)
 				{
-					sceneController = FindObjectOfType<SceneController>();
-					return;
+					obj = GameObject.Find("SceneController");
+					if (obj == null)
+					{
+						sceneController = FindObjectOfType<SceneController>();
+						return;
+					}
 				}
-			}
 
-			sceneController = obj.GetComponent<SceneController>();
+				sceneController = obj.GetComponent<SceneController>();
+			}
 		}
 	}
 }
