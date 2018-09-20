@@ -103,6 +103,8 @@ public class SoundManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         CreateDictionaries();
+
+        Debug.AudioLog("SoundManager Awake");
     }
 
     // Initialize the list of playing sources with the musicSource
@@ -368,7 +370,6 @@ public class SoundManager : MonoBehaviour
     // Function that is called when the script is updated in Unity, currently used for adjusting the volume using the inspector sliders
     private void OnValidate()
     {
-        Debug.GeneralLog("SoundManager Validated");
         AdjustVolume();
     }
 
