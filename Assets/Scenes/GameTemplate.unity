@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -113,6 +113,48 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &80951630
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4792838370498850, guid: cf7e5a2095a1c9446913d6fdc0af5bf9, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4792838370498850, guid: cf7e5a2095a1c9446913d6fdc0af5bf9, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4792838370498850, guid: cf7e5a2095a1c9446913d6fdc0af5bf9, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4792838370498850, guid: cf7e5a2095a1c9446913d6fdc0af5bf9, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4792838370498850, guid: cf7e5a2095a1c9446913d6fdc0af5bf9, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4792838370498850, guid: cf7e5a2095a1c9446913d6fdc0af5bf9, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4792838370498850, guid: cf7e5a2095a1c9446913d6fdc0af5bf9, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4792838370498850, guid: cf7e5a2095a1c9446913d6fdc0af5bf9, type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cf7e5a2095a1c9446913d6fdc0af5bf9, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,7 +390,7 @@ RectTransform:
   m_Children:
   - {fileID: 920116282}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -415,160 +457,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1688541648
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1688541650}
-  - component: {fileID: 1688541649}
-  - component: {fileID: 1688541652}
-  - component: {fileID: 1688541651}
-  m_Layer: 0
-  m_Name: Managers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1688541649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1688541648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f53fb4e97f5a354f939ef4cf9ad0dae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MasterVolume: 1
-  MusicMasterVolume: 1
-  EffectsMasterVolume: 1
-  DialogueMasterVolume: 0
-  musicList: []
-  effectsList: []
-  dialogueList: []
---- !u!4 &1688541650
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1688541648}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1688541651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1688541648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b510249464e71043837d46332f1dc6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  generalLog: 1
-  audioLog: 1
-  inputLog: 1
-  generalColor: {r: 0, g: 0, b: 0, a: 0}
-  audioColor: {r: 0, g: 0.14089537, b: 1, a: 0}
-  inputColor: {r: 1, g: 0.4040035, b: 0, a: 0}
---- !u!114 &1688541652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1688541648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72808b2d1e8df2f46a2e99c2be766f73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 1259717850098200, guid: b90c9bd104c5b5e46a6dce7d2f93ed47,
-    type: 2}
-  maxPlayers: 4
-  players: []
-  axes:
-  - axisName: LeftHorizontal
-    positiveKeyboardAxis: 100
-    negativeKeyboardAxis: 97
-    xboxAxis: 0
-  - axisName: LeftVertical
-    positiveKeyboardAxis: 119
-    negativeKeyboardAxis: 115
-    xboxAxis: 1
-  - axisName: RightHorizontal
-    positiveKeyboardAxis: 108
-    negativeKeyboardAxis: 106
-    xboxAxis: 2
-  - axisName: RightVertical
-    positiveKeyboardAxis: 105
-    negativeKeyboardAxis: 107
-    xboxAxis: 3
-  - axisName: LeftTrigger
-    positiveKeyboardAxis: 0
-    negativeKeyboardAxis: 0
-    xboxAxis: 4
-  - axisName: RightTrigger
-    positiveKeyboardAxis: 0
-    negativeKeyboardAxis: 0
-    xboxAxis: 5
-  buttons:
-  - buttonName: A
-    keyboardButton: 32
-    xboxButton: 0
-  - buttonName: B
-    keyboardButton: 98
-    xboxButton: 1
-  - buttonName: X
-    keyboardButton: 120
-    xboxButton: 2
-  - buttonName: Y
-    keyboardButton: 121
-    xboxButton: 3
-  - buttonName: LeftStick
-    keyboardButton: 304
-    xboxButton: 6
-  - buttonName: RightStick
-    keyboardButton: 303
-    xboxButton: 7
-  - buttonName: LB
-    keyboardButton: 306
-    xboxButton: 4
-  - buttonName: RB
-    keyboardButton: 305
-    xboxButton: 5
-  - buttonName: Up
-    keyboardButton: 273
-    xboxButton: 11
-  - buttonName: Right
-    keyboardButton: 275
-    xboxButton: 12
-  - buttonName: Down
-    keyboardButton: 274
-    xboxButton: 13
-  - buttonName: Left
-    keyboardButton: 276
-    xboxButton: 14
-  - buttonName: Back
-    keyboardButton: 8
-    xboxButton: 8
-  - buttonName: Start
-    keyboardButton: 9
-    xboxButton: 9
-  - buttonName: Menu
-    keyboardButton: 27
-    xboxButton: 10
 --- !u!1001 &1922492037
 Prefab:
   m_ObjectHideFlags: 0
