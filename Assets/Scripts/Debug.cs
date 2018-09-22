@@ -3,7 +3,7 @@
 /*
  * Author:      Zachary Schmalz
  * Version:     1.0.0
- * Date:        September 13, 2018
+ * Date:        September 19, 2018
  */
 
 /// <summary>
@@ -11,15 +11,26 @@
 /// </summary>
 public class Debug : MonoBehaviour
 {
+    public enum LogType
+    {
+        Normal,
+        Warning,
+        Error
+    };
+
     [SerializeField] private bool generalLog;
     [SerializeField] private bool audioLog;
+    [SerializeField] private bool inputLog;
     [SerializeField] private Color generalColor;
     [SerializeField] private Color audioColor;
+    [SerializeField] private Color inputColor;
 
     private static bool staticGeneralLog;
     private static bool staticAudioLog;
+    private static bool staticInputLog;
     private static Color staticGeneralColor;
     private static Color staticAudioColor;
+    private static Color staticInputColor;
 
     private void Awake()
     {
@@ -30,39 +41,60 @@ public class Debug : MonoBehaviour
     {
         staticGeneralLog = generalLog;
         staticAudioLog = audioLog;
+        staticInputLog = inputLog;
         staticGeneralColor = generalColor;
         staticAudioColor = audioColor;
+        staticInputColor = inputColor;
     }
 
-    public static void Log(string s)
+    public static void Log(object o, LogType type = LogType.Normal)
     {
-        UnityEngine.Debug.Log(s);
+        switch(type)
+        {
+            case LogType.Normal:
+                UnityEngine.Debug.Log(o);
+                break;
+
+            case LogType.Warning:
+                UnityEngine.Debug.LogWarning(o);
+                break;
+
+            case LogType.Error:
+                UnityEngine.Debug.LogError(o);
+                break;
+        }
     }
 
-    public static void GeneralLog(object s)
+    public static void GeneralLog(object o, LogType type = LogType.Normal)
     {
         if (staticGeneralLog)
-            UnityEngine.Debug.Log(FormatString("(General Log)\n", staticGeneralColor) + s);
+            Log(FormatString("(General Log)\n", staticGeneralColor) + o, type);
     }
 
-    public static void AudioLog(object s)
+    public static void AudioLog(object o, LogType type = LogType.Normal)
     {
         if (staticAudioLog)
-            UnityEngine.Debug.Log(FormatString("(Audio Log)\n", staticAudioColor) + s);
+            Log(FormatString("(Audio Log)\n", staticAudioColor) + o, type);
     }
 
-    public static void LogWarning(object s)
+    public static void InputLog(object o, LogType type = LogType.Normal)
     {
-        UnityEngine.Debug.LogWarning(s);
+        if (staticInputLog)
+            Log(FormatString("(Input Log)\n", staticInputColor) + o, type);
     }
 
-    public static void LogError(object s)
+    public static void LogWarning(object o)
     {
-        UnityEngine.Debug.LogError(s);
+        Log(o, LogType.Warning);
     }
 
-    private static string FormatString(object s, Color color)
+    public static void LogError(object o)
     {
-        return "<b><color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + s + "</color></b>";
+        Log(o, LogType.Error);
+    }
+    
+    private static string FormatString(object o, Color color)
+    {
+        return "<b><color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + o + "</color></b>";
     }
 }
