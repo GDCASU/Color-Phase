@@ -188,14 +188,27 @@ public class InputManager : MonoBehaviour
     public float GetAxis(string axisKey, Player player)
     {
         if (player == null)
-            return 0;
+        {
+            List<float> valueList = new List<float>();
+
+            // Add keyboard values to list
+            valueList.Add(keyboardController.GetAxis(KeyboardAxisLookUp(keyboardAxisDictList[0], "(Pos)" + axisKey)));
+            valueList.Add(-keyboardController.GetAxis(KeyboardAxisLookUp(keyboardAxisDictList[0], "(Neg)" + axisKey)));
+
+            // Add xbox values to list
+            for (int i = 0; i < xboxControllers.Count; i++)
+                if (xboxControllers[i].IsConnected)
+                    valueList.Add(xboxControllers[i].GetAxis(XboxAxisLookUp(xboxAxisDictList[0], axisKey)));
+
+            return LargestAbsoluteValue(valueList);
+        }
         else
         {
             if (player.InputMethod == InputMethod.Keyboard)
             {
                 float keyboardPos = keyboardController.GetAxis(KeyboardAxisLookUp(keyboardAxisDictList[player.PlayerIndex + 1], "(Pos)" + axisKey));
-                float  keyboardNeg = -keyboardController.GetAxis(KeyboardAxisLookUp(keyboardAxisDictList[player.PlayerIndex + 1], "(Neg)" + axisKey));
-                return LargestAbsoluteValue(new float[] { keyboardPos, keyboardNeg });
+                float keyboardNeg = -keyboardController.GetAxis(KeyboardAxisLookUp(keyboardAxisDictList[player.PlayerIndex + 1], "(Neg)" + axisKey));
+                return LargestAbsoluteValue(new List<float> { keyboardPos, keyboardNeg });
             }
 
             else if (player.InputMethod == InputMethod.XboxController)
@@ -213,14 +226,27 @@ public class InputManager : MonoBehaviour
     public float GetAxisDown(string axisKey, Player player)
     {
         if (player == null)
-            return 0;
+        {
+            List<float> valueList = new List<float>();
+
+            // Add keyboard values to list
+            valueList.Add(keyboardController.GetAxisDown(KeyboardAxisLookUp(keyboardAxisDictList[0], "(Pos)" + axisKey)));
+            valueList.Add(-keyboardController.GetAxisDown(KeyboardAxisLookUp(keyboardAxisDictList[0], "(Neg)" + axisKey)));
+
+            // Add xbox values to list
+            for (int i = 0; i < xboxControllers.Count; i++)
+                if (xboxControllers[i].IsConnected)
+                    valueList.Add(xboxControllers[i].GetAxisDown(XboxAxisLookUp(xboxAxisDictList[0], axisKey)));
+
+            return LargestAbsoluteValue(valueList);
+        }
         else
         {
             if (player.InputMethod == InputMethod.Keyboard)
             {
                 float keyboardPos = keyboardController.GetAxisDown(KeyboardAxisLookUp(keyboardAxisDictList[player.PlayerIndex + 1], "(Pos)" + axisKey));
                 float keyboardNeg = -keyboardController.GetAxisDown(KeyboardAxisLookUp(keyboardAxisDictList[player.PlayerIndex + 1], "(Neg)" + axisKey));
-                return LargestAbsoluteValue(new float[] { keyboardPos, keyboardNeg });
+                return LargestAbsoluteValue(new List<float> { keyboardPos, keyboardNeg });
             }
 
             else if (player.InputMethod == InputMethod.XboxController)
@@ -238,7 +264,14 @@ public class InputManager : MonoBehaviour
     public bool GetButton(string buttonKey, Player player)
     {
         if (player == null)
-            return false;
+        {
+            bool result = keyboardController.GetButton(KeyboardButtonLookUp(keyboardButtonDictList[0], buttonKey));
+            for(int i = 0; i < xboxControllers.Count; i++)
+                if(xboxControllers[i].IsConnected)
+                    result |= xboxControllers[i].GetButton(XboxButtonLookUp(xboxButtonDictList[i], buttonKey));
+
+            return result;
+        }
         else
         {
             if (player.InputMethod == InputMethod.Keyboard)
@@ -259,7 +292,14 @@ public class InputManager : MonoBehaviour
     public bool GetButtonDown(string buttonKey, Player player)
     {
         if (player == null)
-            return false;
+        {
+            bool result = keyboardController.GetButtonDown(KeyboardButtonLookUp(keyboardButtonDictList[0], buttonKey));
+            for (int i = 0; i < xboxControllers.Count; i++)
+                if (xboxControllers[i].IsConnected)
+                    result |= xboxControllers[i].GetButtonDown(XboxButtonLookUp(xboxButtonDictList[i], buttonKey));
+
+            return result;
+        }
         else
         {
             if (player.InputMethod == InputMethod.Keyboard)
@@ -280,7 +320,14 @@ public class InputManager : MonoBehaviour
     public bool GetButtonUp(string buttonKey, Player player)
     {
         if (player == null)
-            return false;
+        {
+            bool result = keyboardController.GetButtonUp(KeyboardButtonLookUp(keyboardButtonDictList[0], buttonKey));
+            for (int i = 0; i < xboxControllers.Count; i++)
+                if (xboxControllers[i].IsConnected)
+                    result |= xboxControllers[i].GetButtonUp(XboxButtonLookUp(xboxButtonDictList[i], buttonKey));
+
+            return result;
+        }
         else
         {
             if (player.InputMethod == InputMethod.Keyboard)
@@ -470,7 +517,7 @@ public class InputManager : MonoBehaviour
     /// Returns the value that has the highest aboslute value in a list of floats
     /// </summary>
     /// <param name="values"></param>
-    private float LargestAbsoluteValue(float[] values)
+    private float LargestAbsoluteValue(List<float> values)
     {
         float largest = 0f;
         foreach(float f in values)

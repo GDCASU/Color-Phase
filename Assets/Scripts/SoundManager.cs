@@ -103,7 +103,7 @@ public class SoundManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         CreateDictionaries();
-
+        Debug.GeneralLog("GameManager Awake");
         Debug.AudioLog("SoundManager Awake");
     }
 

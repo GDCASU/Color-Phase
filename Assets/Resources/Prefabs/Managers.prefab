@@ -9,19 +9,19 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1410003892429294}
+  m_RootGameObject: {fileID: 1355761643099124}
   m_IsPrefabAsset: 1
---- !u!1 &1410003892429294
+--- !u!1 &1355761643099124
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4792838370498850}
-  - component: {fileID: 114782681191374896}
-  - component: {fileID: 114878439708608384}
-  - component: {fileID: 114061606556329646}
+  - component: {fileID: 4980425425442416}
+  - component: {fileID: 114773778710994988}
+  - component: {fileID: 114297557913724812}
+  - component: {fileID: 114990144097441300}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -29,12 +29,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4792838370498850
+--- !u!4 &4980425425442416
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1410003892429294}
+  m_GameObject: {fileID: 1355761643099124}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -42,47 +42,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114061606556329646
+--- !u!114 &114297557913724812
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1410003892429294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b510249464e71043837d46332f1dc6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  generalLog: 1
-  audioLog: 1
-  inputLog: 1
-  generalColor: {r: 0, g: 0, b: 0, a: 0}
-  audioColor: {r: 0, g: 0.14089537, b: 1, a: 0}
-  inputColor: {r: 1, g: 0.4040035, b: 0, a: 0}
---- !u!114 &114782681191374896
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1410003892429294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f53fb4e97f5a354f939ef4cf9ad0dae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MasterVolume: 1
-  MusicMasterVolume: 1
-  EffectsMasterVolume: 1
-  DialogueMasterVolume: 0
-  musicList: []
-  effectsList: []
-  dialogueList: []
---- !u!114 &114878439708608384
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1410003892429294}
+  m_GameObject: {fileID: 1355761643099124}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72808b2d1e8df2f46a2e99c2be766f73, type: 3}
@@ -163,3 +128,38 @@ MonoBehaviour:
   - buttonName: Menu
     keyboardButton: 27
     xboxButton: 10
+--- !u!114 &114773778710994988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1355761643099124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f53fb4e97f5a354f939ef4cf9ad0dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MasterVolume: 1
+  MusicMasterVolume: 1
+  EffectsMasterVolume: 1
+  DialogueMasterVolume: 0
+  musicList: []
+  effectsList: []
+  dialogueList: []
+--- !u!114 &114990144097441300
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1355761643099124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b510249464e71043837d46332f1dc6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generalLog: 1
+  audioLog: 1
+  inputLog: 1
+  generalColor: {r: 0, g: 0, b: 0, a: 0}
+  audioColor: {r: 0, g: 0.14089537, b: 1, a: 0}
+  inputColor: {r: 1, g: 0.4040035, b: 0, a: 0}

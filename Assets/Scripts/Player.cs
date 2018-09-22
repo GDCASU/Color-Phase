@@ -30,28 +30,22 @@ public class Player : MonoBehaviour
 	
 	void Update ()
     {
-        float f = 0;
-        if ((f = input.GetAxis("LeftHorizontal", this)) != 0) Debug.InputLog("Left Horizontal: " + f);
-        if ((f = input.GetAxis("LeftVertical", this)) != 0) Debug.InputLog("Left Vertical: " + f);
-        if ((f = input.GetAxis("RightHorizontal", this)) != 0) Debug.InputLog("Right Horizontal: " + f);
-        if ((f = input.GetAxis("RightVertical", this)) != 0) Debug.InputLog("Right Vertical: " + f);
-        if ((f = input.GetAxis("LeftTrigger", this)) != 0) Debug.InputLog("Left Trigger: " + f);
-        if ((f = input.GetAxis("RightTrigger", this)) != 0) Debug.InputLog("Right Trigger: " + f);
+        // If getting specific player input (in this case, this player)
 
-        if (input.GetButtonDown("A", this)) Debug.InputLog("A Pressed");
-        if (input.GetButton("B", this)) Debug.InputLog("B Pressed");
-        if (input.GetButton("X", this)) Debug.InputLog("X Pressed");
-        if (input.GetButton("Y", this)) Debug.InputLog("Y Pressed");
-        if (input.GetButton("LeftStick", this)) Debug.InputLog("LeftStick Pressed");
-        if (input.GetButton("RightStick", this)) Debug.InputLog("RightStick Pressed");
-        if (input.GetButton("LB", this)) Debug.InputLog("LB Pressed");
-        if (input.GetButton("RB", this)) Debug.InputLog("RB Pressed");
-        if (input.GetButton("Up", this)) Debug.InputLog("Up Pressed");
-        if (input.GetButton("Right", this)) Debug.InputLog("Right Pressed");
-        if (input.GetButton("Down", this)) Debug.InputLog("Down Pressed");
-        if (input.GetButton("Left", this)) Debug.InputLog("Left Pressed");
-        if (input.GetButton("Back", this)) Debug.InputLog("Back Pressed");
-        if (input.GetButton("Start", this)) Debug.InputLog("Start Pressed");
-        if (input.GetButton("Menu", this)) Debug.InputLog("Guide Pressed");
+        //float f = 0;
+        //if ((f = input.GetAxis("LeftHorizontal", this)) != 0) Debug.InputLog("Player " + (PlayerIndex + 1) + " - Left Horizontal: " + f);
+        //if ((f = input.GetAxisDown("LeftHorizontal", this)) != 0) Debug.InputLog("Player " + (PlayerIndex + 1) + " - Left Horizontal Down: " + f);
+        //if (input.GetButton("A", this)) Debug.InputLog("Player " + (PlayerIndex + 1) + " - A Pressed");
+        //if (input.GetButtonDown("A", this)) Debug.InputLog("Player " + (PlayerIndex + 1) + " - A pressed this frame");
+        //if (input.GetButtonUp("A", this)) Debug.InputLog("Player " + (PlayerIndex + 1) + " - A released this frame");
+
+        // If getting any input, simply replace "this" with null
+
+        //f = 0;
+        //if ((f = input.GetAxis("LeftHorizontal", null)) != 0) Debug.InputLog("Left Horizontal: " + f);
+        //if ((f = input.GetAxisDown("LeftHorizontal", null)) != 0) Debug.InputLog("Left Horizontal Down: " + f);
+        //if (input.GetButton("A", null)) Debug.InputLog("A Pressed");
+        //if (input.GetButtonDown("A", null)) Debug.InputLog("A pressed this frame");
+        //if (input.GetButtonUp("A", null)) Debug.InputLog("A released this frame");
     }
 }
