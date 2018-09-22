@@ -185,7 +185,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="axisKey">The name given to the axis in the inspector</param>
     /// <param name="player">The player index to check the input from</param>
-    public float GetAxis(string axisKey, Player player)
+    public float GetAxis(string axisKey, Player player = null)
     {
         if (player == null)
         {
@@ -223,7 +223,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="axisKey"></param>
     /// <param name="player"></param>
-    public float GetAxisDown(string axisKey, Player player)
+    public float GetAxisDown(string axisKey, Player player = null)
     {
         if (player == null)
         {
@@ -261,7 +261,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public bool GetButton(string buttonKey, Player player)
+    public bool GetButton(string buttonKey, Player player = null)
     {
         if (player == null)
         {
@@ -289,7 +289,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public bool GetButtonDown(string buttonKey, Player player)
+    public bool GetButtonDown(string buttonKey, Player player = null)
     {
         if (player == null)
         {
@@ -317,7 +317,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public bool GetButtonUp(string buttonKey, Player player)
+    public bool GetButtonUp(string buttonKey, Player player = null)
     {
         if (player == null)
         {

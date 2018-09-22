@@ -39,13 +39,13 @@ public class Player : MonoBehaviour
         //if (input.GetButtonDown("A", this)) Debug.InputLog("Player " + (PlayerIndex + 1) + " - A pressed this frame");
         //if (input.GetButtonUp("A", this)) Debug.InputLog("Player " + (PlayerIndex + 1) + " - A released this frame");
 
-        // If getting any input, simply replace "this" with null
+        // If getting any input, simply delete "this"
 
         //f = 0;
-        //if ((f = input.GetAxis("LeftHorizontal", null)) != 0) Debug.InputLog("Left Horizontal: " + f);
-        //if ((f = input.GetAxisDown("LeftHorizontal", null)) != 0) Debug.InputLog("Left Horizontal Down: " + f);
-        //if (input.GetButton("A", null)) Debug.InputLog("A Pressed");
-        //if (input.GetButtonDown("A", null)) Debug.InputLog("A pressed this frame");
-        //if (input.GetButtonUp("A", null)) Debug.InputLog("A released this frame");
+        //if ((f = input.GetAxis("LeftHorizontal")) != 0) Debug.InputLog("Left Horizontal: " + f);
+        //if ((f = input.GetAxisDown("LeftHorizontal")) != 0) Debug.InputLog("Left Horizontal Down: " + f);
+        //if (input.GetButton("A")) Debug.InputLog("A Pressed");
+        //if (input.GetButtonDown("A")) Debug.InputLog("A pressed this frame");
+        //if (input.GetButtonUp("A")) Debug.InputLog("A released this frame");
     }
 }
