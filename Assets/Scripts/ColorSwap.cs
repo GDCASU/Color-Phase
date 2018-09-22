@@ -5,6 +5,7 @@ using UnityEngine;
 public class ColorSwap : MonoBehaviour
 {
     public GameObject playerModel;
+    public GameObject playerCamera;
     public GameObject crossHair;
     public GameObject[] lights;
 
@@ -13,13 +14,43 @@ public class ColorSwap : MonoBehaviour
     public Material[] blueMaterials;
     public Material[] yellowMaterials;
 
-    public KeyCode colorChangeInput = KeyCode.Mouse0; // left mouse input = 134
+    public enum PlayerColor { Red, Green, Blue, Yellow, };
+    public int PlayerColorsCount = PlayerColor.GetNames(typeof(PlayerColor)).Length;
 
+    public Dictionary<PlayerColor, Color > spriteColors = new Dictionary <PlayerColor, Color> {
+        {PlayerColor.Red, new Color(0.5490196f, 0.2614016f, 0.2588235f) },
+        {PlayerColor.Green, new Color(0.2659206f, 0.5471698f, 0.26068f) },
+        {PlayerColor.Blue, new Color(0.2588235f, 0.4211917f, 0.5490196f)},
+        {PlayerColor.Yellow, new Color(0.5490196f, 0.5487493f, 0.2588235f)},
+    };
+    public Dictionary<PlayerColor, Material[] > materialColors;
+    public PlayerColor currentPlayerColor = 0; // The current color of the player
+    public int currentColor {
+        get { return (int)currentPlayerColor; }
+        set { currentPlayerColor = (PlayerColor)value; }
+    }
+
+    public KeyCode colorChangeInput = KeyCode.Mouse0; // left mouse input = 134
     private int colorChangeInputToggle = 0;
 
-    public int currentColor = 0; // The current color of the player
 
-    // Use this for initialization
+    private MeshRenderer playerMesh;
+    private SpriteRenderer crossHairRender;
+
+    void Awake() {
+        // Set up material dictionary 
+        materialColors = new Dictionary <PlayerColor, Material[]> {
+            {PlayerColor.Red, redMaterials },
+            {PlayerColor.Green, greenMaterials },
+            {PlayerColor.Blue, blueMaterials },
+            {PlayerColor.Yellow, yellowMaterials },
+        };
+
+        // Get component references
+        playerMesh = playerModel.GetComponent<MeshRenderer>(); 
+        crossHairRender = crossHair.GetComponent<SpriteRenderer>(); 
+    }
+
     void Start()
     {
         // swap materials for color
@@ -27,19 +58,16 @@ public class ColorSwap : MonoBehaviour
         SetColor(currentColor);
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Some test code that I'll leave for now
         if (Input.GetKey(colorChangeInput))
         {
             if (colorChangeInputToggle == 0)
             {
                 //swap colors and lights
-                currentColor = currentColor + 1;
-                if (currentColor > 3)
-                {
-                    currentColor = 0;
-                }
+                currentColor++;
+                if (currentColor > PlayerColorsCount) currentColor = 0;
                 SetColor(currentColor);
                 colorChangeInputToggle = 1;
             }
@@ -53,25 +81,18 @@ public class ColorSwap : MonoBehaviour
     public void SetColor(int color)
     {
         for (int i = 0; i < lights.Length; i++)
-            lights[i].SetActive(i == color);
-        switch (color)
-        {
-            case 0:
-                playerModel.GetComponent<MeshRenderer>().materials = redMaterials;
-                crossHair.GetComponent<SpriteRenderer>().color = new Color(0.5490196f, 0.2614016f, 0.2588235f);
-                break;
-            case 1:
-                playerModel.GetComponent<MeshRenderer>().materials = greenMaterials;
-                crossHair.GetComponent<SpriteRenderer>().color = new Color(0.2659206f, 0.5471698f, 0.26068f);
-                break;
-            case 2:
-                playerModel.GetComponent<MeshRenderer>().materials = blueMaterials;
-                crossHair.GetComponent<SpriteRenderer>().color = new Color(0.2588235f, 0.4211917f, 0.5490196f);
-                break;
-            case 3:
-                playerModel.GetComponent<MeshRenderer>().materials = yellowMaterials;
-                crossHair.GetComponent<SpriteRenderer>().color = new Color(0.5490196f, 0.5487493f, 0.2588235f);
-                break;
-        }
+            lights[i].SetActive(i == (int)color);
+        
+        Material[] m;
+        if (materialColors.TryGetValue((PlayerColor)color, out m)) playerMesh.materials = m;
+
+        Color c;
+        if(spriteColors.TryGetValue((PlayerColor)color, out c)) crossHairRender.color = c;
+
+        currentColor = color;
+
+        // This isn't very efficent but it means we can decide if this is a given ability 
+        QuickSwap q = GetComponent<QuickSwap>();
+        if(q != null ) q.updatePalletUI();
     }
 }
