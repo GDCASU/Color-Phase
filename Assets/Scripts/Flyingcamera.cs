@@ -128,8 +128,14 @@ public class Flyingcamera : MonoBehaviour
         {
             Vector3 push = (cams[activecam].transform.forward * zAxis + cams[activecam].transform.right * xAxis) * speed * 50;
             rb.AddForce(push, ForceMode.Acceleration);
-            transform.LookAt(transform.position + push);
+            transform.rotation = Quaternion.Slerp(this.transform.rotation, cams[activecam].transform.rotation, 1);
+            //transform.LookAt(transform.position + push);
             transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        }
+
+        if(xAxis == 0 && zAxis == 0)
+        {
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
         }
     }
 
