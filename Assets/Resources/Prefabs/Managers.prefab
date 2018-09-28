@@ -9,19 +9,20 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1355761643099124}
+  m_RootGameObject: {fileID: 1061644799083764}
   m_IsPrefabAsset: 1
---- !u!1 &1355761643099124
+--- !u!1 &1061644799083764
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4980425425442416}
-  - component: {fileID: 114773778710994988}
-  - component: {fileID: 114297557913724812}
-  - component: {fileID: 114990144097441300}
+  - component: {fileID: 4435268738181252}
+  - component: {fileID: 114336014866587410}
+  - component: {fileID: 114895673168771794}
+  - component: {fileID: 114656416383538420}
+  - component: {fileID: 114480359751746016}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -29,12 +30,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4980425425442416
+--- !u!4 &4435268738181252
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1355761643099124}
+  m_GameObject: {fileID: 1061644799083764}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -42,12 +43,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114297557913724812
+--- !u!114 &114336014866587410
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1355761643099124}
+  m_GameObject: {fileID: 1061644799083764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5ae471a6060e4d4dbc7f77c9682f5ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114480359751746016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1061644799083764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f53fb4e97f5a354f939ef4cf9ad0dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MasterVolume: 1
+  MusicMasterVolume: 1
+  EffectsMasterVolume: 1
+  DialogueMasterVolume: 0
+  musicList: []
+  effectsList: []
+  dialogueList: []
+--- !u!114 &114656416383538420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1061644799083764}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72808b2d1e8df2f46a2e99c2be766f73, type: 3}
@@ -56,7 +86,6 @@ MonoBehaviour:
   playerPrefab: {fileID: 1259717850098200, guid: b90c9bd104c5b5e46a6dce7d2f93ed47,
     type: 2}
   maxPlayers: 4
-  players: []
   axes:
   - axisName: LeftHorizontal
     positiveKeyboardAxis: 100
@@ -128,30 +157,12 @@ MonoBehaviour:
   - buttonName: Menu
     keyboardButton: 27
     xboxButton: 10
---- !u!114 &114773778710994988
+--- !u!114 &114895673168771794
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1355761643099124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f53fb4e97f5a354f939ef4cf9ad0dae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MasterVolume: 1
-  MusicMasterVolume: 1
-  EffectsMasterVolume: 1
-  DialogueMasterVolume: 0
-  musicList: []
-  effectsList: []
-  dialogueList: []
---- !u!114 &114990144097441300
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1355761643099124}
+  m_GameObject: {fileID: 1061644799083764}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b510249464e71043837d46332f1dc6c, type: 3}

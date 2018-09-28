@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using XInputDotNetPure;
 
@@ -50,7 +51,6 @@ public class XboxController
     };
 
     // Private class variables
-    private InputManager input;
     private PlayerIndex playerIndex;
     private GamePadState currentState;
     private GamePadState previousState;
@@ -106,8 +106,8 @@ public class XboxController
             if (IsConnected == false)
                 return XboxButton.None;
 
-            foreach (KeyValuePair<XboxButton, ButtonState> xb in previousButtonDict)
-                if (xb.Value == ButtonState.Released && currentButtonDict[xb.Key] == ButtonState.Pressed)
+            foreach (KeyValuePair<XboxButton, ButtonState> xb in currentButtonDict)
+                if (currentButtonDict[xb.Key] == ButtonState.Pressed)
                     return xb.Key;
             return XboxButton.None;
         }
@@ -119,8 +119,6 @@ public class XboxController
     /// <param name="index">Which index is this controller mapped to</param>
     public XboxController(PlayerIndex index)
     {
-        input = InputManager.singleton;
-
         playerIndex = index;
         IsConnected = false;
 
@@ -142,7 +140,7 @@ public class XboxController
             if (GamePad.GetState(playerIndex).IsConnected)
             {
                 IsConnected = true;
-                input.AddPlayer(InputManager.InputMethod.XboxController);
+                InputManager.AddPlayer(InputManager.InputMethod.XboxController);
                 Debug.InputLog("XboxController " + (int)(playerIndex + 1) + " connected");
             }
         }
@@ -157,7 +155,7 @@ public class XboxController
             if (previousState.IsConnected && currentState.IsConnected == false)
             {
                 IsConnected = false;
-                input.RemovePlayer((int)playerIndex);
+                InputManager.RemovePlayer((int)playerIndex);
                 Debug.InputLog("Controller " + (int)(playerIndex + 1) + " disconnected", Debug.LogType.Warning);
                 return;
             }
@@ -236,66 +234,22 @@ public class XboxController
     private void InitializeDictionaries()
     {
         // Initialize the previous XboxAxis dictionary with 0 values
-        previousAxisDict = new Dictionary<XboxAxis, float>
-        {
-            { XboxAxis.LeftStickHorizontal, 0 },
-            { XboxAxis.LeftStickVertical, 0 },
-            { XboxAxis.RightStickHorizontal, 0 },
-            { XboxAxis.RightStickVertical, 0 },
-            { XboxAxis.LeftTrigger, 0 },
-            { XboxAxis.RightTrigger, 0 }
-        };
-
-        // Initialize the current XboxAxis dictionary with 0 values
-        currentAxisDict = new Dictionary<XboxAxis, float>
-        {
-            { XboxAxis.LeftStickHorizontal, 0 },
-            { XboxAxis.LeftStickVertical, 0 },
-            { XboxAxis.RightStickHorizontal, 0 },
-            { XboxAxis.RightStickVertical, 0 },
-            { XboxAxis.LeftTrigger, 0 },
-            { XboxAxis.RightTrigger, 0 }
-        };
+        previousAxisDict = new Dictionary<XboxAxis, float>();
+        foreach (XboxAxis axis in Enum.GetValues(typeof(XboxAxis)))
+            if (axis != XboxAxis.None)
+                previousAxisDict.Add(axis, 0);
 
         // Initiailze the previous XboxButton dictionary with Released ButtonState
-        previousButtonDict = new Dictionary<XboxButton, ButtonState>
-        {
-            { XboxButton.A, ButtonState.Released },
-            { XboxButton.B, ButtonState.Released },
-            { XboxButton.X, ButtonState.Released },
-            { XboxButton.Y, ButtonState.Released },
-            { XboxButton.LeftBumper, ButtonState.Released },
-            { XboxButton.RightBumper, ButtonState.Released },
-            { XboxButton.LeftStick, ButtonState.Released },
-            { XboxButton.RightStick, ButtonState.Released },
-            { XboxButton.Back, ButtonState.Released },
-            { XboxButton.Start, ButtonState.Released },
-            { XboxButton.Guide, ButtonState.Released },
-            { XboxButton.DPadUp, ButtonState.Released },
-            { XboxButton.DPadRight, ButtonState.Released },
-            { XboxButton.DPadDown, ButtonState.Released },
-            { XboxButton.DPadLeft, ButtonState.Released },
-        };
+        previousButtonDict = new Dictionary<XboxButton, ButtonState>();
+        foreach(XboxButton button in Enum.GetValues(typeof(XboxButton)))
+            if (button != XboxButton.None)
+                previousButtonDict.Add(button, ButtonState.Released);
+
+        // Initialize the current XboxAxis dictionary with 0 values
+        currentAxisDict = previousAxisDict.ToDictionary(entry => entry.Key, entry => entry.Value);
 
         // Initiailze the current XboxButton dictionary with Released ButtonState
-        currentButtonDict = new Dictionary<XboxButton, ButtonState>
-        {
-            { XboxButton.A, ButtonState.Released },
-            { XboxButton.B, ButtonState.Released },
-            { XboxButton.X, ButtonState.Released },
-            { XboxButton.Y, ButtonState.Released },
-            { XboxButton.LeftBumper, ButtonState.Released },
-            { XboxButton.RightBumper, ButtonState.Released },
-            { XboxButton.LeftStick, ButtonState.Released },
-            { XboxButton.RightStick, ButtonState.Released },
-            { XboxButton.Back, ButtonState.Released },
-            { XboxButton.Start, ButtonState.Released },
-            { XboxButton.Guide, ButtonState.Released },
-            { XboxButton.DPadUp, ButtonState.Released },
-            { XboxButton.DPadRight, ButtonState.Released },
-            { XboxButton.DPadDown, ButtonState.Released },
-            { XboxButton.DPadLeft, ButtonState.Released },
-        };
+        currentButtonDict = previousButtonDict.ToDictionary(entry => entry.Key, entry => entry.Value);
     }
 
     /// <summary>
@@ -303,13 +257,13 @@ public class XboxController
     /// </summary>
     private void UpdateDictionaries()
     {
-        // Update the previous XboxAxis dictionary values
-        previousAxisDict[XboxAxis.LeftStickHorizontal] = previousState.ThumbSticks.Left.X;
-        previousAxisDict[XboxAxis.LeftStickVertical] = previousState.ThumbSticks.Left.Y;
-        previousAxisDict[XboxAxis.RightStickHorizontal] = previousState.ThumbSticks.Right.X;
-        previousAxisDict[XboxAxis.RightStickVertical] = previousState.ThumbSticks.Right.Y;
-        previousAxisDict[XboxAxis.LeftTrigger] = previousState.Triggers.Left;
-        previousAxisDict[XboxAxis.RightTrigger] = previousState.Triggers.Right;
+        // Transfer the current XboxAxis dictionary values to the previous dictionary values
+        foreach (KeyValuePair<XboxAxis, float> kp in previousAxisDict.ToList())
+            previousAxisDict[kp.Key] = currentAxisDict[kp.Key];
+
+        // Transfer the current XboxButton dictionary values to the previous dictionary values
+        foreach (KeyValuePair<XboxButton, ButtonState> kp in previousButtonDict.ToList())
+            previousButtonDict[kp.Key] = currentButtonDict[kp.Key];
 
         // Update the current XboxAxis dictionary values
         currentAxisDict[XboxAxis.LeftStickHorizontal] = currentState.ThumbSticks.Left.X;
@@ -318,24 +272,7 @@ public class XboxController
         currentAxisDict[XboxAxis.RightStickVertical] = currentState.ThumbSticks.Right.Y;
         currentAxisDict[XboxAxis.LeftTrigger] = currentState.Triggers.Left;
         currentAxisDict[XboxAxis.RightTrigger] = currentState.Triggers.Right;
-
-        // Update the previous XboxButton dictionary values
-        previousButtonDict[XboxButton.A] = previousState.Buttons.A;
-        previousButtonDict[XboxButton.B] = previousState.Buttons.B;
-        previousButtonDict[XboxButton.X] = previousState.Buttons.X;
-        previousButtonDict[XboxButton.Y] = previousState.Buttons.Y;
-        previousButtonDict[XboxButton.LeftBumper] = previousState.Buttons.LeftShoulder;
-        previousButtonDict[XboxButton.RightBumper] = previousState.Buttons.RightShoulder;
-        previousButtonDict[XboxButton.LeftStick] = previousState.Buttons.LeftStick;
-        previousButtonDict[XboxButton.RightStick] = previousState.Buttons.RightStick;
-        previousButtonDict[XboxButton.Back] = previousState.Buttons.Back;
-        previousButtonDict[XboxButton.Start] = previousState.Buttons.Start;
-        previousButtonDict[XboxButton.Guide] = previousState.Buttons.Guide;
-        previousButtonDict[XboxButton.DPadUp] = previousState.DPad.Up;
-        previousButtonDict[XboxButton.DPadRight] = previousState.DPad.Right;
-        previousButtonDict[XboxButton.DPadDown] = previousState.DPad.Down;
-        previousButtonDict[XboxButton.DPadLeft] = previousState.DPad.Left;
-
+        
         // Update the current XboxButton dictionary values
         currentButtonDict[XboxButton.A] = currentState.Buttons.A;
         currentButtonDict[XboxButton.B] = currentState.Buttons.B;
