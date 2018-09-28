@@ -1,10 +1,24 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
 
 namespace Scripts
 {
-	public class SceneController : MonoBehaviour
+	public interface ISceneController
+	{
+		/// <summary>
+		/// Loads scene with specified name. Scenes must be in build settings.
+		/// </summary>
+		AsyncOperation GoToScene(string targetSceneName);
+
+		/// <summary>
+		/// Loads current scene
+		/// </summary>
+		AsyncOperation RestartScene();
+	}
+
+	public class SceneController : MonoBehaviour, ISceneController
 	{
 		/// <summary>
 		/// Updates each time a new scene is loaded
@@ -24,6 +38,17 @@ namespace Scripts
 		}
 
 		/// <summary>
+		/// Tries progressively slower methods to find an existing scene controller
+		/// </summary>
+		public static ISceneController GetInstance()
+		{
+			GameObject obj = GameObject.FindGameObjectWithTag("SceneController");
+			if (obj != null) return obj.GetComponent<SceneController>();
+			obj = GameObject.Find("SceneController");
+			return obj == null ? FindObjectOfType<SceneController>() : obj.GetComponent<SceneController>();
+		}
+
+		/// <summary>
 		/// Loads scene with specified name. Scenes must be in build settings.
 		/// </summary>
 		public AsyncOperation GoToScene(string targetSceneName)
@@ -38,7 +63,7 @@ namespace Scripts
 		{
 			return GoToScene(currentScene);
 		}
-	
+
 		private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
 		{
 			currentScene = SceneManager.GetActiveScene().name;

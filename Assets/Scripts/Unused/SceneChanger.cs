@@ -11,11 +11,11 @@ namespace Scripts
 		/// <summary>
 		/// Populates with an existing SceneController if you don't supply one.
 		/// </summary>
-		public SceneController sceneController;
+		public ISceneController sceneController;
 
 		private void Awake()
 		{
-			TryToPopulateController();
+			EnsureControllerIsPopulated();
 		}
 
 		/// <summary>
@@ -26,24 +26,9 @@ namespace Scripts
 			return sceneController.GoToScene(targetScene);
 		}
 
-		private void TryToPopulateController()
+		private void EnsureControllerIsPopulated()
 		{
-			// Tries progressively slower methods to find sceneController;
-			if (sceneController == null)
-			{
-				var obj = GameObject.FindGameObjectWithTag("SceneController");
-				if (obj == null)
-				{
-					obj = GameObject.Find("SceneController");
-					if (obj == null)
-					{
-						sceneController = FindObjectOfType<SceneController>();
-						return;
-					}
-				}
-
-				sceneController = obj.GetComponent<SceneController>();
-			}
+			if (sceneController == null) sceneController = SceneController.GetInstance();
 		}
 	}
 }
