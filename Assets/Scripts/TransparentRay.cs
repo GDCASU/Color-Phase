@@ -17,9 +17,9 @@ public class TransparentRay : MonoBehaviour
     {
         layerMask = ~(layerMask | (1 << 17));
         tranparent = new Material[players.Length];
-        for(int x=0;x<players.Length;x++)
+        for(int x=0;x<players.Length;x++)//work on
         {
-            tranparent[x] = new Material(oringinalTransparent);
+            //tranparent[x] = new Material(oringinalTransparent);
         }
     }
 
