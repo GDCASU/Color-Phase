@@ -179,3 +179,10 @@ public class Flyingcamera : MonoBehaviour
         }
     }
 }
+
+public enum CameraType
+{
+    ThirdPerson,
+    FirstPerson,
+    Whatever
+}
