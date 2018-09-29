@@ -9,7 +9,7 @@
 /// <summary>
 /// This player class is used to communicate with the InputManager, and handle any player related functions
 /// </summary>
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPlayer
 {
     // Public class properties
     /// <summary>

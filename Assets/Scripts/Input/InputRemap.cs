@@ -42,7 +42,7 @@ public class InputRemap : MonoBehaviour
     /// <summary>
     /// Returns the Player instance class of the current player
     /// </summary>
-    private Player CurrentPlayer { get { return InputManager.Players[currentPlayer].GetComponent<Player>(); } }
+    private IPlayer CurrentPlayer { get { return InputManager.Players[currentPlayer].GetComponent<IPlayer>(); } }
 
     void Start ()
     {
@@ -151,7 +151,7 @@ public class InputRemap : MonoBehaviour
         KeyCode key = KeyCode.None;
         text[1].text = "";
 
-        Player player = CurrentPlayer;
+        IPlayer player = CurrentPlayer;
         if (player.InputMethod == InputManager.InputMethod.Keyboard)
         {
             while ((key = InputManager.GetNextKeyboardButton()) == KeyCode.None)
@@ -198,7 +198,7 @@ public class InputRemap : MonoBehaviour
         Color color = playerText.color;
         color.a = 0;
 
-        Player player = CurrentPlayer;
+        IPlayer player = CurrentPlayer;
         int previousPlayer = currentPlayer;
 
         while(InputManager.GetButton("A", player) == false)
@@ -246,7 +246,7 @@ public class InputRemap : MonoBehaviour
         Color color = inputText.color;
         color.a = 0;
 
-        Player player = CurrentPlayer;
+        IPlayer player = CurrentPlayer;
         int previousMethod = (int)player.InputMethod;
         int newMethod = previousMethod;
 
@@ -296,7 +296,7 @@ public class InputRemap : MonoBehaviour
         playerText.text = "Player " + (currentPlayer + 1);
         inputText.text = "Input Type: " + CurrentPlayer.InputMethod.ToString();
 
-        Player player = CurrentPlayer;
+        IPlayer player = CurrentPlayer;
 
         if (player.InputMethod == InputManager.InputMethod.Keyboard)
             UpdateKeyboardControlText();
@@ -373,7 +373,7 @@ public class InputRemap : MonoBehaviour
     // Update input values from the current player
     private void UpdateInput()
     {
-        Player player = CurrentPlayer;
+        IPlayer player = CurrentPlayer;
 
         leftHorizontal = InputManager.GetAxisDown("LeftHorizontal", player);
         leftVertical = InputManager.GetAxisDown("LeftVertical", player);

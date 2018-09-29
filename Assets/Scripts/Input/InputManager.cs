@@ -11,7 +11,7 @@ using XInputDotNetPure;
  * Author:      Zachary Schmalz
  * Version:     1.1.0
  * Date:        September 28, 2018
- *              Converted class to be primarily static
+ *              Converted class to be primarily static and implemented IPlayer interface
  */
 
 /// <summary>
@@ -141,12 +141,12 @@ public class InputManager : MonoBehaviour
             return;
 
         // If there is only 1 player and the players' input method is the keyboard, change the input method to a connected controller
-        else if(players.Count == 1 && players[0].GetComponent<Player>().InputMethod == InputMethod.Keyboard)
+        else if(players.Count == 1 && players[0].GetComponent<IPlayer>().InputMethod == InputMethod.Keyboard)
         {
             if(inputMethod == InputMethod.XboxController)
             {
-                players[0].GetComponent<Player>().PlayerIndex = 0;
-                players[0].GetComponent<Player>().InputMethod = inputMethod;
+                players[0].GetComponent<IPlayer>().PlayerIndex = 0;
+                players[0].GetComponent<IPlayer>().InputMethod = inputMethod;
                 return;
             }
         }
@@ -157,8 +157,8 @@ public class InputManager : MonoBehaviour
             GameObject newPlayer;
             players.Add(newPlayer = Instantiate(singleton.playerPrefab));
 
-            newPlayer.GetComponent<Player>().InputMethod = inputMethod;
-            newPlayer.GetComponent<Player>().PlayerIndex = players.IndexOf(newPlayer);
+            newPlayer.GetComponent<IPlayer>().InputMethod = inputMethod;
+            newPlayer.GetComponent<IPlayer>().PlayerIndex = players.IndexOf(newPlayer);
 
             DuplicateDictionaries();
             return;
@@ -172,13 +172,13 @@ public class InputManager : MonoBehaviour
     public static void RemovePlayer(int indexToRemove)
     {
         // If removing the first player and the player is using a controller, do not remove the player and switch the input method to keyboard
-        if(indexToRemove == 0 && players[indexToRemove].GetComponent<Player>().InputMethod == InputMethod.XboxController)
+        if(indexToRemove == 0 && players[indexToRemove].GetComponent<IPlayer>().InputMethod == InputMethod.XboxController)
         {
-            players[indexToRemove].GetComponent<Player>().InputMethod = InputMethod.Keyboard;
+            players[indexToRemove].GetComponent<IPlayer>().InputMethod = InputMethod.Keyboard;
         }
 
         // Remove the player from lists and delete their associated dictionaries in the lists
-        else if(players[indexToRemove].GetComponent<Player>().InputMethod == InputMethod.XboxController)
+        else if(players[indexToRemove].GetComponent<IPlayer>().InputMethod == InputMethod.XboxController)
         {
             GameObject playerToRemove = players[indexToRemove];
             players.RemoveAt(indexToRemove);
@@ -201,7 +201,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="axisKey">The name given to the axis in the inspector</param>
     /// <param name="player">The player index to check the input from</param>
-    public static float GetAxis(string axisKey, Player player = null)
+    public static float GetAxis(string axisKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -239,7 +239,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="axisKey"></param>
     /// <param name="player"></param>
-    public static float GetAxisDown(string axisKey, Player player = null)
+    public static float GetAxisDown(string axisKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -277,7 +277,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public static bool GetButton(string buttonKey, Player player = null)
+    public static bool GetButton(string buttonKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -305,7 +305,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public static bool GetButtonDown(string buttonKey, Player player = null)
+    public static bool GetButtonDown(string buttonKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -333,7 +333,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public static bool GetButtonUp(string buttonKey, Player player = null)
+    public static bool GetButtonUp(string buttonKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -379,7 +379,7 @@ public class InputManager : MonoBehaviour
     /// If no player exists, returns None
     /// </summary>
     /// <param name="player"></param>
-    public static XboxController.XboxButton GetNextXboxButton(Player player = null)
+    public static XboxController.XboxButton GetNextXboxButton(IPlayer player = null)
     {
         if (player == null)
         {
@@ -400,7 +400,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public static void ResetButton(string buttonKey, Player player)
+    public static void ResetButton(string buttonKey, IPlayer player)
     {
         if (player == null)
             return;
@@ -414,7 +414,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public static void ResetButton(XboxController.XboxButton button, Player player)
+    public static void ResetButton(XboxController.XboxButton button, IPlayer player)
     {
         if (player == null)
             return;
@@ -429,7 +429,7 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="key"></param>
     /// <param name="player"></param>
-    public static void RemapKeyboardButton(string buttonKey, KeyCode key, Player player)
+    public static void RemapKeyboardButton(string buttonKey, KeyCode key, IPlayer player)
     {
         if (player == null)
             return;
@@ -450,7 +450,7 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="button"></param>
     /// <param name="player"></param>
-    public static void RemapXboxButton(string buttonKey, XboxController.XboxButton button, Player player)
+    public static void RemapXboxButton(string buttonKey, XboxController.XboxButton button, IPlayer player)
     {
         // !!!NOTE!!! - Currently remapping xbox axis is not supported
         if (player == null)
