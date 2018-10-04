@@ -7,7 +7,7 @@
  /// <summary>
  /// This interface is used for communication with the InputManager class. 
  /// </summary>
-public interface IPlayer
+public interface IInputPlayer
 {
     InputManager.InputMethod InputMethod { get; set; }
     int PlayerIndex { get; set; }

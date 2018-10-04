@@ -7,7 +7,7 @@ public class QuickSwap : MonoBehaviour {
     Allows the player to swap between a stored color and their currect color
      */
 	ColorSwap colorSwap;
-    private Player player;
+    private InputPlayer inputPlayer;
     private GameObject PalletCurrent;
     private GameObject PalletBackup;
     private SpriteRenderer PalletCurrentRender;
@@ -15,7 +15,7 @@ public class QuickSwap : MonoBehaviour {
     public int storedColor;
     void Awake () {
         colorSwap = GetComponent<ColorSwap>(); 
-        player = GetComponent<Player>();
+        inputPlayer = GetComponent<InputPlayer>();
     }
 	void Start () { 
         // Set the stored color to whatever the player has at the time
@@ -40,7 +40,7 @@ public class QuickSwap : MonoBehaviour {
     }
 	
 	void Update () {
-		if(InputManager.GetButtonDown("X", player)) {
+		if(InputManager.GetButtonDown("X", inputPlayer)) {
             int temp = colorSwap.currentColor;
             colorSwap.SetColor(storedColor);
             storedColor = temp;
