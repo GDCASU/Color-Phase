@@ -6,23 +6,39 @@ using UnityEngine.Scripting.APIUpdating;
 
 public class PlayerMovement : MonoBehaviour
 {
-	public GameObject cam;
 	public IInputPlayer player;
-	public float speed = 2.0F;
+	public GameObject cam;
+	public float speed = 2.0f;
+	public float jumpStrength = 20f;
+	public float minimumY = -30f;
 	
 	private Rigidbody rb;
 	private IDictionary<PlayerAction, string> actionStrings;
-	private readonly float axisModifier = Mathf.Sqrt(2) / 2;
 	private Vector3 ledgeMemory;
 	private bool jumping;
+	private static readonly float axisModifier = Mathf.Sqrt(2) / 2;
+	private static readonly float pushModifier = 50f;
+
+	private enum PlayerAction
+	{
+		Forward,
+		Back,
+		Left,
+		Right,
+		Jump
+	}
 
 	private void Start()
 	{
 		rb = GetComponent<Rigidbody>();
-		actionStrings.Add(PlayerAction.Forward, "Forward");
-		actionStrings.Add(PlayerAction.Back, "Back");
-		actionStrings.Add(PlayerAction.Left, "Left");
-		actionStrings.Add(PlayerAction.Right, "Right");
+		actionStrings = new Dictionary<PlayerAction, string>
+		{
+			// this can be made more dynamic once our usage of the InputManager has been more standardized
+			{PlayerAction.Forward, "Forward"},
+			{PlayerAction.Back, "Back"},
+			{PlayerAction.Left, "Left"},
+			{PlayerAction.Right, "Right"}
+		};
 	}
 
 	private void Update()
@@ -44,17 +60,9 @@ public class PlayerMovement : MonoBehaviour
 		xAxis *= axisModifier;
 		zAxis *= axisModifier;
 
-		// Old input style, I'm not really sure what this is but ideally we could get rid of it
-		if (Input.GetKey(KeyCode.Q))
-		{
-			Cursor.visible = true;
-			Cursor.lockState = CursorLockMode.None;
-		}
-
 		// If the player falls off of the map then set the player on the last ledge
-		if (transform.position.y < -30)
+		if (transform.position.y < minimumY)
 		{
-			//TODO: Remove health from player(s)
 			rb.velocity = new Vector3(0, 1, 0);
 			transform.position = ledgeMemory;
 		}
@@ -66,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
 			if (Trying(PlayerAction.Jump) && !jumping)
 			{
-				rb.velocity = new Vector3(rb.velocity.x, 20, rb.velocity.z);
+				rb.velocity = new Vector3(rb.velocity.x, jumpStrength, rb.velocity.z);
 				jumping = true;
 			}
 		}
@@ -78,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
 		//uncomment to prevent movement mid-air
 		//if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
 		{
-			Vector3 push = (cam.transform.forward * zAxis + cam.transform.right * xAxis) * speed * 50;
+			Vector3 push = (cam.transform.forward * zAxis + cam.transform.right * xAxis) * speed * pushModifier;
 			rb.AddForce(push, ForceMode.Acceleration);
 			transform.LookAt(transform.position + push);
 			transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
@@ -89,13 +97,4 @@ public class PlayerMovement : MonoBehaviour
 	{
 		return InputManager.GetButton(actionStrings[action], player);
 	}
-}
-
-public enum PlayerAction
-{
-	Forward,
-	Back,
-	Left,
-	Right,
-	Jump
 }
