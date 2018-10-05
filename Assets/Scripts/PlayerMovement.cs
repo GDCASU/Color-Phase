@@ -7,7 +7,6 @@ using UnityEngine.Scripting.APIUpdating;
 public class PlayerMovement : MonoBehaviour
 {
 	public GameObject cam;
-	public IPlayerInput playerInput = PlayerInput.instance;
 	public float speed = 2.0f;
 	public float jumpStrength = 20f;
 	public float minimumY = -30f;
@@ -79,6 +78,6 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool Trying(PlayerAction action)
 	{
-		return playerInput.GetButton(action, player);
+		return PlayerInput.GetButton(action, player);
 	}
 }
