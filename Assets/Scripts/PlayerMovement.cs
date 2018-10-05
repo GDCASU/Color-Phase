@@ -6,39 +6,24 @@ using UnityEngine.Scripting.APIUpdating;
 
 public class PlayerMovement : MonoBehaviour
 {
-	public IInputPlayer player;
+	/// <summary>
+	/// 
+	/// </summary>
+	public IPlayerInput playerInput;
 	public GameObject cam;
 	public float speed = 2.0f;
 	public float jumpStrength = 20f;
 	public float minimumY = -30f;
 	
 	private Rigidbody rb;
-	private IDictionary<PlayerAction, string> actionStrings;
 	private Vector3 ledgeMemory;
 	private bool jumping;
 	private static readonly float axisModifier = Mathf.Sqrt(2) / 2;
 	private static readonly float pushModifier = 50f;
 
-	private enum PlayerAction
-	{
-		Forward,
-		Back,
-		Left,
-		Right,
-		Jump
-	}
-
 	private void Start()
 	{
 		rb = GetComponent<Rigidbody>();
-		actionStrings = new Dictionary<PlayerAction, string>
-		{
-			// this can be made more dynamic once our usage of the InputManager has been more standardized
-			{PlayerAction.Forward, "Forward"},
-			{PlayerAction.Back, "Back"},
-			{PlayerAction.Left, "Left"},
-			{PlayerAction.Right, "Right"}
-		};
 	}
 
 	private void Update()
@@ -95,6 +80,6 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool Trying(PlayerAction action)
 	{
-		return InputManager.GetButton(actionStrings[action], player);
+		return playerInput.GetButton(action);
 	}
 }
