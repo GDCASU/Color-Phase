@@ -7,6 +7,11 @@ using XInputDotNetPure;
  * Author:      Zachary Schmalz
  * Version:     1.0.0
  * Date:        September 19, 2018
+ * 
+ * Author:      Zachary Schmalz
+ * Version:     1.1.0
+ * Date:        September 28, 2018
+ *              Converted class to be primarily static and implemented IPlayer interface
  */
 
 /// <summary>
@@ -45,29 +50,29 @@ public class InputManager : MonoBehaviour
         public KeyCode keyboardButton;
         public XboxController.XboxButton xboxButton;
     }
-
-    public static InputManager singleton;
-
+    
     // Public class variables
     public GameObject playerPrefab;
     [Range(1, 4)] public int maxPlayers;
-    [HideInInspector] public List<GameObject> players;
     public List<Axis> axes;
     public List<Button> buttons;
 
     // Private class variables
-    private KeyboardController keyboardController;
-    private List<Dictionary<string, KeyCode>> keyboardAxisDictList;
-    private List<Dictionary<string, KeyCode>> keyboardButtonDictList;
-    private List<XboxController> xboxControllers;
-    private List<Dictionary<string, XboxController.XboxAxis>> xboxAxisDictList;
-    private List<Dictionary<string, XboxController.XboxButton>> xboxButtonDictList;
+    private static InputManager singleton;
+    private static List<GameObject> players;
+
+    private static KeyboardController keyboardController;
+    private static List<Dictionary<string, KeyCode>> keyboardAxisDictList;
+    private static List<Dictionary<string, KeyCode>> keyboardButtonDictList;
+    private static List<XboxController> xboxControllers;
+    private static List<Dictionary<string, XboxController.XboxAxis>> xboxAxisDictList;
+    private static List<Dictionary<string, XboxController.XboxButton>> xboxButtonDictList;
 
     // Public class properties
     /// <summary>
     /// Returns the amount of controllers connected
     /// </summary>
-    public int ControllersConnected
+    public static int ControllersConnected
     {
         get
         {
@@ -78,17 +83,28 @@ public class InputManager : MonoBehaviour
             return count;
         }
     }
+    /// <summary>
+    /// Property for static access to players
+    /// </summary>
+    public static List<GameObject> Players { get { return players; } }
 
-    void Awake()
+    // Static properties for accessing paritcular players
+    public static GameObject PlayerOne { get { return (players.Count == 0 || players[0] == null) ? null : players[0]; } }
+    public static GameObject PlayerTwo { get { return (players.Count <= 1 || players[1] == null) ? null : players[1]; } }
+    public static GameObject PlayerThree { get { return (players.Count <= 2 || players[2] == null) ? null : players[2]; } }
+    public static GameObject PlayerFour { get { return (players.Count <= 3 || players[3] == null) ? null : players[3]; } }
+
+    public void Awake()
     {
-        if (singleton == null)
+        // Delete any extra copies of script not attached to the GameObject with the GameManager
+        if (singleton == null && gameObject.GetComponent<GameManager>())
             singleton = this;
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
-
+        
         players = new List<GameObject>();
 
         InitializeKeyboardInput();
@@ -118,19 +134,19 @@ public class InputManager : MonoBehaviour
     /// Adds a new player with a specified InputMethod
     /// </summary>
     /// <param name="inputMethod"></param>
-    public void AddPlayer(InputMethod inputMethod)
+    public static void AddPlayer(InputMethod inputMethod)
     {
         // Do not add more players than the maximum allowed
-        if (players.Count >= maxPlayers)
+        if (players.Count >= singleton.maxPlayers)
             return;
 
         // If there is only 1 player and the players' input method is the keyboard, change the input method to a connected controller
-        else if(players.Count == 1 && players[0].GetComponent<Player>().InputMethod == InputMethod.Keyboard)
+        else if(players.Count == 1 && players[0].GetComponent<IPlayer>().InputMethod == InputMethod.Keyboard)
         {
             if(inputMethod == InputMethod.XboxController)
             {
-                players[0].GetComponent<Player>().PlayerIndex = 0;
-                players[0].GetComponent<Player>().InputMethod = inputMethod;
+                players[0].GetComponent<IPlayer>().PlayerIndex = 0;
+                players[0].GetComponent<IPlayer>().InputMethod = inputMethod;
                 return;
             }
         }
@@ -139,10 +155,10 @@ public class InputManager : MonoBehaviour
         else
         {
             GameObject newPlayer;
-            players.Add(newPlayer = Instantiate(playerPrefab));
+            players.Add(newPlayer = Instantiate(singleton.playerPrefab));
 
-            newPlayer.GetComponent<Player>().InputMethod = inputMethod;
-            newPlayer.GetComponent<Player>().PlayerIndex = players.IndexOf(newPlayer);
+            newPlayer.GetComponent<IPlayer>().InputMethod = inputMethod;
+            newPlayer.GetComponent<IPlayer>().PlayerIndex = players.IndexOf(newPlayer);
 
             DuplicateDictionaries();
             return;
@@ -153,16 +169,16 @@ public class InputManager : MonoBehaviour
     /// Remove a player at the specified index
     /// </summary>
     /// <param name="indexToRemove"></param>
-    public void RemovePlayer(int indexToRemove)
+    public static void RemovePlayer(int indexToRemove)
     {
         // If removing the first player and the player is using a controller, do not remove the player and switch the input method to keyboard
-        if(indexToRemove == 0 && players[indexToRemove].GetComponent<Player>().InputMethod == InputMethod.XboxController)
+        if(indexToRemove == 0 && players[indexToRemove].GetComponent<IPlayer>().InputMethod == InputMethod.XboxController)
         {
-            players[indexToRemove].GetComponent<Player>().InputMethod = InputMethod.Keyboard;
+            players[indexToRemove].GetComponent<IPlayer>().InputMethod = InputMethod.Keyboard;
         }
 
         // Remove the player from lists and delete their associated dictionaries in the lists
-        else if(players[indexToRemove].GetComponent<Player>().InputMethod == InputMethod.XboxController)
+        else if(players[indexToRemove].GetComponent<IPlayer>().InputMethod == InputMethod.XboxController)
         {
             GameObject playerToRemove = players[indexToRemove];
             players.RemoveAt(indexToRemove);
@@ -185,7 +201,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="axisKey">The name given to the axis in the inspector</param>
     /// <param name="player">The player index to check the input from</param>
-    public float GetAxis(string axisKey, Player player = null)
+    public static float GetAxis(string axisKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -223,7 +239,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="axisKey"></param>
     /// <param name="player"></param>
-    public float GetAxisDown(string axisKey, Player player = null)
+    public static float GetAxisDown(string axisKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -261,7 +277,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public bool GetButton(string buttonKey, Player player = null)
+    public static bool GetButton(string buttonKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -289,7 +305,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public bool GetButtonDown(string buttonKey, Player player = null)
+    public static bool GetButtonDown(string buttonKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -317,7 +333,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public bool GetButtonUp(string buttonKey, Player player = null)
+    public static bool GetButtonUp(string buttonKey, IPlayer player = null)
     {
         if (player == null)
         {
@@ -343,7 +359,7 @@ public class InputManager : MonoBehaviour
     /// <summary>
     /// Returns the first Keyboard button that is pressed
     /// </summary>
-    public KeyCode GetNextKeyboardButton()
+    public static KeyCode GetNextKeyboardButton()
     {
         foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
         {
@@ -363,7 +379,7 @@ public class InputManager : MonoBehaviour
     /// If no player exists, returns None
     /// </summary>
     /// <param name="player"></param>
-    public XboxController.XboxButton GetNextXboxButton(Player player = null)
+    public static XboxController.XboxButton GetNextXboxButton(IPlayer player = null)
     {
         if (player == null)
         {
@@ -384,7 +400,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public void ResetButton(string buttonKey, Player player)
+    public static void ResetButton(string buttonKey, IPlayer player)
     {
         if (player == null)
             return;
@@ -398,7 +414,7 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public void ResetButton(XboxController.XboxButton button, Player player)
+    public static void ResetButton(XboxController.XboxButton button, IPlayer player)
     {
         if (player == null)
             return;
@@ -413,7 +429,7 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="key"></param>
     /// <param name="player"></param>
-    public void RemapKeyboardButton(string buttonKey, KeyCode key, Player player)
+    public static void RemapKeyboardButton(string buttonKey, KeyCode key, IPlayer player)
     {
         if (player == null)
             return;
@@ -434,7 +450,7 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="button"></param>
     /// <param name="player"></param>
-    public void RemapXboxButton(string buttonKey, XboxController.XboxButton button, Player player)
+    public static void RemapXboxButton(string buttonKey, XboxController.XboxButton button, IPlayer player)
     {
         // !!!NOTE!!! - Currently remapping xbox axis is not supported
         if (player == null)
@@ -447,7 +463,7 @@ public class InputManager : MonoBehaviour
     /// Returns a list containing a KeyboardAxisDictionary and KeyboardButtonDictionary at the specified index
     /// </summary>
     /// <param name="index"></param>
-    public List<Dictionary<string, KeyCode>> GetKeyboardDictionary(int index)
+    public static List<Dictionary<string, KeyCode>> GetKeyboardDictionary(int index)
     {
         if(index >= keyboardAxisDictList.Count) { Debug.InputLog("Index is out of bounds of Keyboard Axis/Button Dictionary list", Debug.LogType.Error); return null; }
         return new List<Dictionary<string, KeyCode>>() { keyboardAxisDictList[index], keyboardButtonDictList[index] };
@@ -457,7 +473,7 @@ public class InputManager : MonoBehaviour
     /// Returns an XboxAxisDictionary at the specified index
     /// </summary>
     /// <param name="index"></param>
-    public Dictionary<string, XboxController.XboxAxis> GetXboxAxisDictionary(int index)
+    public static Dictionary<string, XboxController.XboxAxis> GetXboxAxisDictionary(int index)
     {
         if (index >= xboxAxisDictList.Count) { Debug.InputLog("Index is out of bounds of Xbox Axis Dictionary list", Debug.LogType.Error); return null; }
         return xboxAxisDictList[index];
@@ -467,13 +483,13 @@ public class InputManager : MonoBehaviour
     /// Returns an XboxButtonDictionary at the specified index
     /// </summary>
     /// <param name="index"></param>
-    public Dictionary<string, XboxController.XboxButton> GetXboxButtonDictionary(int index)
+    public static Dictionary<string, XboxController.XboxButton> GetXboxButtonDictionary(int index)
     {
         if (index >= xboxButtonDictList.Count) { Debug.InputLog("Index is out of bounds of Xbox Button Dictionary list", Debug.LogType.Error); return null; }
         return xboxButtonDictList[index];
     }
 
-    private KeyCode KeyboardAxisLookUp(Dictionary<string, KeyCode> dict, string key)
+    private static KeyCode KeyboardAxisLookUp(Dictionary<string, KeyCode> dict, string key)
     {
         if (dict.ContainsKey(key) == false)
         {
@@ -483,7 +499,7 @@ public class InputManager : MonoBehaviour
         else return dict[key];
     }
 
-    private KeyCode KeyboardButtonLookUp(Dictionary<string, KeyCode> dict, string key)
+    private static KeyCode KeyboardButtonLookUp(Dictionary<string, KeyCode> dict, string key)
     {
         if (dict.ContainsKey(key) == false)
         {
@@ -493,7 +509,7 @@ public class InputManager : MonoBehaviour
         else return dict[key];
     }
 
-    private XboxController.XboxAxis XboxAxisLookUp(Dictionary<string, XboxController.XboxAxis> dict, string key)
+    private static XboxController.XboxAxis XboxAxisLookUp(Dictionary<string, XboxController.XboxAxis> dict, string key)
     {
         if (dict.ContainsKey(key) == false)
         {
@@ -503,7 +519,7 @@ public class InputManager : MonoBehaviour
         else return dict[key];
     }
 
-    private XboxController.XboxButton XboxButtonLookUp(Dictionary<string, XboxController.XboxButton> dict, string key)
+    private static XboxController.XboxButton XboxButtonLookUp(Dictionary<string, XboxController.XboxButton> dict, string key)
     {
         if (dict.ContainsKey(key) == false)
         {
@@ -517,7 +533,7 @@ public class InputManager : MonoBehaviour
     /// Returns the value that has the highest aboslute value in a list of floats
     /// </summary>
     /// <param name="values"></param>
-    private float LargestAbsoluteValue(List<float> values)
+    private static float LargestAbsoluteValue(List<float> values)
     {
         float largest = 0f;
         foreach(float f in values)
@@ -529,7 +545,7 @@ public class InputManager : MonoBehaviour
     /// <summary>
     /// Creates a copy of the Keyboard Axis/Button and Xbox Axis/Button dictionaries for each player added
     /// </summary>
-    private void DuplicateDictionaries()
+    private static void DuplicateDictionaries()
     {
         Dictionary<string, KeyCode> newKeyboardAxisDict = keyboardAxisDictList[0].ToDictionary(entry => entry.Key, entry => entry.Value);
         keyboardAxisDictList.Add(newKeyboardAxisDict);
@@ -547,13 +563,13 @@ public class InputManager : MonoBehaviour
     /// <summary>
     /// Initializes the Keyboard input and value dictionaries
     /// </summary>
-    private void InitializeKeyboardInput()
+    private static void InitializeKeyboardInput()
     {
         keyboardController = new KeyboardController();
         keyboardAxisDictList = new List<Dictionary<string, KeyCode>>() { new Dictionary<string, KeyCode>() };
 
         // Add all axes to the keyboard axis dictionary
-        foreach (Axis x in axes)
+        foreach (Axis x in singleton.axes)
         {
             // Add the positive/negative keyboard axis with the (Pos)/(Neg) addition to the key
             keyboardAxisDictList[0].Add("(Pos)" + x.axisName, x.positiveKeyboardAxis);
@@ -562,28 +578,28 @@ public class InputManager : MonoBehaviour
 
         // Add all buttons to the keyboard button dictionary
         keyboardButtonDictList = new List<Dictionary<string, KeyCode>>() { new Dictionary<string, KeyCode>() };
-        foreach (Button b in buttons)
+        foreach (Button b in singleton.buttons)
             keyboardButtonDictList[0].Add(b.buttonName, b.keyboardButton);
     }
 
     /// <summary>
     /// Initializes the Xbox controllers and value dictionaries
     /// </summary>
-    private void InitializeXboxInput()
+    private static void InitializeXboxInput()
     {
         // Create controller list and objects for each controller
         xboxControllers = new List<XboxController>();
-        for (int i = 0; i < maxPlayers; i++)
+        for (int i = 0; i < singleton.maxPlayers; i++)
             xboxControllers.Add(new XboxController((PlayerIndex)i));
 
         // Initialize XboxAxis dictionary
         xboxAxisDictList = new List<Dictionary<string, XboxController.XboxAxis>>() { new Dictionary<string, XboxController.XboxAxis>() };
-        foreach (Axis x in axes)
+        foreach (Axis x in singleton.axes)
             xboxAxisDictList[0].Add(x.axisName, x.xboxAxis);
 
         // Initialize XboxButton dictionary
         xboxButtonDictList = new List<Dictionary<string, XboxController.XboxButton>>() { new Dictionary<string, XboxController.XboxButton>() };
-        foreach (Button b in buttons)
+        foreach (Button b in singleton.buttons)
             xboxButtonDictList[0].Add(b.buttonName, b.xboxButton);
     }
 }

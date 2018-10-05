@@ -40,7 +40,7 @@ public class QuickSwap : MonoBehaviour {
     }
 	
 	void Update () {
-		if(InputManager.singleton.GetButtonDown("X", player)) {
+		if(InputManager.GetButtonDown("X", player)) {
             int temp = colorSwap.currentColor;
             colorSwap.SetColor(storedColor);
             storedColor = temp;
