@@ -26,7 +26,6 @@ public class InputRemap : MonoBehaviour
     public Color selectedColor;
 
     // Private class variables
-    private InputManager input;
     private List<GameObject> controls;
     private int currentSelected;
     private int currentPlayer;
@@ -43,11 +42,10 @@ public class InputRemap : MonoBehaviour
     /// <summary>
     /// Returns the Player instance class of the current player
     /// </summary>
-    private Player CurrentPlayer { get { return input.players[currentPlayer].GetComponent<Player>(); } }
+    private IInputPlayer CurrentPlayer { get { return InputManager.Players[currentPlayer].GetComponent<IInputPlayer>(); } }
 
     void Start ()
     {
-        input = InputManager.singleton;
         controls = new List<GameObject>() { playerText.gameObject, inputText.gameObject };
         currentPlayer = 0;
         UpdateText();
@@ -114,10 +112,8 @@ public class InputRemap : MonoBehaviour
             }
 
             // When the player selects a player, input method, or control to change, start the respective coroutine
-            if (input.GetButtonDown("A", CurrentPlayer))
+            if (InputManager.GetButtonDown("A", CurrentPlayer))
             {
-                input.ResetButton("A", CurrentPlayer);
-
                 if (CurrentSelected == 0)
                     StartCoroutine(SwitchPlayer());
                 else if (CurrentSelected == 1)
@@ -145,6 +141,8 @@ public class InputRemap : MonoBehaviour
     // Coroutine for remapping controls
     IEnumerator RemapControl()
     {
+        yield return new WaitUntil(() => InputManager.GetButtonUp("A", CurrentPlayer) == true);
+
         Text[] text = controls[CurrentSelected].GetComponentsInChildren<Text>();
 
         isRemapping = true;
@@ -153,10 +151,10 @@ public class InputRemap : MonoBehaviour
         KeyCode key = KeyCode.None;
         text[1].text = "";
 
-        Player player = CurrentPlayer;
+        IInputPlayer player = CurrentPlayer;
         if (player.InputMethod == InputManager.InputMethod.Keyboard)
         {
-            while ((key = input.GetNextKeyboardButton()) == KeyCode.None)
+            while ((key = InputManager.GetNextKeyboardButton()) == KeyCode.None)
             {
                 c.a = Mathf.Abs(Mathf.Sin(Time.time * 3));
                 controls[CurrentSelected].GetComponentInChildren<Image>().color = c;
@@ -164,14 +162,14 @@ public class InputRemap : MonoBehaviour
             }
             if (key != KeyCode.None)
             {
-                input.RemapKeyboardButton(text[0].text, key, player);
+                InputManager.RemapKeyboardButton(text[0].text, key, player);
                 text[1].text = key.ToString();
             }
         }
 
         else if (player.InputMethod == InputManager.InputMethod.XboxController)
         {
-            while ((button = input.GetNextXboxButton()) == XboxController.XboxButton.None)
+            while ((button = InputManager.GetNextXboxButton(player)) == XboxController.XboxButton.None)
             {
                 c.a = Mathf.Abs(Mathf.Sin(Time.time * 3));
                 controls[CurrentSelected].GetComponentInChildren<Image>().color = c;
@@ -179,12 +177,13 @@ public class InputRemap : MonoBehaviour
             }
             if (button != XboxController.XboxButton.None)
             {
-                input.RemapXboxButton(text[0].text, button, player);
+                InputManager.RemapXboxButton(text[0].text, button, player);
                 text[1].text = button.ToString();
             }
         }
 
-        input.ResetButton(button, player);
+        yield return new WaitUntil(() => InputManager.GetButtonUp(text[0].text, player));
+
         c.a = 0;
         controls[CurrentSelected].GetComponentInChildren<Image>().color = c;
         isRemapping = false;
@@ -193,14 +192,16 @@ public class InputRemap : MonoBehaviour
     // Coroutine for selecting the current players input mapping
     IEnumerator SwitchPlayer()
     {
+        yield return new WaitUntil(() => InputManager.GetButtonUp("A", CurrentPlayer) == true);
+
         isRemapping = true;
         Color color = playerText.color;
         color.a = 0;
 
-        Player player = CurrentPlayer;
+        IInputPlayer player = CurrentPlayer;
         int previousPlayer = currentPlayer;
 
-        while(input.GetButton("A", player) == false)
+        while(InputManager.GetButton("A", player) == false)
         {
             color.a = Mathf.Abs(Mathf.Sin(Time.time * 3));
             playerText.color = color;
@@ -208,7 +209,7 @@ public class InputRemap : MonoBehaviour
             if (leftHorizontal == -1 || left)
             {
                 if (currentPlayer == 0)
-                    currentPlayer = input.players.Count - 1;
+                    currentPlayer = InputManager.Players.Count - 1;
                 else
                     currentPlayer--;
                 playerText.text = "Player " + (currentPlayer + 1);
@@ -216,7 +217,7 @@ public class InputRemap : MonoBehaviour
 
             else if (leftHorizontal == 1 || right)
             {
-                if (currentPlayer == input.players.Count - 1)
+                if (currentPlayer == InputManager.Players.Count - 1)
                     currentPlayer = 0;
                 else
                     currentPlayer++;
@@ -226,10 +227,11 @@ public class InputRemap : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+        yield return new WaitUntil(() => InputManager.GetButtonUp("A", CurrentPlayer) == true);
+
         color.a = 1;
         playerText.color = color;
         isRemapping = false;
-        input.ResetButton("A", player);
 
         if (previousPlayer != currentPlayer)
             UpdateText();
@@ -238,20 +240,22 @@ public class InputRemap : MonoBehaviour
     // Coroutine for switching the input method
     IEnumerator SwitchInput()
     {
+        yield return new WaitUntil(() => InputManager.GetButtonUp("A", CurrentPlayer) == true);
+
         isRemapping = true;
         Color color = inputText.color;
         color.a = 0;
 
-        Player player = CurrentPlayer;
+        IInputPlayer player = CurrentPlayer;
         int previousMethod = (int)player.InputMethod;
         int newMethod = previousMethod;
 
-        while (input.GetButton("A", player) == false)
+        while (InputManager.GetButton("A", player) == false)
         {
             color.a = Mathf.Abs(Mathf.Sin(Time.time * 3));
             inputText.color = color;
 
-            if (previousMethod == (int)InputManager.InputMethod.Keyboard && input.ControllersConnected == 0) { }
+            if (previousMethod == (int)InputManager.InputMethod.Keyboard && InputManager.ControllersConnected == 0) { }
             else
             {
                 if (leftHorizontal == -1 || left)
@@ -265,10 +269,11 @@ public class InputRemap : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+        yield return new WaitUntil(() => InputManager.GetButtonUp("A", player) == true);
+
         color.a = 1;
         inputText.color = color;
         isRemapping = false;
-        input.ResetButton("A", player);
 
         if (previousMethod != newMethod)
         {
@@ -291,7 +296,7 @@ public class InputRemap : MonoBehaviour
         playerText.text = "Player " + (currentPlayer + 1);
         inputText.text = "Input Type: " + CurrentPlayer.InputMethod.ToString();
 
-        Player player = CurrentPlayer;
+        IInputPlayer player = CurrentPlayer;
 
         if (player.InputMethod == InputManager.InputMethod.Keyboard)
             UpdateKeyboardControlText();
@@ -302,7 +307,7 @@ public class InputRemap : MonoBehaviour
     // Updates the text on the canvas with the axis and button keys/values of the current player keyboard input mapping
     private void UpdateKeyboardControlText()
     {
-        List<Dictionary<string, KeyCode>> keyboardDictionary = input.GetKeyboardDictionary(currentPlayer + 1);
+        List<Dictionary<string, KeyCode>> keyboardDictionary = InputManager.GetKeyboardDictionary(currentPlayer + 1);
         int j = 0;
         for (int i = 0; i < keyboardDictionary.Count; i++)
         {
@@ -328,8 +333,8 @@ public class InputRemap : MonoBehaviour
     // Updates the text on the canvas with the axis and button keys/values of the current player xbox controller input mapping 
     private void UpdateXboxControlText()
     {
-        Dictionary<string, XboxController.XboxAxis> xboxAxisDictionary = input.GetXboxAxisDictionary(currentPlayer + 1);
-        Dictionary<string, XboxController.XboxButton> xboxButtonDictionary = input.GetXboxButtonDictionary(currentPlayer + 1);
+        Dictionary<string, XboxController.XboxAxis> xboxAxisDictionary = InputManager.GetXboxAxisDictionary(currentPlayer + 1);
+        Dictionary<string, XboxController.XboxButton> xboxButtonDictionary = InputManager.GetXboxButtonDictionary(currentPlayer + 1);
 
         int i = 0;
         foreach(KeyValuePair<string, XboxController.XboxAxis> kp in xboxAxisDictionary)
@@ -368,13 +373,13 @@ public class InputRemap : MonoBehaviour
     // Update input values from the current player
     private void UpdateInput()
     {
-        Player player = CurrentPlayer;
+        IInputPlayer player = CurrentPlayer;
 
-        leftHorizontal = input.GetAxisDown("LeftHorizontal", player);
-        leftVertical = input.GetAxisDown("LeftVertical", player);
-        up = input.GetButtonDown("Up", player);
-        right = input.GetButtonDown("Right", player);
-        down = input.GetButtonDown("Down", player);
-        left = input.GetButtonDown("Left", player);
+        leftHorizontal = InputManager.GetAxisDown("LeftHorizontal", player);
+        leftVertical = InputManager.GetAxisDown("LeftVertical", player);
+        up = InputManager.GetButtonDown("Up", player);
+        right = InputManager.GetButtonDown("Right", player);
+        down = InputManager.GetButtonDown("Down", player);
+        left = InputManager.GetButtonDown("Left", player);
     }
 }

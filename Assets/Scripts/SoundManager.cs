@@ -7,6 +7,11 @@ using UnityEngine;
  * Author:      Zachary Schmalz
  * Version:     1.0.0
  * Date:        September 13, 2018
+ * 
+ * Author:      Zachary Schmalz
+ * Version:     1.1.0
+ * Date:        September 28, 2018
+ *              Converted class to be static
  */
 
 /// <summary>
@@ -42,10 +47,6 @@ public class Sound
 /// </summary>
 public class SoundManager : MonoBehaviour
 {
-    /// <summary>
-    /// A Singleton reference to the SoundManager visible to all classes
-    /// </summary>
-    public static SoundManager singleton;
 
     /// <summary>
     /// Master volume for all AudioSources in the game
@@ -77,43 +78,47 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     [HideInInspector] public List<Sound> dialogueList;
 
+    /// <summary>
+    /// A Singleton reference to the SoundManager object
+    /// </summary>
+    private static SoundManager singleton;
+
     // Dictionary's for all different types of Sounds
-    private Dictionary<string, Sound> musicDictionary;
-    private Dictionary<string, Sound> effectsDictionary;
-    private Dictionary<string, Sound> dialogueDictionary;
+    private static Dictionary<string, Sound> musicDictionary;
+    private static Dictionary<string, Sound> effectsDictionary;
+    private static Dictionary<string, Sound> dialogueDictionary;
 
     // Reference to the only music source that should be playing
-    private AudioSource musicSource;
+    private static AudioSource musicSource;
 
     // List containing all Sounds that are actively playing
-    private List<AudioSource> sourcesPlaying;
+    private static List<AudioSource> sourcesPlaying;
 
     // Assign singleton value and create sound dictionaries
-    private void Awake()
+    public void Awake()
     {
-        if (singleton == null)
+        // Delete any extra copies of script not attached to the GameObject with the GameManager
+        if (singleton == null && gameObject.GetComponent<GameManager>())
             singleton = this;
 
         else if (singleton != this)
         {
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
-
         CreateDictionaries();
-        Debug.GeneralLog("GameManager Awake");
+        
         Debug.AudioLog("SoundManager Awake");
     }
 
     // Initialize the list of playing sources with the musicSource
-    private void Start()
+    void Start()
     {
         sourcesPlaying = new List<AudioSource>() { musicSource };
     }
 
-    private void Update()
+    void Update()
     {
         
     }
@@ -125,11 +130,11 @@ public class SoundManager : MonoBehaviour
     /// <param name="fadeDuration">How long should the currently playing music fade out before palying</param>
     /// <param name="source">A reference to the AudioSource component</param>
     /// <remarks></remarks>
-    public void PlayMusic(string key, float fadeDuration = 0.0f, AudioSource source = null)
+    public static void PlayMusic(string key, float fadeDuration = 0.0f, AudioSource source = null)
     {
         // Checks that the music dictionary contains the key
         if (musicDictionary.ContainsKey(key))
-            StartCoroutine(PlayMusicCoroutine(key, fadeDuration, source));
+            singleton.StartCoroutine(PlayMusicCoroutine(key, fadeDuration, source));
         else
             Debug.AudioLog("MusicDictionary does not contain key: " + key);
     }
@@ -143,11 +148,11 @@ public class SoundManager : MonoBehaviour
     /// If the <para name="source"> is null, a temporary AudioSource is created and initalized to the values
     /// defined in the sound class, and destroyed after the effect finishes playing. Otherwise, the manager
     /// uses the source provided to play the effect, allowing for a more customized AudioSource (such as 3D)</para></remarks>
-    public void PlayEffect(string key, AudioSource source = null)
+    public static void PlayEffect(string key, AudioSource source = null)
     {
         // Checks that the effects dictionary contains the key
         if (effectsDictionary.ContainsKey(key))
-            StartCoroutine(PlayEffectCoroutine(key, source));
+            singleton.StartCoroutine(PlayEffectCoroutine(key, source));
         else
             Debug.AudioLog("EffectDictionary does not contain key: " + key);
     }
@@ -158,15 +163,15 @@ public class SoundManager : MonoBehaviour
     /// <param name="source">The AudiSource component used to play the effect</param>
     /// <remarks>Use this method to play effects specific to GameObjects and AudioSources (i.e. custom defined AudioSources)
     /// Use this method if there is not a globally defined effect in the effectsList of this class</remarks>
-    public void PlayEffect(AudioSource source)
+    public static void PlayEffect(AudioSource source)
     {
         if (source && source.clip != null)
-            StartCoroutine(PlayEffectCoroutine(source));
+            singleton.StartCoroutine(PlayEffectCoroutine(source));
         else
             Debug.AudioLog("AudioSource and/or AudioClip is null");
     }
 
-    IEnumerator PlayMusicCoroutine(string key, float duration, AudioSource source)
+    static IEnumerator PlayMusicCoroutine(string key, float duration, AudioSource source)
     {
         // If a musicSource already exists and is playing
         if (musicSource && musicSource.isPlaying)
@@ -189,7 +194,7 @@ public class SoundManager : MonoBehaviour
                 }
 
                 // If the source playing the music is attached to this gameObject, destroy it
-                AudioSource[] sources = gameObject.GetComponents<AudioSource>();
+                AudioSource[] sources = singleton.gameObject.GetComponents<AudioSource>();
                 if (sources.Contains<AudioSource>(musicSource))
                 {
                     Debug.AudioLog("Music Source: " + musicSource.clip.name + " - Destroyed");
@@ -202,13 +207,13 @@ public class SoundManager : MonoBehaviour
 
         // If no source is provided, create a temporary AudioSource component to play it
         if (source == null)
-            musicSource = gameObject.AddComponent<AudioSource>();
+            musicSource = singleton.gameObject.AddComponent<AudioSource>();
         else
             musicSource = source;
 
         // Assign properties of the AudioSource to the values defined in the Sound object
         musicSource.clip = sound.clip;
-        musicSource.volume = sound.volume * MusicMasterVolume * MasterVolume;
+        musicSource.volume = sound.volume * singleton.MusicMasterVolume * singleton.MasterVolume;
         musicSource.pitch = sound.pitch;
         musicSource.loop = sound.loop;
         musicSource.Play();
@@ -230,20 +235,20 @@ public class SoundManager : MonoBehaviour
             Debug.AudioLog("External Music Source: " + sound.referenceName + " - Playing");
     }
 
-    IEnumerator PlayEffectCoroutine(string key, AudioSource source)
+    static IEnumerator PlayEffectCoroutine(string key, AudioSource source)
     {
         AudioSource effect;
         Sound sound = effectsDictionary[key];
 
         // If no source is provided, create a temporary source to play the effect
         if (source == null)
-            effect = gameObject.AddComponent<AudioSource>();
+            effect = singleton.gameObject.AddComponent<AudioSource>();
         else
             effect = source;
 
         // Assign properties of the AudioSource to the values defined in the Sound object
         effect.clip = sound.clip;
-        effect.volume = sound.volume * EffectsMasterVolume * MasterVolume;
+        effect.volume = sound.volume * singleton.EffectsMasterVolume * singleton.MasterVolume;
         effect.pitch = sound.pitch;
         effect.loop = false;
         effect.Play();
@@ -266,10 +271,10 @@ public class SoundManager : MonoBehaviour
     }
 
     // This function is meant to play effects from AudioSources that have been defined, and whose clip is not in any dictionary
-    IEnumerator PlayEffectCoroutine(AudioSource source)
+    static IEnumerator PlayEffectCoroutine(AudioSource source)
     {
         float initialVolume = source.volume;
-        source.volume = initialVolume * EffectsMasterVolume * MasterVolume;
+        source.volume = initialVolume * singleton.EffectsMasterVolume * singleton.MasterVolume;
         source.Play();
         sourcesPlaying.Add(source);
         Debug.AudioLog("Effect Source: " + source.clip.name + " - Playing");
@@ -282,7 +287,7 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// Adjusts the volume of all sounds respective to their MasterVolumes parameters
     /// </summary>
-    public void AdjustVolume()
+    public static void AdjustVolume()
     {
         if (sourcesPlaying != null)
         {
@@ -292,17 +297,17 @@ public class SoundManager : MonoBehaviour
                 {
                     Sound s;
 
-                    if (musicDictionary.ContainsValue(s = musicList.Find(x => x.clip.name == source.clip.name)))
-                        source.volume = musicDictionary[s.referenceName].volume * MusicMasterVolume * MasterVolume;
+                    if (musicDictionary.ContainsValue(s = singleton.musicList.Find(x => x.clip.name == source.clip.name)))
+                        source.volume = musicDictionary[s.referenceName].volume * singleton.MusicMasterVolume * singleton.MasterVolume;
 
-                    else if (effectsDictionary.ContainsValue(s = effectsList.Find(x => x.clip.name == source.clip.name)))
-                        source.volume = effectsDictionary[s.referenceName].volume * EffectsMasterVolume * MasterVolume;
+                    else if (effectsDictionary.ContainsValue(s = singleton.effectsList.Find(x => x.clip.name == source.clip.name)))
+                        source.volume = effectsDictionary[s.referenceName].volume * singleton.EffectsMasterVolume * singleton.MasterVolume;
 
-                    else if (dialogueDictionary.ContainsValue(s = dialogueList.Find(x => x.clip.name == source.clip.name)))
-                        source.volume = dialogueDictionary[s.referenceName].volume * DialogueMasterVolume * MasterVolume;
+                    else if (dialogueDictionary.ContainsValue(s = singleton.dialogueList.Find(x => x.clip.name == source.clip.name)))
+                        source.volume = dialogueDictionary[s.referenceName].volume * singleton.DialogueMasterVolume * singleton.MasterVolume;
 
                     else
-                        source.volume = source.volume * MasterVolume;
+                        source.volume = source.volume * singleton.MasterVolume;
                 }
             }
         }
@@ -311,7 +316,7 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// Pauses all currently playing AudioSources
     /// </summary>
-    public void PauseAll()
+    public static void PauseAll()
     {
         int count = 0;
         foreach (AudioSource s in sourcesPlaying)
@@ -328,7 +333,7 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// UnPauses any Paused AudioSource
     /// </summary>
-    public void UnPauseAll()
+    public static void UnPauseAll()
     {
         int count = 0;
         foreach (AudioSource s in sourcesPlaying)
@@ -345,7 +350,7 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// Stops all AudioSources currently playing, and clears the list of playing AudioSources
     /// </summary>
-    public void StopAll()
+    public static void StopAll()
     {
         int count = 0;
         foreach (AudioSource s in sourcesPlaying)
@@ -361,30 +366,30 @@ public class SoundManager : MonoBehaviour
         sourcesPlaying.Add(musicSource);
 
         // Remove any AudioSource attached to the GameObject
-        foreach (AudioSource s in GetComponents<AudioSource>())
+        foreach (AudioSource s in singleton.GetComponents<AudioSource>())
             Destroy(s);
 
         Debug.AudioLog(count + " sounds stopped");
     }
 
     // Function that is called when the script is updated in Unity, currently used for adjusting the volume using the inspector sliders
-    private void OnValidate()
+    private static void OnValidate()
     {
         AdjustVolume();
     }
 
     // Create the sound dictionaries
-    private void CreateDictionaries()
+    private static void CreateDictionaries()
     {
         musicDictionary = new Dictionary<string, Sound>();
         effectsDictionary = new Dictionary<string, Sound>();
         dialogueDictionary = new Dictionary<string, Sound>();
 
-        foreach (Sound s in musicList)
+        foreach (Sound s in singleton.musicList)
             musicDictionary.Add(s.referenceName, s);
-        foreach (Sound s in effectsList)
+        foreach (Sound s in singleton.effectsList)
             effectsDictionary.Add(s.referenceName, s);
-        foreach (Sound s in dialogueList)
+        foreach (Sound s in singleton.dialogueList)
             dialogueDictionary.Add(s.referenceName, s);
     }
 }
