@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class PlayerInput
+public class PlayerInput : IPlayerInput
 {
 	private static IDictionary<PlayerAction, string> actionStrings = new Dictionary<PlayerAction, string>
 	{
@@ -12,13 +12,15 @@ public static class PlayerInput
 		{PlayerAction.Right, "Right"},
 		{PlayerAction.Jump, "Jump"}
 	};
+	
+	public static readonly PlayerInput instance = new PlayerInput();
 
-	public static bool GetButton(PlayerAction action, IInputPlayer player)
+	public bool GetButton(PlayerAction action, IInputPlayer player)
 	{
 		return InputManager.GetButton(actionStrings[action], player);
 	}
 
-	public static float GetAxis(PlayerAction action, IInputPlayer player)
+	public float GetAxis(PlayerAction action, IInputPlayer player)
 	{
 		return InputManager.GetAxis(actionStrings[action], player);
 	}
