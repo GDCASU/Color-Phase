@@ -6,15 +6,12 @@ using UnityEngine.Scripting.APIUpdating;
 
 public class PlayerMovement : MonoBehaviour
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public IPlayerInput playerInput;
 	public GameObject cam;
 	public float speed = 2.0f;
 	public float jumpStrength = 20f;
 	public float minimumY = -30f;
-	
+
+	private IInputPlayer player;
 	private Rigidbody rb;
 	private Vector3 ledgeMemory;
 	private bool jumping;
@@ -23,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Start()
 	{
+		player = GetComponent<IInputPlayer>();
 		rb = GetComponent<Rigidbody>();
 	}
 
@@ -80,6 +78,6 @@ public class PlayerMovement : MonoBehaviour
 
 	private bool Trying(PlayerAction action)
 	{
-		return playerInput.GetButton(action);
+		return PlayerInput.GetButton(action, player);
 	}
 }

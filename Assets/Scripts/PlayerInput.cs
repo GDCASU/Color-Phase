@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInput : MonoBehaviour, IPlayerInput
+public static class PlayerInput
 {
-	/// <summary>
-	/// This is the central dictionary for player input mappings.
-	/// </summary>
-	public static IDictionary<PlayerAction, string> actionStrings = new Dictionary<PlayerAction, string>
+	private static IDictionary<PlayerAction, string> actionStrings = new Dictionary<PlayerAction, string>
 	{
 		{PlayerAction.Forward, "Forward"},
 		{PlayerAction.Back, "Back"},
@@ -15,21 +12,23 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
 		{PlayerAction.Right, "Right"},
 		{PlayerAction.Jump, "Jump"}
 	};
-	
-	private IInputPlayer player;
 
-	private void Start()
-	{
-		if (player == null) player = GetComponent<IInputPlayer>();
-	}
-
-	public bool GetButton(PlayerAction action)
+	public static bool GetButton(PlayerAction action, IInputPlayer player)
 	{
 		return InputManager.GetButton(actionStrings[action], player);
 	}
 
-	public float GetAxis(PlayerAction action)
+	public static float GetAxis(PlayerAction action, IInputPlayer player)
 	{
 		return InputManager.GetAxis(actionStrings[action], player);
 	}
+}
+
+public enum PlayerAction
+{
+	Forward,
+	Back,
+	Left,
+	Right,
+	Jump
 }
