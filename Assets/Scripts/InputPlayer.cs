@@ -15,18 +15,27 @@ public class InputPlayer : MonoBehaviour, IInputPlayer
     /// <summary>
     /// Property to get and set the players' input method type
     /// </summary>
-    public InputManager.InputMethod InputMethod { get; set; }
+    public InputManager.InputMethod InputMethod
+    {
+        get { return inputMethod; }
+        set { inputMethod = value; }
+    }
+
     /// <summary>
     /// Property to get and set the player index
     /// </summary>
-    public int PlayerIndex { get; set; }
-
-	void Start ()
+    public int PlayerIndex
     {
-        
-	}
-	
-	void Update ()
+        get { return playerIndex; }
+        set { playerIndex = value; }
+    }
+    
+    [SerializeField]
+    private InputManager.InputMethod inputMethod;
+    [SerializeField]
+    private int playerIndex;
+
+    void Update ()
     {
         // If getting specific player input (in this case, this player)
 
