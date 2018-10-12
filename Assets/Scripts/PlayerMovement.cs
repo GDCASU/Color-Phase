@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 		//uncomment to prevent movement mid-air
 		//if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
 		{
-			Vector3 push = (cam.transform.forward * zAxis + cam.transform.right * xAxis) * speed * pushModifier;
+			Vector3 push = (transform.forward * zAxis + transform.right * xAxis) * speed * pushModifier;
 			rb.AddForce(push, ForceMode.Acceleration);
 			transform.LookAt(transform.position + push);
 			transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);

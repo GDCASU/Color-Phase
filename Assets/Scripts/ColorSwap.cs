@@ -34,7 +34,7 @@ public class ColorSwap : MonoBehaviour
     private int colorChangeInputToggle = 0;
 
 
-    private MeshRenderer playerMesh;
+    private SkinnedMeshRenderer playerMesh;
     private SpriteRenderer crossHairRender;
 
     void Awake() {
@@ -47,7 +47,7 @@ public class ColorSwap : MonoBehaviour
         };
 
         // Get component references
-        playerMesh = playerModel.GetComponent<MeshRenderer>(); 
+        playerMesh = playerModel.GetComponent<SkinnedMeshRenderer>(); 
         crossHairRender = crossHair.GetComponent<SpriteRenderer>(); 
     }
 
