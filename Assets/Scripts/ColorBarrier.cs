@@ -6,8 +6,6 @@ public class ColorBarrier : MonoBehaviour
 {
     public int barrierColor = 0;
 
-    public ColorSwap[] players;
-
     public Material redMaterial;
     public Material greenMaterial;
     public Material blueMaterial;
@@ -25,7 +23,7 @@ public class ColorBarrier : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach (ColorSwap ply in players)
+        foreach (ColorSwap ply in ColorSwap.players)
             Physics.IgnoreCollision(ply.GetComponent<Collider>(), col, ply.currentColor == barrierColor);
     }
 

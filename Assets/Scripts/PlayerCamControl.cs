@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlayerCamControl : MonoBehaviour
 {
     public int controlState = 0;
-    public float speed = 2.0F;
-    public float direction = 0.0F;
 
     //An array of cameras to switch between
     [Header("Cameras")]
