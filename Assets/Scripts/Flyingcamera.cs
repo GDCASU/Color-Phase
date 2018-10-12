@@ -7,6 +7,9 @@ public class Flyingcamera : MonoBehaviour
     public int controlState = 0;
     public float speed = 2.0F;
     public float direction = 0.0F;
+    public float lookSpeed;
+    public float angleToSnap;
+    public Transform forwardTarget;
 
     //An array of cameras to switch between
     [Header("Cameras")]
@@ -125,15 +128,45 @@ public class Flyingcamera : MonoBehaviour
 
         //uncomment to prevent movement mid-air
         //if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
-        {
+        //{
             Vector3 push = (cams[activecam].transform.forward * zAxis + cams[activecam].transform.right * xAxis) * speed * 50;
             rb.AddForce(push, ForceMode.Acceleration);
-            transform.rotation = Quaternion.Slerp(this.transform.rotation, cams[activecam].transform.rotation, 1);
+            //transform.rotation = Quaternion.Lerp(this.transform.rotation, cams[activecam].transform.rotation, lookSpeed * Time.deltaTime);
             //transform.LookAt(transform.position + push);
+            //transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        //}
+
+        /**
+         * This rotates the player according to
+         * the camera position
+         */
+         //If statement only if input is received
+        if (xAxis != 0 || zAxis != 0)
+        {
+            //The y rotation of the player and the camera
+            float playerRotation = transform.eulerAngles.y;
+            float cameraRotation = cams[activecam].transform.eulerAngles.y;
+
+            /**
+             * This if else statement makes it so that on
+             * initial input it will use the quaternion lerp and
+             * then the else statement is meant for input being
+             * help down.
+             */
+            if (Mathf.Abs(playerRotation - cameraRotation) > angleToSnap)
+            {
+                transform.rotation = Quaternion.Lerp(this.transform.rotation, cams[activecam].transform.rotation, lookSpeed * Time.deltaTime);
+                //transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+            }
+            else
+            {
+                transform.LookAt(forwardTarget);
+            }
+            //Makes sure that the x and z rotations are 0
             transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         }
 
-        if(xAxis == 0 && zAxis == 0)
+        if (xAxis == 0 && zAxis == 0)
         {
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
         }
