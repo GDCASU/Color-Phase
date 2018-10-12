@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
 	public float speed = 2.0f;
 	public float jumpStrength = 20f;
 	public float minimumY = -30f;
-
+    private float colliderHeight;
 	private IInputPlayer player;
 	private Rigidbody rb;
 	private Vector3 ledgeMemory;
@@ -46,15 +46,9 @@ public class PlayerMovement : MonoBehaviour
 		float xAxis = 0;
 		float zAxis = 0;
 
+        // This needs to use the enum abstraction once its sorted out
 		xAxis = InputManager.GetAxis("LeftHorizontal", player);
         zAxis = InputManager.GetAxis("LeftVertical", player);
-		/*if (Trying(PlayerAction.Right)) xAxis++;
-		if (Trying(PlayerAction.Forward)) zAxis++;
-		if (Trying(PlayerAction.Back)) zAxis--; */
-        //Trying(PlayerAction.Jump)
-
-		//xAxis *= axisModifier;
-		//zAxis *= axisModifier;
 
 		// If the player falls off of the map then set the player on the last ledge
 		if (transform.position.y < minimumY)
@@ -63,26 +57,22 @@ public class PlayerMovement : MonoBehaviour
 			transform.position = ledgeMemory;
 		}
 
-		if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.1f))
+		if (Physics.Raycast(transform.position, Vector3.down, 0.5f))
 		{
 			// TODO: Detect if it is a valid platform (Not a moving object)
-			ledgeMemory = transform.position; // Remember the ledge position of the player
             jumping = false;
-
-            if (InputManager.GetButton("A") && !jumping)
-			{
-                rb.AddForce(Vector3.up * jumpStrength * 100, ForceMode.Acceleration);
-				//rb.velocity = new Vector3(rb.velocity.x, jumpStrength, rb.velocity.z);
-				jumping = true;
-			}
+			ledgeMemory = transform.position; // Remember the ledge position of the player
+            if (InputManager.GetButtonDown("A")) rb.AddForce(jumpStrength * Vector3.up, ForceMode.Acceleration);
 		}
+        else jumping = true;
 
 		//uncomment to prevent movement mid-air
 		//if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
 		{
 			transform.LookAt(cam.transform.position);
 			transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y + 180,0);
-            rb.AddForce(transform.forward * zAxis * speed + transform.right * xAxis * speed/2, ForceMode.Acceleration);
+            Vector3 force = transform.forward * zAxis * speed + transform.right * xAxis * speed/2;
+            rb.AddForce(force, ForceMode.Acceleration);
 		}
 	}
 

@@ -11077,6 +11077,11 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 1ad036a2e6de05541aafca8b64dd3537, type: 3}
+--- !u!1 &534843920 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100010, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7,
+    type: 3}
+  m_PrefabInternal: {fileID: 878189212}
 --- !u!1 &537646046
 GameObject:
   m_ObjectHideFlags: 0
@@ -15502,7 +15507,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.061
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -15526,12 +15531,24 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 848797bee7301964382c34b3059de716, type: 2}
+    - target: {fileID: 100012, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
+      propertyPath: m_Name
+      value: Player 1 Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
+      propertyPath: m_Name
+      value: PlayerModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 100012, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
   m_IsPrefabAsset: 0
@@ -15556,9 +15573,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd6700b6ee8c384eba576bdea1286d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
-  speed: 2
-  jumpStrength: 20
+  cam: {fileID: 766603456}
+  speed: 80
+  jumpStrength: 1000
   minimumY: -30
 --- !u!114 &878189216
 MonoBehaviour:
@@ -15572,21 +15589,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlState: 0
-  speed: 2
-  direction: 0
   cams:
-  - {fileID: 0}
+  - {fileID: 766603456}
   - {fileID: 0}
   - {fileID: 0}
   activecam: 0
   sensitivity: 80
-  forward: 119
-  backward: 115
-  right: 100
-  left: 97
   camHorizAxis: Mouse X
   camVertAxis: Mouse Y
-  jumpInput: 32
 --- !u!114 &878189217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15610,14 +15620,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368a53c0aec0f2c4c8596818002cbe8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerModel: {fileID: 0}
-  playerCamera: {fileID: 0}
-  crossHair: {fileID: 0}
+  playerModel: {fileID: 534843920}
+  playerCamera: {fileID: 766603456}
+  crossHair: {fileID: 1623606583}
   lights: []
-  redMaterials: []
-  greenMaterials: []
-  blueMaterials: []
-  yellowMaterials: []
+  redMaterials:
+  - {fileID: 2100000, guid: 313c7344f36a1c343a01bfe59fed8698, type: 2}
+  - {fileID: 2100000, guid: 85f03dfaf0dce8547b1fe553d154db8c, type: 2}
+  - {fileID: 2100000, guid: b3b0bdaad8b55114b9277c23a2aca4ae, type: 2}
+  greenMaterials:
+  - {fileID: 2100000, guid: 4029a364043a19944b676d9325cf3ab1, type: 2}
+  - {fileID: 2100000, guid: 85f03dfaf0dce8547b1fe553d154db8c, type: 2}
+  - {fileID: 2100000, guid: a3a57147f5ce09b46ac612d14fa84bda, type: 2}
+  blueMaterials:
+  - {fileID: 2100000, guid: ac4ecf767522ff34c8e123ebd0621938, type: 2}
+  - {fileID: 2100000, guid: 85f03dfaf0dce8547b1fe553d154db8c, type: 2}
+  - {fileID: 2100000, guid: b0251653c1424064fb4ffade9245b1c5, type: 2}
+  yellowMaterials:
+  - {fileID: 2100000, guid: bf616ba06d776dc459cd7de41d33360a, type: 2}
+  - {fileID: 2100000, guid: 85f03dfaf0dce8547b1fe553d154db8c, type: 2}
+  - {fileID: 2100000, guid: b90fa5be42df7204b84e857c04d84dd6, type: 2}
   PlayerColorsCount: 4
   currentPlayerColor: 0
   colorChangeInput: 323
@@ -15628,16 +15650,16 @@ Rigidbody:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 878189214}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 2
+  m_Mass: 10
+  m_Drag: 4
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!136 &878189220
-CapsuleCollider:
+  m_Interpolate: 1
+  m_Constraints: 80
+  m_CollisionDetection: 1
+--- !u!65 &878189220
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -15645,10 +15667,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.49265194, y: 0.9923612, z: 0.29645252}
+  m_Center: {x: -0.004744053, y: 0.4935084, z: 0.06784582}
 --- !u!1 &880999474 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 1ad036a2e6de05541aafca8b64dd3537,
@@ -18453,7 +18474,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4011876302166104, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114898057032863776, guid: 9d490a65e71b1144a83381737f1f6438,
         type: 2}
@@ -18563,6 +18584,10 @@ Prefab:
     - target: {fileID: 1611816782866864, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1611816782866864, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
+      propertyPath: m_Name
+      value: Player 1 Character OLD
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
@@ -34854,8 +34879,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 766603457}
-  - {fileID: 429062124}
   - {fileID: 878189213}
+  - {fileID: 429062124}
   - {fileID: 601188697}
   - {fileID: 1335547913}
   - {fileID: 1334612450}
