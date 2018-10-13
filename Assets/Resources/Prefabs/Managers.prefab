@@ -85,78 +85,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1259717850098200, guid: b90c9bd104c5b5e46a6dce7d2f93ed47,
     type: 2}
-  maxPlayers: 4
+  maxPlayers: 2
   axes:
-  - axisName: LeftHorizontal
+  - playerAction: 0
     positiveKeyboardAxis: 100
     negativeKeyboardAxis: 97
     xboxAxis: 0
-  - axisName: LeftVertical
+  - playerAction: 1
     positiveKeyboardAxis: 119
     negativeKeyboardAxis: 115
     xboxAxis: 1
-  - axisName: RightHorizontal
-    positiveKeyboardAxis: 108
-    negativeKeyboardAxis: 106
+  - playerAction: 2
+    positiveKeyboardAxis: 275
+    negativeKeyboardAxis: 276
     xboxAxis: 2
-  - axisName: RightVertical
-    positiveKeyboardAxis: 105
-    negativeKeyboardAxis: 107
+  - playerAction: 3
+    positiveKeyboardAxis: 273
+    negativeKeyboardAxis: 274
     xboxAxis: 3
-  - axisName: LeftTrigger
-    positiveKeyboardAxis: 0
-    negativeKeyboardAxis: 0
-    xboxAxis: 4
-  - axisName: RightTrigger
-    positiveKeyboardAxis: 0
-    negativeKeyboardAxis: 0
-    xboxAxis: 5
   buttons:
-  - buttonName: A
+  - playerAction: 0
     keyboardButton: 32
     xboxButton: 0
-  - buttonName: B
-    keyboardButton: 98
-    xboxButton: 1
-  - buttonName: X
-    keyboardButton: 120
-    xboxButton: 2
-  - buttonName: Y
-    keyboardButton: 121
-    xboxButton: 3
-  - buttonName: LeftStick
-    keyboardButton: 304
-    xboxButton: 6
-  - buttonName: RightStick
-    keyboardButton: 303
-    xboxButton: 7
-  - buttonName: LB
-    keyboardButton: 306
-    xboxButton: 4
-  - buttonName: RB
-    keyboardButton: 305
-    xboxButton: 5
-  - buttonName: Up
-    keyboardButton: 273
-    xboxButton: 11
-  - buttonName: Right
-    keyboardButton: 275
-    xboxButton: 12
-  - buttonName: Down
-    keyboardButton: 274
-    xboxButton: 13
-  - buttonName: Left
-    keyboardButton: 276
-    xboxButton: 14
-  - buttonName: Back
-    keyboardButton: 8
-    xboxButton: 8
-  - buttonName: Start
-    keyboardButton: 9
-    xboxButton: 9
-  - buttonName: Menu
-    keyboardButton: 27
-    xboxButton: 10
 --- !u!114 &114895673168771794
 MonoBehaviour:
   m_ObjectHideFlags: 1
