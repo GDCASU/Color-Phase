@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
 	public float speed = 2.0f;
 	public float jumpStrength = 20f;
 	public float minimumY = -30f;
+    public float lookSpeed;
+    public float angleToSnap;
     private float colliderHeight;
 	private IInputPlayer player;
 	private Rigidbody rb;
@@ -62,19 +64,48 @@ public class PlayerMovement : MonoBehaviour
 			// TODO: Detect if it is a valid platform (Not a moving object)
             jumping = false;
 			ledgeMemory = transform.position; // Remember the ledge position of the player
-            if (InputManager.GetButtonDown("A")) rb.AddForce(jumpStrength * Vector3.up, ForceMode.Acceleration);
+            if (InputManager.GetButtonDown("A"))  rb.velocity = new Vector3(rb.velocity.x, 20, rb.velocity.z);
 		}
         else jumping = true;
 
 		//uncomment to prevent movement mid-air
 		//if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
 		{
-			transform.LookAt(cam.transform.position);
-			transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y + 180,0);
-            Vector3 force = transform.forward * zAxis * speed + transform.right * xAxis * speed/2;
+			//transform.LookAt(cam.transform.position);
+			//transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y + 180,0);
+            Vector3 force = cam.transform.forward.normalized * zAxis * speed + cam.transform.right.normalized * xAxis * speed/2;
+            force.y = 0;
             rb.AddForce(force, ForceMode.Acceleration);
 		}
+        rotatePlayer(xAxis, zAxis);
 	}
+
+
+    /// <summary>
+    /// This rotates the player according to
+    /// the camera position
+    /// </summary>
+    private void rotatePlayer (float xAxis, float zAxis) {
+        // If statement only if input is received
+        if (xAxis != 0 || zAxis != 0)
+        {
+            rb.freezeRotation = false;
+
+            // The y rotation of the player and the camera
+            float playerRotation = transform.eulerAngles.y;
+            float cameraRotation = cam.transform.eulerAngles.y;
+
+            // Rotate gently until the snap threshold
+            if (Mathf.Abs(playerRotation - cameraRotation) > angleToSnap)
+                transform.rotation = Quaternion.Lerp(this.transform.rotation, cam.transform.rotation, lookSpeed * Time.deltaTime);
+            else transform.rotation = cam.transform.rotation;
+
+            // Makes sure that the x and z rotations are 0
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+
+        }
+        else rb.freezeRotation = true;
+    }
 
 	private bool Trying(PlayerAction action)
 	{
