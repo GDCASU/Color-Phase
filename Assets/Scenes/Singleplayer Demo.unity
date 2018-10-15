@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.55831075, g: 0.69821054, b: 0.9408288, a: 1}
+  m_IndirectSpecularColor: {r: 0.55830944, g: 0.69820845, b: 0.94082594, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -13197,6 +13197,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 716924347}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &726346276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 726346277}
+  m_Layer: 9
+  m_Name: Forward Reference
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &726346277
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 726346276}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 429062124}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &733044767 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114277559175971064, guid: 886e34c016f861f47808423290a695ad,
@@ -18341,6 +18369,31 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114898057032863776, guid: 9d490a65e71b1144a83381737f1f6438,
+        type: 2}
+      propertyPath: lookSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114898057032863776, guid: 9d490a65e71b1144a83381737f1f6438,
+        type: 2}
+      propertyPath: playerForward
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114898057032863776, guid: 9d490a65e71b1144a83381737f1f6438,
+        type: 2}
+      propertyPath: angleToSnap
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114898057032863776, guid: 9d490a65e71b1144a83381737f1f6438,
+        type: 2}
+      propertyPath: fowardReference
+      value: 
+      objectReference: {fileID: 726346277}
+    - target: {fileID: 114898057032863776, guid: 9d490a65e71b1144a83381737f1f6438,
+        type: 2}
+      propertyPath: forwardTarget
+      value: 
+      objectReference: {fileID: 726346277}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d490a65e71b1144a83381737f1f6438, type: 2}
   m_IsPrefabAsset: 0
