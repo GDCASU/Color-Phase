@@ -10,10 +10,14 @@ public class PlayerMovement : MonoBehaviour
 	public float speed = 2.0f;
 	public float jumpStrength = 20f;
 	public float minimumY = -30f;
-
+    public float lookSpeed;
+    public float angleToSnap;
+    private float colliderHeight;
 	private IInputPlayer player;
 	private Rigidbody rb;
 	private Vector3 ledgeMemory;
+    private Animator animator;
+    private PhysicMaterial physicsMaterial;
 	private bool jumping;
 	private static readonly float axisModifier = Mathf.Sqrt(2) / 2;
 	private static readonly float pushModifier = 50f;
@@ -22,12 +26,21 @@ public class PlayerMovement : MonoBehaviour
 	{
 		player = GetComponent<IInputPlayer>();
 		rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+        physicsMaterial = GetComponent<PhysicMaterial>();
 	}
 
 	private void Update()
 	{
 		Move();
+        Animations();
 	}
+
+    private void Animations() 
+    {
+        animator.SetFloat("Speed", Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)));
+        animator.SetBool("Grounded", !jumping);
+    }
 
 	private void Move()
 	{
@@ -35,13 +48,9 @@ public class PlayerMovement : MonoBehaviour
 		float xAxis = 0;
 		float zAxis = 0;
 
-		if (Trying(PlayerAction.Left)) xAxis--;
-		if (Trying(PlayerAction.Right)) xAxis++;
-		if (Trying(PlayerAction.Forward)) zAxis++;
-		if (Trying(PlayerAction.Back)) zAxis--;
-
-		xAxis *= axisModifier;
-		zAxis *= axisModifier;
+        // This needs to use the enum abstraction once its sorted out
+		xAxis = InputManager.GetAxis("LeftHorizontal", player);
+        zAxis = InputManager.GetAxis("LeftVertical", player);
 
 		// If the player falls off of the map then set the player on the last ledge
 		if (transform.position.y < minimumY)
@@ -50,31 +59,53 @@ public class PlayerMovement : MonoBehaviour
 			transform.position = ledgeMemory;
 		}
 
-		if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 1.05f))
+		if (Physics.Raycast(transform.position, Vector3.down, 0.5f))
 		{
 			// TODO: Detect if it is a valid platform (Not a moving object)
+            jumping = false;
 			ledgeMemory = transform.position; // Remember the ledge position of the player
-
-			if (Trying(PlayerAction.Jump) && !jumping)
-			{
-				rb.velocity = new Vector3(rb.velocity.x, jumpStrength, rb.velocity.z);
-				jumping = true;
-			}
+            if (InputManager.GetButtonDown("A"))  rb.velocity = new Vector3(rb.velocity.x, 20, rb.velocity.z);
 		}
-		if (!Trying(PlayerAction.Jump))
-		{
-			jumping = false;
-		}
+        else jumping = true;
 
 		//uncomment to prevent movement mid-air
 		//if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
 		{
-			Vector3 push = (cam.transform.forward * zAxis + cam.transform.right * xAxis) * speed * pushModifier;
-			rb.AddForce(push, ForceMode.Acceleration);
-			transform.LookAt(transform.position + push);
-			transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+			//transform.LookAt(cam.transform.position);
+			//transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y + 180,0);
+            Vector3 force = cam.transform.forward.normalized * zAxis * speed + cam.transform.right.normalized * xAxis * speed/2;
+            force.y = 0;
+            rb.AddForce(force, ForceMode.Acceleration);
 		}
+        rotatePlayer(xAxis, zAxis);
 	}
+
+
+    /// <summary>
+    /// This rotates the player according to
+    /// the camera position
+    /// </summary>
+    private void rotatePlayer (float xAxis, float zAxis) {
+        // If statement only if input is received
+        if (xAxis != 0 || zAxis != 0)
+        {
+            rb.freezeRotation = false;
+
+            // The y rotation of the player and the camera
+            float playerRotation = transform.eulerAngles.y;
+            float cameraRotation = cam.transform.eulerAngles.y;
+
+            // Rotate gently until the snap threshold
+            if (Mathf.Abs(playerRotation - cameraRotation) > angleToSnap)
+                transform.rotation = Quaternion.Lerp(this.transform.rotation, cam.transform.rotation, lookSpeed * Time.deltaTime);
+            else transform.rotation = cam.transform.rotation;
+
+            // Makes sure that the x and z rotations are 0
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+
+        }
+        else rb.freezeRotation = true;
+    }
 
 	private bool Trying(PlayerAction action)
 	{

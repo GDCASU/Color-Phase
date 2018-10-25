@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ColorSwap : MonoBehaviour
 {
+    public static List<ColorSwap> players = new List<ColorSwap>(); // Easy access for puzzle objects
     public GameObject playerModel;
     public GameObject playerCamera;
     public GameObject crossHair;
@@ -34,7 +35,7 @@ public class ColorSwap : MonoBehaviour
     private int colorChangeInputToggle = 0;
 
 
-    private MeshRenderer playerMesh;
+    private SkinnedMeshRenderer playerMesh;
     private SpriteRenderer crossHairRender;
 
     void Awake() {
@@ -47,8 +48,11 @@ public class ColorSwap : MonoBehaviour
         };
 
         // Get component references
-        playerMesh = playerModel.GetComponent<MeshRenderer>(); 
+        playerMesh = playerModel.GetComponent<SkinnedMeshRenderer>(); 
         crossHairRender = crossHair.GetComponent<SpriteRenderer>(); 
+
+        // Add self to singleton
+        players.Add(this);
     }
 
     void Start()
