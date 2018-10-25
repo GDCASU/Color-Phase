@@ -15,18 +15,18 @@ public class ChangeCameraPerspective : MonoBehaviour
         {
             if (addCamera)
             {
-                other.GetComponent<Flyingcamera>().cams[2] = cam;
+                other.GetComponent<PlayerCamControl>().cams[2] = cam;
             }
             if (changeCamera)
             {
-                other.GetComponent<Flyingcamera>().ChangeCamera(changeTo);
+                other.GetComponent<PlayerCamControl>().ChangeCamera(changeTo);
             }
             if (removeCamera)
             {
-                other.GetComponent<Flyingcamera>().cams[2] = null;
-                if (other.GetComponent<Flyingcamera>().activecam == 2)
+                other.GetComponent<PlayerCamControl>().cams[2] = null;
+                if (other.GetComponent<PlayerCamControl>().activecam == 2)
                 {
-                    other.GetComponent<Flyingcamera>().ChangeCamera(changeTo);
+                    other.GetComponent<PlayerCamControl>().ChangeCamera(changeTo);
                 }
             }
         }
