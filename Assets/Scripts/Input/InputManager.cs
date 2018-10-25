@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XInputDotNetPure;
+using PlayerInput;
 
 /*
  * Author:      Zachary Schmalz
@@ -12,8 +13,41 @@ using XInputDotNetPure;
  * Version:     1.1.0
  * Date:        September 28, 2018
  *              Converted class to be primarily static and implemented IPlayer interface
+ *              
+ *  Author:     Zachary Schmalz
+ *  Version:    1.1.1
+ *  Date:       October 12, 2018
+ *              Added PlayerAxis & PlayerButton enums to define player actions. Dictionary keys
+ *              are now the string value of the action enum.
  */
 
+/// <summary>
+/// Requires import of this namespace to access enums
+/// </summary>
+namespace PlayerInput
+{
+    /// <summary>
+    /// Enum for all Player axis actions (float vales)
+    /// </summary>
+    public enum PlayerAxis
+    {
+        MoveHorizontal,
+        MoveVertical,
+        CameraHorizontal,
+        CameraVertical,
+        None,
+    };
+
+    /// <summary>
+    /// Enum for all Player button actions (bool values)
+    /// </summary>
+    public enum PlayerButton
+    {
+        Jump,
+        None,
+    };
+}
+ 
 /// <summary>
 /// This class handles all XboxController and Keyboard input
 /// </summary>
@@ -34,7 +68,7 @@ public class InputManager : MonoBehaviour
     [System.Serializable]
     public class Axis
     {
-        public string axisName;
+        public PlayerAxis playerAction;
         public KeyCode positiveKeyboardAxis;
         public KeyCode negativeKeyboardAxis;
         public XboxController.XboxAxis xboxAxis;
@@ -46,7 +80,7 @@ public class InputManager : MonoBehaviour
     [System.Serializable]
     public class Button
     {
-        public string buttonName;
+        public PlayerButton playerAction;
         public KeyCode keyboardButton;
         public XboxController.XboxButton xboxButton;
     }
@@ -60,7 +94,6 @@ public class InputManager : MonoBehaviour
     // Private class variables
     private static InputManager singleton;
     private static List<GameObject> players;
-
     private static KeyboardController keyboardController;
     private static List<Dictionary<string, KeyCode>> keyboardAxisDictList;
     private static List<Dictionary<string, KeyCode>> keyboardButtonDictList;
@@ -201,8 +234,9 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="axisKey">The name given to the axis in the inspector</param>
     /// <param name="player">The player index to check the input from</param>
-    public static float GetAxis(string axisKey, IInputPlayer player = null)
+    public static float GetAxis(PlayerAxis axis, IInputPlayer player = null)
     {
+        string axisKey = axis.ToString();
         if (player == null)
         {
             List<float> valueList = new List<float>();
@@ -239,8 +273,9 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="axisKey"></param>
     /// <param name="player"></param>
-    public static float GetAxisDown(string axisKey, IInputPlayer player = null)
+    public static float GetAxisDown(PlayerAxis axis, IInputPlayer player = null)
     {
+        string axisKey = axis.ToString();
         if (player == null)
         {
             List<float> valueList = new List<float>();
@@ -277,8 +312,9 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public static bool GetButton(string buttonKey, IInputPlayer player = null)
+    public static bool GetButton(PlayerButton button, IInputPlayer player = null)
     {
+        string buttonKey = button.ToString();
         if (player == null)
         {
             bool result = keyboardController.GetButton(KeyboardButtonLookUp(keyboardButtonDictList[0], buttonKey));
@@ -305,8 +341,9 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public static bool GetButtonDown(string buttonKey, IInputPlayer player = null)
+    public static bool GetButtonDown(PlayerButton button, IInputPlayer player = null)
     {
+        string buttonKey = button.ToString();
         if (player == null)
         {
             bool result = keyboardController.GetButtonDown(KeyboardButtonLookUp(keyboardButtonDictList[0], buttonKey));
@@ -333,8 +370,9 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public static bool GetButtonUp(string buttonKey, IInputPlayer player = null)
+    public static bool GetButtonUp(PlayerButton button, IInputPlayer player = null)
     {
+        string buttonKey = button.ToString();
         if (player == null)
         {
             bool result = keyboardController.GetButtonUp(KeyboardButtonLookUp(keyboardButtonDictList[0], buttonKey));
@@ -400,8 +438,9 @@ public class InputManager : MonoBehaviour
     /// </summary>
     /// <param name="buttonKey"></param>
     /// <param name="player"></param>
-    public static void ResetButton(string buttonKey, IInputPlayer player)
+    public static void ResetButton(PlayerButton button, IInputPlayer player)
     {
+        string buttonKey = button.ToString();
         if (player == null)
             return;
         else
@@ -429,8 +468,9 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="key"></param>
     /// <param name="player"></param>
-    public static void RemapKeyboardButton(string buttonKey, KeyCode key, IInputPlayer player)
+    public static void RemapKeyboardButton(PlayerButton button, KeyCode key, IInputPlayer player)
     {
+        string buttonKey = button.ToString();
         if (player == null)
             return;
         else
@@ -450,13 +490,14 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="button"></param>
     /// <param name="player"></param>
-    public static void RemapXboxButton(string buttonKey, XboxController.XboxButton button, IInputPlayer player)
+    public static void RemapXboxButton(PlayerButton button, XboxController.XboxButton xButton, IInputPlayer player)
     {
+        string buttonKey = button.ToString();
         // !!!NOTE!!! - Currently remapping xbox axis is not supported
         if (player == null)
             return;
         else
-            xboxButtonDictList[(int)player.PlayerIndex + 1][buttonKey] = button;
+            xboxButtonDictList[(int)player.PlayerIndex + 1][buttonKey] = xButton;
     }
 
     /// <summary>
@@ -572,14 +613,14 @@ public class InputManager : MonoBehaviour
         foreach (Axis x in singleton.axes)
         {
             // Add the positive/negative keyboard axis with the (Pos)/(Neg) addition to the key
-            keyboardAxisDictList[0].Add("(Pos)" + x.axisName, x.positiveKeyboardAxis);
-            keyboardAxisDictList[0].Add("(Neg)" + x.axisName, x.negativeKeyboardAxis);
+            keyboardAxisDictList[0].Add("(Pos)" + x.playerAction.ToString(), x.positiveKeyboardAxis);
+            keyboardAxisDictList[0].Add("(Neg)" + x.playerAction.ToString(), x.negativeKeyboardAxis);
         }
 
         // Add all buttons to the keyboard button dictionary
         keyboardButtonDictList = new List<Dictionary<string, KeyCode>>() { new Dictionary<string, KeyCode>() };
         foreach (Button b in singleton.buttons)
-            keyboardButtonDictList[0].Add(b.buttonName, b.keyboardButton);
+            keyboardButtonDictList[0].Add(b.playerAction.ToString(), b.keyboardButton);
     }
 
     /// <summary>
@@ -595,11 +636,11 @@ public class InputManager : MonoBehaviour
         // Initialize XboxAxis dictionary
         xboxAxisDictList = new List<Dictionary<string, XboxController.XboxAxis>>() { new Dictionary<string, XboxController.XboxAxis>() };
         foreach (Axis x in singleton.axes)
-            xboxAxisDictList[0].Add(x.axisName, x.xboxAxis);
+            xboxAxisDictList[0].Add(x.playerAction.ToString(), x.xboxAxis);
 
         // Initialize XboxButton dictionary
         xboxButtonDictList = new List<Dictionary<string, XboxController.XboxButton>>() { new Dictionary<string, XboxController.XboxButton>() };
         foreach (Button b in singleton.buttons)
-            xboxButtonDictList[0].Add(b.buttonName, b.xboxButton);
+            xboxButtonDictList[0].Add(b.playerAction.ToString(), b.xboxButton);
     }
 }
