@@ -4,6 +4,11 @@
  * Author:      Zachary Schmalz
  * Version:     1.0.0
  * Date:        September 19, 2018
+ * 
+ * Author:      Zachary Schmalz
+ * Version:     1.1.0
+ * Date:        September 28, 2018
+ *              Updated static fields and removed extra copies of variables
  */
 
 /// <summary>
@@ -17,34 +22,26 @@ public class Debug : MonoBehaviour
         Warning,
         Error
     };
+    
+    public bool generalLog;
+    public bool audioLog;
+    public bool inputLog;
+    public Color generalColor;
+    public Color audioColor;
+    public Color inputColor;
 
-    [SerializeField] private bool generalLog;
-    [SerializeField] private bool audioLog;
-    [SerializeField] private bool inputLog;
-    [SerializeField] private Color generalColor;
-    [SerializeField] private Color audioColor;
-    [SerializeField] private Color inputColor;
+    private static Debug singleton;
 
-    private static bool staticGeneralLog;
-    private static bool staticAudioLog;
-    private static bool staticInputLog;
-    private static Color staticGeneralColor;
-    private static Color staticAudioColor;
-    private static Color staticInputColor;
-
-    private void Awake()
+    public void Awake()
     {
-        OnValidate();
-    }
-
-    public void OnValidate()
-    {
-        staticGeneralLog = generalLog;
-        staticAudioLog = audioLog;
-        staticInputLog = inputLog;
-        staticGeneralColor = generalColor;
-        staticAudioColor = audioColor;
-        staticInputColor = inputColor;
+        // Delete any extra copies of script not attached to the GameObject with the GameManager
+        if (singleton == null && gameObject.GetComponent<GameManager>())
+            singleton = this;
+        else
+        {
+            Destroy(this);
+            return;
+        }
     }
 
     public static void Log(object o, LogType type = LogType.Normal)
@@ -67,20 +64,20 @@ public class Debug : MonoBehaviour
 
     public static void GeneralLog(object o, LogType type = LogType.Normal)
     {
-        if (staticGeneralLog)
-            Log(FormatString("(General Log)\n", staticGeneralColor) + o, type);
+        if (singleton.generalLog)
+            Log(FormatString("(General Log)\n", singleton.generalColor) + o, type);
     }
 
     public static void AudioLog(object o, LogType type = LogType.Normal)
     {
-        if (staticAudioLog)
-            Log(FormatString("(Audio Log)\n", staticAudioColor) + o, type);
+        if (singleton.audioLog)
+            Log(FormatString("(Audio Log)\n", singleton.audioColor) + o, type);
     }
 
     public static void InputLog(object o, LogType type = LogType.Normal)
     {
-        if (staticInputLog)
-            Log(FormatString("(Input Log)\n", staticInputColor) + o, type);
+        if (singleton.inputLog)
+            Log(FormatString("(Input Log)\n", singleton.inputColor) + o, type);
     }
 
     public static void LogWarning(object o)

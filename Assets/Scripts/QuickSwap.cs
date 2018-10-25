@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayerInput;
 
 public class QuickSwap : MonoBehaviour {
     /*
     Allows the player to swap between a stored color and their currect color
      */
 	ColorSwap colorSwap;
-    private Player player;
+    private InputPlayer inputPlayer;
     private GameObject PalletCurrent;
     private GameObject PalletBackup;
     private SpriteRenderer PalletCurrentRender;
@@ -15,7 +16,7 @@ public class QuickSwap : MonoBehaviour {
     public int storedColor;
     void Awake () {
         colorSwap = GetComponent<ColorSwap>(); 
-        player = GetComponent<Player>();
+        inputPlayer = GetComponent<InputPlayer>();
     }
 	void Start () { 
         // Set the stored color to whatever the player has at the time
@@ -40,7 +41,9 @@ public class QuickSwap : MonoBehaviour {
     }
 	
 	void Update () {
-		if(InputManager.singleton.GetButtonDown("X", player)) {
+        // I've changed this from X because of the Input remapping.
+        // This will need to be chnaged later once inputs are defined
+		if(InputManager.GetButtonDown(PlayerButton.Jump, inputPlayer)) {
             int temp = colorSwap.currentColor;
             colorSwap.SetColor(storedColor);
             storedColor = temp;
