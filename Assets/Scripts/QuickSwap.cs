@@ -7,7 +7,9 @@ public class QuickSwap : MonoBehaviour {
     /*
     Allows the player to swap between a stored color and their currect color
      */
-	ColorSwap colorSwap;
+    public GameObject PalletCurrentPrefab;
+    public GameObject PalletBackupPrefab;
+    ColorSwap colorSwap;
     private InputPlayer inputPlayer;
     private GameObject PalletCurrent;
     private GameObject PalletBackup;
@@ -20,11 +22,11 @@ public class QuickSwap : MonoBehaviour {
     }
 	void Start () { 
         // Set the stored color to whatever the player has at the time
-        storedColor = colorSwap.currentColor; 
+        storedColor = colorSwap.currentColor;
 
         // Set up the UI
-        PalletCurrent = Instantiate(Resources.Load("Prefabs/UI Prefabs/PalletCurrent", typeof(GameObject))) as GameObject;
-        PalletBackup = Instantiate(Resources.Load("Prefabs/UI Prefabs/PalletBackup", typeof(GameObject))) as GameObject;
+        PalletCurrent = Instantiate(PalletCurrentPrefab);
+        PalletBackup = Instantiate(PalletBackupPrefab);
 
         PalletCurrent.transform.parent = colorSwap.playerCamera.transform;
         PalletCurrent.transform.localPosition = new Vector3 (0.29F, -0.18F, 0.4F); // These are hardcoded for now (no UI canvas)

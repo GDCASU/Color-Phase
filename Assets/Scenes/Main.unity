@@ -9022,6 +9022,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 382b23052ba706841b3bc22f7e02b088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PalletCurrentPrefab: {fileID: 0}
+  PalletBackupPrefab: {fileID: 0}
   storedColor: 0
 --- !u!114 &429062130 stripped
 MonoBehaviour:
@@ -15603,7 +15605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 766603456}
   speed: 80
-  jumpStrength: 1000
+  jumpStrength: 15
   minimumY: -30
   lookSpeed: 10
   angleToSnap: 2
@@ -15638,6 +15640,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 382b23052ba706841b3bc22f7e02b088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PalletCurrentPrefab: {fileID: 1660235993164178, guid: 4d5afd4ece684854ebcb45633b7a635b,
+    type: 2}
+  PalletBackupPrefab: {fileID: 1610772120150412, guid: f29d3cf41205cf1489ffe5ff66b42bcb,
+    type: 2}
   storedColor: 0
 --- !u!114 &878189218
 MonoBehaviour:

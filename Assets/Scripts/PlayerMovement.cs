@@ -67,9 +67,13 @@ public class PlayerMovement : MonoBehaviour
             // TODO: Detect if it is a valid platform (Not a moving object)
             jumping = false;
             ledgeMemory = transform.position; // Remember the ledge position of the player
-            if (InputManager.GetButton(PlayerButton.Jump, player)) rb.velocity = new Vector3(rb.velocity.x, jumpStrength, rb.velocity.z);
+            if (InputManager.GetButtonDown(PlayerButton.Jump, player))
+            {
+                animator.SetTrigger("Jump");
+                rb.velocity = new Vector3(rb.velocity.x, jumpStrength, rb.velocity.z);
+            }
         }
-        else jumping = true;
+        else if(!Physics.Raycast(transform.position, Vector3.down, 1f)) jumping = true;
 
         //uncomment to prevent movement mid-air
         //if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
