@@ -44,6 +44,7 @@ namespace PlayerInput
     public enum PlayerButton
     {
         Jump,
+        Swap,
         None,
     };
 }
