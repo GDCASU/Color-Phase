@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float minimumY = -30f;
     public float lookSpeed;
     public float angleToSnap;
-    private float colliderHeight;
+    private Collider playerCollider;
     private IInputPlayer player;
     private Rigidbody rb;
     private Vector3 ledgeMemory;
@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         physicsMaterial = GetComponent<PhysicMaterial>();
-        colliderHeight = GetComponent<Collider>().bounds.extents.y;
+        playerCollider = GetComponent<Collider>();
     }
 
     private void Update()
@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = ledgeMemory;
         }
 
-        if (Physics.Raycast(transform.position, Vector3.down, colliderHeight))
+        if (Physics.Raycast(transform.position, Vector3.down, playerCollider.bounds.extents.y))
         {
             // TODO: Detect if it is a valid platform (Not a moving object)
             grounded = true;
@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector3(rb.velocity.x, jumpStrength, rb.velocity.z);
             }
         }
-        else if(!Physics.Raycast(transform.position, Vector3.down, colliderHeight + 0.5f)) grounded = false; 
+        else if(!Physics.Raycast(playerCollider.bounds.center, Vector3.down, playerCollider.bounds.extents.y + 1)) grounded = false; 
 
         //uncomment to prevent movement mid-air
         //if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
