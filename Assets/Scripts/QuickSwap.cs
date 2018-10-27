@@ -43,9 +43,7 @@ public class QuickSwap : MonoBehaviour {
     }
 	
 	void Update () {
-        // I've changed this from X because of the Input remapping.
-        // This will need to be chnaged later once inputs are defined
-		if(InputManager.GetButtonDown(PlayerButton.Jump, inputPlayer)) {
+		if(InputManager.GetButtonDown(PlayerButton.Swap, inputPlayer)) {
             int temp = colorSwap.currentColor;
             colorSwap.SetColor(storedColor);
             storedColor = temp;

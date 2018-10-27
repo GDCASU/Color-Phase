@@ -13,13 +13,13 @@ public class PlayerMovement : MonoBehaviour
     public float minimumY = -30f;
     public float lookSpeed;
     public float angleToSnap;
-    private float colliderHeight;
+    private Collider playerCollider;
     private IInputPlayer player;
     private Rigidbody rb;
     private Vector3 ledgeMemory;
     private Animator animator;
     private PhysicMaterial physicsMaterial;
-    private bool jumping;
+    private bool grounded;
     private static readonly float axisModifier = Mathf.Sqrt(2) / 2;
     private static readonly float pushModifier = 50f;
 
@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         physicsMaterial = GetComponent<PhysicMaterial>();
+        playerCollider = GetComponent<Collider>();
     }
 
     private void Update()
@@ -40,9 +41,8 @@ public class PlayerMovement : MonoBehaviour
     private void Animations() 
     {
         animator.SetFloat("Speed", Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)));
-        animator.SetBool("Grounded", !jumping);
+        animator.SetBool("Grounded", grounded);
     }
-
     private void Move()
     {
         // Movement Input
@@ -62,10 +62,10 @@ public class PlayerMovement : MonoBehaviour
             transform.position = ledgeMemory;
         }
 
-        if (Physics.Raycast(transform.position, Vector3.down, 0.5f))
+        if (Physics.Raycast(transform.position, Vector3.down, playerCollider.bounds.extents.y))
         {
             // TODO: Detect if it is a valid platform (Not a moving object)
-            jumping = false;
+            grounded = true;
             ledgeMemory = transform.position; // Remember the ledge position of the player
             if (InputManager.GetButtonDown(PlayerButton.Jump, player))
             {
@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector3(rb.velocity.x, jumpStrength, rb.velocity.z);
             }
         }
-        else if(!Physics.Raycast(transform.position, Vector3.down, 1f)) jumping = true;
+        else if(!Physics.Raycast(playerCollider.bounds.center, Vector3.down, playerCollider.bounds.extents.y + 1)) grounded = false; 
 
         //uncomment to prevent movement mid-air
         //if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), 0.81f))
