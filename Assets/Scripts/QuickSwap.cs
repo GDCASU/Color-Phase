@@ -15,7 +15,7 @@ public class QuickSwap : MonoBehaviour {
     private GameObject PalletBackup;
     private SpriteRenderer PalletCurrentRender;
     private SpriteRenderer PalletBackupRender;
-    public int storedColor;
+    public SwapColor storedColor;
     void Awake () {
         colorSwap = GetComponent<ColorSwap>(); 
         inputPlayer = GetComponent<InputPlayer>();
@@ -46,7 +46,7 @@ public class QuickSwap : MonoBehaviour {
         // I've changed this from X because of the Input remapping.
         // This will need to be chnaged later once inputs are defined
 		if(InputManager.GetButtonDown(PlayerButton.Jump, inputPlayer)) {
-            int temp = colorSwap.currentColor;
+            SwapColor temp = colorSwap.currentColor;
             colorSwap.SetColor(storedColor);
             storedColor = temp;
         }
@@ -56,7 +56,7 @@ public class QuickSwap : MonoBehaviour {
 
     public void updatePalletUI () {
         Color c;
-        if(colorSwap.spriteColors.TryGetValue( (ColorSwap.PlayerColor) colorSwap.currentColor, out c)) PalletCurrentRender.color = c;
-        if(colorSwap.spriteColors.TryGetValue( (ColorSwap.PlayerColor) storedColor, out c)) PalletBackupRender.color = c;
+        if(colorSwap.spriteColors.TryGetValue(colorSwap.currentColor, out c)) PalletCurrentRender.color = c;
+        if(colorSwap.spriteColors.TryGetValue(storedColor, out c)) PalletBackupRender.color = c;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ColorBarrier : MonoBehaviour
 {
-    public int barrierColor = 0;
+    public SwapColor barrierColor = 0;
 
     public Material redMaterial;
     public Material greenMaterial;
@@ -27,20 +27,20 @@ public class ColorBarrier : MonoBehaviour
             Physics.IgnoreCollision(ply.GetComponent<Collider>(), col, ply.currentColor == barrierColor);
     }
 
-    private void setBarrierColor(int color)
+    private void setBarrierColor(SwapColor color)
     {
         switch (color)
         {
-            case 0:
+            case SwapColor.Red:
                 GetComponent<MeshRenderer>().material = redMaterial;
                 break;
-            case 1:
+            case SwapColor.Green:
                 GetComponent<MeshRenderer>().material = greenMaterial;
                 break;
-            case 2:
+            case SwapColor.Blue:
                 GetComponent<MeshRenderer>().material = blueMaterial;
                 break;
-            case 3:
+            case SwapColor.Yellow:
                 GetComponent<MeshRenderer>().material = yellowMaterial;
                 break;
         }

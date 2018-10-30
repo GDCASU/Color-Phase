@@ -11,7 +11,7 @@ public class ButtonToggle : MonoBehaviour
     public Material off;
     public Material on;
     public bool state = false;
-    public int colorValue = 0;
+    public SwapColor colorValue = 0;
 
     // Used for animated button
     public bool holdState = false;
