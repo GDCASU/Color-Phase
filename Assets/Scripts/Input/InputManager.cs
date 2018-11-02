@@ -35,6 +35,10 @@ namespace PlayerInput
         MoveVertical,
         CameraHorizontal,
         CameraVertical,
+
+        UI_Horizontal,
+        UI_Vertical,
+
         None,
     };
 
@@ -45,6 +49,10 @@ namespace PlayerInput
     {
         Jump,
         Swap,
+
+        UI_Submit,     // UI Button
+        UI_Cancel,     // UI Button
+
         None,
     };
 }
