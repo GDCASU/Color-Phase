@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4435268738181252}
   - component: {fileID: 114336014866587410}
-  - component: {fileID: 114895673168771794}
   - component: {fileID: 114656416383538420}
   - component: {fileID: 114480359751746016}
+  - component: {fileID: 114895673168771794}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -103,10 +103,27 @@ MonoBehaviour:
     positiveKeyboardAxis: 273
     negativeKeyboardAxis: 274
     xboxAxis: 3
+  - playerAction: 4
+    positiveKeyboardAxis: 275
+    negativeKeyboardAxis: 276
+    xboxAxis: 0
+  - playerAction: 5
+    positiveKeyboardAxis: 273
+    negativeKeyboardAxis: 274
+    xboxAxis: 3
   buttons:
   - playerAction: 0
     keyboardButton: 32
     xboxButton: 0
+  - playerAction: 1
+    keyboardButton: 120
+    xboxButton: 2
+  - playerAction: 2
+    keyboardButton: 13
+    xboxButton: 0
+  - playerAction: 3
+    keyboardButton: 27
+    xboxButton: 1
 --- !u!114 &114895673168771794
 MonoBehaviour:
   m_ObjectHideFlags: 1
