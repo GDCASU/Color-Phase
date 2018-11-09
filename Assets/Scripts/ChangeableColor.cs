@@ -22,9 +22,11 @@ public class ChangeableColor : MonoBehaviour
     private List<RendererMaterialColor> materialCache;
 
     [SerializeField]
-    private SwapColor currentColor; //other scripts should call ChangeColor only
+    private SwapColor currentColor;
     [SerializeField]
     private List<RendererMaterialColor> materials = new List<RendererMaterialColor>();
+
+    public SwapColor CurrentColor { get { return currentColor; } set { ChangeColor(value); } }
 
     public void Awake()
     {
@@ -135,9 +137,12 @@ public class ChangeableColorEditor : Editor
 {
     private ReorderableList list;
     private static string[] colorNames = Enum.GetNames(typeof(SwapColor));
+    private bool collapsed;
 
     private void OnEnable()
     {
+        collapsed = true;
+
         list = new ReorderableList(serializedObject, serializedObject.FindProperty("materials"), true, true, true, true)
         {
             drawHeaderCallback = (Rect rect) =>
@@ -195,16 +200,18 @@ public class ChangeableColorEditor : Editor
         };
     }
 
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
         SerializedProperty color = serializedObject.FindProperty("currentColor");
         SwapColor curVal = (SwapColor)color.intValue;
         color.intValue = (int)(SwapColor)EditorGUILayout.EnumPopup("Current Color", curVal);
-
         EditorGUILayout.Space();
 
-        list.DoLayoutList();
+        collapsed = EditorGUILayout.Foldout(collapsed, "Advanced", true);
+        if (!collapsed)
+            list.DoLayoutList();
 
         serializedObject.ApplyModifiedProperties();
     }
