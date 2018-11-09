@@ -8,8 +8,6 @@ using PlayerInput;
 public class PlayerMovement : MonoBehaviour
 {
     public GameObject cam;
-    public float speed = 2.0f;
-    public float jumpStrength = 20f;
     public float minimumY = -30f;
     public float lookSpeed;
     public float angleToSnap;
@@ -26,15 +24,18 @@ public class PlayerMovement : MonoBehaviour
     #region Jump Parm
     Vector3 forceOld = Vector3.zero;
     bool jumpingDown = false;
+    [Header("Jump Info")]
     public float hangTime = 1f;
     public float fallSpeedCap = 10;
     public float fallCoefficent = 1;
+    public float jumpStrength = 20f;
 
     #endregion
 
     #region Move Param
+    [Header("Move Info")]
     public float moveSpeedCap = 10;
-
+    public float runSpeed = 2.0f;
     #endregion
 
     Vector3 force;
@@ -101,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
         //uncomment to prevent movement mid-air
         //if (grounded)
         {
-            force = cam.transform.forward.normalized * zAxis * speed + cam.transform.right.normalized * xAxis * speed/2;
+            force = cam.transform.forward.normalized * zAxis * runSpeed + cam.transform.right.normalized * xAxis * runSpeed/2;
             force.y = 0;
         }
 
