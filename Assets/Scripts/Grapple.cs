@@ -3,24 +3,34 @@ using PlayerInput;
 
 // Author: Nick Arnieri
 // Date: 11/2/2018
-// Description:
+// Description: Grapple hook that has 4 different characteristics based on the current color.
+//              Red: Pulls an object towards you
+//              Green: Pushes an object away from you
+//              Blue: Brings you towards another object
+//              Yellow: Lets you swing from a fixed point
 
 public class Grapple : MonoBehaviour
 {
+    [Header("Grapple Attributes")]
     public float hookRange = 50f;
     public float grappleSpeed = 1f;
+
+    [Header("Push/Pull Speed")]
     public float pullPlayerSpeed = 1f;
     public float pullObjectSpeed = 1f;
+    public float pushObjectSpeed = 100f;
 
-    // Swing
+    [Header("Swing Speed")]
     public float swingSpeed = 200f;
     public float swingStrafeSpeed = 200f;
 
+    // Grapple hook states
     private float ropeLength;
     private bool isGrappled;
     private bool canGrapple;
     private bool swinging;
-    private int color;
+
+    // Object to use in calcualtions
     private Collider col;
     private Rigidbody rb;
     private Transform hookAnchor;
@@ -40,17 +50,15 @@ public class Grapple : MonoBehaviour
 
     void Update()
     {
-        color = col.GetComponent<ColorSwap>().currentColor;
-
         if (Input.GetButtonDown("Fire1"))
         {
-            if (Physics.Raycast(gameObject.transform.position, Camera.main.transform.forward, out hit, hookRange))
+            if (Physics.Raycast(gameObject.transform.position, Camera.main.transform.forward, out hit, hookRange, 9))
             {
                 if (hit.collider)
                 {
                     hookAnchor.position = hit.point;
                     grappleAnchor.position = transform.position;
-                    ropeLength = Vector3.Distance(transform.position, hookAnchor.position);
+                    ropeLength = hit.distance;
                     line.enabled = true;
                     canGrapple = true;
                     isGrappled = false;
@@ -58,8 +66,10 @@ public class Grapple : MonoBehaviour
             }
         }
 
+        // Handles when grapple is at the object it collided with and does actions based on color
         if (isGrappled)
         {
+            int color = col.GetComponent<ColorSwap>().currentColor;
             swinging = color == 3;
             switch (color)
             {
@@ -76,18 +86,21 @@ public class Grapple : MonoBehaviour
                     GrappleSwing();
                     break;
             }
+
+            line.SetPosition(0, col.transform.position);
+            line.SetPosition(1, hookAnchor.transform.position);
         }
+        // Handles the initial grapple movement towards the object it collided with
         else if (canGrapple)
         {
             grappleAnchor.position = Vector3.MoveTowards(grappleAnchor.position, hookAnchor.position, grappleSpeed);
             if (grappleAnchor.position == hookAnchor.position)
                 isGrappled = true;
+
+            line.SetPosition(0, col.transform.position);
+            line.SetPosition(1, grappleAnchor.transform.position);
         }
 
-        line.SetPosition(0, col.transform.position);
-        line.SetPosition(1, hookAnchor.transform.position);
-
-        // When the mouse is let go, the player stops moving
         if (Input.GetButtonUp("Fire1"))
         {
             line.enabled = false;
@@ -99,6 +112,7 @@ public class Grapple : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Lets player add force when swinging
         if (swinging && transform.position.y < hookAnchor.position.y)
         {
             float x = InputManager.GetAxis(PlayerAxis.MoveHorizontal);
@@ -108,21 +122,30 @@ public class Grapple : MonoBehaviour
         }
     }
 
+    // Pull the object the grapple collided with towards the player
     private void GrapplePullObject()
     {
-        hookAnchor.position = Vector3.MoveTowards(hookAnchor.position, transform.position, pullObjectSpeed);
+        if (hit.rigidbody)
+        {
+            hookAnchor.position = Vector3.MoveTowards(hookAnchor.position, transform.position, pullObjectSpeed);
+            hit.transform.position = Vector3.MoveTowards(hit.transform.position, transform.position, pullObjectSpeed);
+        }
     }
 
+    // Pull the player towards the object the grapple collided with
     private void GrapplePullPlayer()
     {
         transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
     }
 
+    // When the grapple collides with an object it pushes it forwards
     private void GrapplePushObject()
     {
-        hit.rigidbody.AddForce(hit.transform.forward * 5);
+        if (hit.rigidbody)
+            hit.rigidbody.AddForce(Camera.main.transform.forward * pushObjectSpeed);
     }
 
+    // Lets the user swing around from a fixed point
     private void GrappleSwing()
     {
         Vector3 v = transform.position - hookAnchor.position;
