@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     private static readonly float pushModifier = 50f;
 
     #region Jump Parm
-    Vector3 forceOld = Vector3.zero;
     bool jumpingDown = false;
     [Header("Jump Info")]
     public float hangTime = 1f;
@@ -36,9 +35,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Move Info")]
     public float moveSpeedCap = 10;
     public float runSpeed = 2.0f;
+    private Vector3 forceOld = Vector3.zero;
+    private Vector3 force;
+    
     #endregion
-
-    Vector3 force;
     private void Start()
     {
         player = GetComponent<IInputPlayer>();
@@ -79,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = ledgeMemory;
         }
 
+        # region Jump 
         if (Physics.Raycast(transform.position, Vector3.down, playerCollider.bounds.extents.y))
         {
             // TODO: Detect if it is a valid platform (Not a moving object)
@@ -105,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
             force = cam.transform.forward.normalized * zAxis * runSpeed + cam.transform.right.normalized * xAxis * runSpeed/2;
             force.y = 0;
         }
+        # endregion
 
         rb.AddForce( (grounded) ? force : (force + forceOld) / 2 , ForceMode.Impulse);
         rotatePlayer(xAxis, zAxis);
@@ -140,14 +142,20 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// This keeps the player from accelerating past set limits
+    /// We can't use a straight vector clamp as we treat the axes separately 
+    /// </summary>
     private Vector3 clampVelocities(Vector3 velocity) {
         Vector3 vOut = velocity;
 
         Vector3 moveSpeed = new Vector3(velocity.x, 0, velocity.z);
 
+        // Clamp movement speed
         if(moveSpeed.magnitude > moveSpeedCap) 
             vOut = moveSpeed.normalized * moveSpeedCap;
 
+        // Clamp falling speed
         float ySpeed = velocity.y;
         if(!grounded && ySpeed < -fallSpeedCap) 
             ySpeed = -fallSpeedCap;
