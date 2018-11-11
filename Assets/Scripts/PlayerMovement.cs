@@ -84,6 +84,9 @@ public class PlayerMovement : MonoBehaviour
         if(collision.contacts[0].normal == Vector3.up )  grounded = true;
     }
 
+    float xAxisOld = 0;
+    float zAxisOld = 0;
+
     private void Move()
     {
         // Movement Input
@@ -123,38 +126,48 @@ public class PlayerMovement : MonoBehaviour
         //uncomment to prevent movement mid-air
         //if (grounded)
         {
-            force = cam.transform.forward.normalized * zAxis * runSpeed + cam.transform.right.normalized * xAxis * runSpeed/2;
+            force = cam.transform.forward.normalized * zAxis * runSpeed + cam.transform.right.normalized * xAxis * runSpeed;
             force.y = 0;
         }
         # endregion
 
         // While in the air our force is an average of current input and force when we left the ground
         rb.AddForce( (grounded) ? force : (force + forceOld) / 2 , ForceMode.Impulse);
-        rotatePlayer(xAxis, zAxis);
+        // If we're off the ground rotate to our jump direction
+        rotatePlayer( (grounded) ? xAxis : xAxisOld,(grounded) ? zAxis : zAxisOld);
         rb.velocity = clampVelocities(rb.velocity);
 
         // Store the previous force for jump momentum 
-        if(grounded) forceOld = force;
+        if(grounded) {
+            forceOld = force;
+            xAxisOld = xAxis;
+            zAxisOld = zAxis;
+        }
     }
     
     /// <summary>
     /// This rotates the player according to
-    /// the camera position
+    /// the camera position and player input
     /// </summary>
     private void rotatePlayer (float xAxis, float zAxis) {
         // If statement only if input is received and the player is on the ground
-        if (grounded && (xAxis != 0 || zAxis != 0))
+        if ((xAxis != 0 || zAxis != 0))
         {
             rb.freezeRotation = false;
 
             // The y rotation of the player and the camera
             float playerRotation = transform.eulerAngles.y;
-            float cameraRotation = cam.transform.eulerAngles.y;
+            
+            // Find the rotation for our player input
+            Vector2 camForward = new Vector2 (cam.transform.forward.x, cam.transform.forward.z);
+            float inputRotation = Vector2.SignedAngle(camForward, new Vector2(-xAxis, zAxis));
+
+            Quaternion inputLook = Quaternion.AngleAxis(inputRotation, Vector3.up);
 
             // Rotate gently until the snap threshold
-            if (Mathf.Abs(playerRotation - cameraRotation) > angleToSnap)
-                transform.rotation = Quaternion.Lerp(this.transform.rotation, cam.transform.rotation, lookSpeed * Time.deltaTime);
-            else transform.rotation = cam.transform.rotation;
+            if (Mathf.Abs(playerRotation - inputRotation) > angleToSnap)
+                transform.rotation = Quaternion.Lerp(this.transform.rotation, inputLook, lookSpeed * Time.deltaTime);
+            else transform.rotation = inputLook;
         }
         rb.freezeRotation = true;
         
