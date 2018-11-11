@@ -17,12 +17,13 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 ledgeMemory;
     private Animator animator;
     private PhysicMaterial physicsMaterial;
-    private bool grounded;
     private static readonly float axisModifier = Mathf.Sqrt(2) / 2;
     private static readonly float pushModifier = 50f;
 
     #region Jump Parm
-    bool jumpingDown = false;
+    private bool grounded = true;
+    private bool jumpHeld = false;
+
     [Header("Jump Info")]
     public float hangTime = 1f;
     public float fallSpeedCap = 10;
@@ -48,16 +49,39 @@ public class PlayerMovement : MonoBehaviour
         playerCollider = GetComponent<Collider>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Move();
         Animations();
+
+        // At the end of each frame we set grounded to false so that
+        // OnCollisionStay needs to verify that we are still grounded
+        // Obviously it would be better to use OnCollisionExit 
+        // but we can't check the normal
+        grounded = false;
     }
     
     private void Animations() 
     {
         animator.SetFloat("Speed", Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)));
         animator.SetBool("Grounded", grounded);
+    }
+
+
+    void OnCollisionEnter(Collision collision) 
+    {
+        // TODO: Detect if it is a valid platform (Not a moving object)
+        // Note: This can be accomplished by checking collision.other
+
+        // Check if grounded and handle some other behavior that happens we we ground
+        if(collision.contacts[0].normal == Vector3.up ) {
+            grounded = true;
+        }
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if(collision.contacts[0].normal == Vector3.up )  grounded = true;
     }
 
     private void Move()
@@ -80,25 +104,21 @@ public class PlayerMovement : MonoBehaviour
         }
 
         # region Jump 
-        if (Physics.Raycast(transform.position, Vector3.down, playerCollider.bounds.extents.y))
-        {
-            // TODO: Detect if it is a valid platform (Not a moving object)
-            if(!grounded) jumpingDown = false;
-            grounded = true;
-            ledgeMemory = transform.position; // Remember the ledge position of the player
+        if (grounded) {
+            // Update the last on ledge position of the player
+            ledgeMemory = transform.position; 
+            // Handle a jump input
             if (InputManager.GetButtonDown(PlayerButton.Jump, player))
             {
                 animator.SetTrigger("Jump");
                 rb.velocity = new Vector3(rb.velocity.x, jumpStrength, rb.velocity.z);
-                jumpingDown = true;
+                jumpHeld = true;
             }
         }
-
-        else if(!Physics.Raycast(playerCollider.bounds.center, Vector3.down, playerCollider.bounds.extents.y + 1)){
+        else {
             if (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime) 
-                jumpingDown = false;
-            grounded = false; 
-            if(!jumpingDown) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
+                jumpHeld = false;
+            if (!jumpHeld) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
         }
         //uncomment to prevent movement mid-air
         //if (grounded)
@@ -108,11 +128,12 @@ public class PlayerMovement : MonoBehaviour
         }
         # endregion
 
+        // While in the air our force is an average of current input and force when we left the ground
         rb.AddForce( (grounded) ? force : (force + forceOld) / 2 , ForceMode.Impulse);
         rotatePlayer(xAxis, zAxis);
-
         rb.velocity = clampVelocities(rb.velocity);
 
+        // Store the previous force for jump momentum 
         if(grounded) forceOld = force;
     }
     
@@ -121,8 +142,8 @@ public class PlayerMovement : MonoBehaviour
     /// the camera position
     /// </summary>
     private void rotatePlayer (float xAxis, float zAxis) {
-        // If statement only if input is received
-        if (xAxis != 0 || zAxis != 0)
+        // If statement only if input is received and the player is on the ground
+        if (grounded && (xAxis != 0 || zAxis != 0))
         {
             rb.freezeRotation = false;
 
@@ -135,11 +156,10 @@ public class PlayerMovement : MonoBehaviour
                 transform.rotation = Quaternion.Lerp(this.transform.rotation, cam.transform.rotation, lookSpeed * Time.deltaTime);
             else transform.rotation = cam.transform.rotation;
         }
-        else rb.freezeRotation = true;
+        rb.freezeRotation = true;
         
         // Makes sure that the x and z rotations are 0
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-
     }
 
     /// <summary>
