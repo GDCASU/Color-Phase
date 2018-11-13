@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Move Info")]
     public float moveSpeedCap = 10;
     public float runSpeed = 2.0f;
+    public float frictionCoefficient = 1.2f;
     private Vector3 forceOld = Vector3.zero;
     private Vector3 force;
     
@@ -135,7 +136,9 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce( (grounded) ? force : (force + forceOld) / 2 , ForceMode.Impulse);
         // If we're off the ground rotate to our jump direction
         rotatePlayer( (grounded) ? xAxis : xAxisOld,(grounded) ? zAxis : zAxisOld);
-        rb.velocity = clampVelocities(rb.velocity);
+        bool friction = (grounded && zAxis == 0 && xAxis == 0);
+        rb.velocity =  clampVelocities(rb.velocity, friction);
+        
 
         // Store the previous force for jump momentum 
         if(grounded) {
@@ -179,10 +182,10 @@ public class PlayerMovement : MonoBehaviour
     /// This keeps the player from accelerating past set limits
     /// We can't use a straight vector clamp as we treat the axes separately 
     /// </summary>
-    private Vector3 clampVelocities(Vector3 velocity) {
-        Vector3 vOut = velocity;
+    private Vector3 clampVelocities(Vector3 velocity, bool friction) {
+        Vector3 moveSpeed = new Vector3(velocity.x, 0, velocity.z) / ((friction) ? frictionCoefficient:1);
 
-        Vector3 moveSpeed = new Vector3(velocity.x, 0, velocity.z);
+        Vector3 vOut = moveSpeed;
 
         // Clamp movement speed
         if(moveSpeed.magnitude > moveSpeedCap) 
