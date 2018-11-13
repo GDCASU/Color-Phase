@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
         // OnCollisionStay needs to verify that we are still grounded
         // Obviously it would be better to use OnCollisionExit 
         // but we can't check the normal
-        grounded = false;
+        if(!Physics.Raycast(playerCollider.bounds.center, Vector3.down, playerCollider.bounds.extents.y + 0.5f)) grounded = false;
     }
     
     private void Animations() 
