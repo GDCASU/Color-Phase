@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     public float fallSpeedCap = 10;
     public float fallCoefficent = 1;
     public float jumpStrength = 20f;
+    public float jumpControl = 1;
 
     #endregion
 
@@ -37,7 +38,6 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeedCap = 10;
     public float runSpeed = 2.0f;
     public float frictionCoefficient = 1.2f;
-    private Vector3 forceOld = Vector3.zero;
     private Vector3 force;
     
     #endregion
@@ -133,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
         # endregion
 
         // While in the air our force is an average of current input and force when we left the ground
-        rb.AddForce( (grounded) ? force : (force + forceOld) / 2 , ForceMode.Impulse);
+        rb.AddForce( (grounded) ? force : (force * jumpControl), ForceMode.Impulse );
         // If we're off the ground rotate to our jump direction
         rotatePlayer( (grounded) ? xAxis : xAxisOld,(grounded) ? zAxis : zAxisOld);
         bool friction = (grounded && zAxis == 0 && xAxis == 0);
@@ -142,7 +142,6 @@ public class PlayerMovement : MonoBehaviour
 
         // Store the previous force for jump momentum 
         if(grounded) {
-            forceOld = force;
             xAxisOld = xAxis;
             zAxisOld = zAxis;
         }
