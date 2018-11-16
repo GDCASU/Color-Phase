@@ -18,7 +18,7 @@ public class Grapple : MonoBehaviour
     [Header("Push/Pull Speed")]
     public float pullPlayerSpeed = 1f;
     public float pullObjectSpeed = 1f;
-    public float pushObjectSpeed = 100f;
+    public float pushObjectSpeed = 1000f;
 
     [Header("Swing Speed")]
     public float swingSpeed = 200f;
@@ -56,12 +56,7 @@ public class Grapple : MonoBehaviour
             {
                 if (hit.collider)
                 {
-                    hookAnchor.position = hit.point;
-                    grappleAnchor.position = transform.position;
-                    ropeLength = hit.distance;
-                    line.enabled = true;
-                    canGrapple = true;
-                    isGrappled = false;
+                    enableGrapple();
                 }
             }
         }
@@ -103,10 +98,7 @@ public class Grapple : MonoBehaviour
 
         if (Input.GetButtonUp("Fire1"))
         {
-            line.enabled = false;
-            isGrappled = false;
-            canGrapple = false;
-            swinging = false;
+            disableGrapple();
         }
     }
 
@@ -120,6 +112,24 @@ public class Grapple : MonoBehaviour
             rb.AddForce(transform.forward * z * swingSpeed);
             rb.AddForce(transform.right * x * swingStrafeSpeed);
         }
+    }
+
+    private void enableGrapple()
+    {
+        hookAnchor.position = hit.point;
+        grappleAnchor.position = transform.position;
+        ropeLength = hit.distance;
+        line.enabled = true;
+        canGrapple = true;
+        isGrappled = false;
+    }
+
+    private void disableGrapple()
+    {
+        line.enabled = false;
+        isGrappled = false;
+        canGrapple = false;
+        swinging = false;
     }
 
     // Pull the object the grapple collided with towards the player
@@ -142,7 +152,10 @@ public class Grapple : MonoBehaviour
     private void GrapplePushObject()
     {
         if (hit.rigidbody)
+        {
             hit.rigidbody.AddForce(Camera.main.transform.forward * pushObjectSpeed);
+            disableGrapple();
+        }
     }
 
     // Lets the user swing around from a fixed point
