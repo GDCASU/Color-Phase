@@ -10,6 +10,7 @@ public class ColorChangeTrigger : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        Debug.Log("hey");
         //Debug.Log(other);
         if (other.tag.StartsWith("Player"))
         {
