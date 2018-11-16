@@ -1,0 +1,63 @@
+
+/*
+Reactive moving blocks need a script
+
+
+These blocks/platforms activate if the player is on top of them and match the color on one of the sides.
+If multiple colors are the same then it will toggle clockwise each time the player activates that color.
+
+The blocks can potentially move in 4 directions forward, backward, left, and right.
+The maximum distance the blocks can move until stopped in X direction will also customizable variables.
+The blocks will also stop if they run into a wall.
+
+Each side of the block (not including top and bottom) can be assigned a red, green, blue, yellow, or blank state.
+A blank side will do nothing and cannot be activated.
+The colored sides can be activated by the player and will move in the direction of the arrow.
+When a side is activated, the material will swap to a glowing version and particles (with matching colors) on that side will be activated.
+
+The player must move along with the velocity of the platforms and not lock up the movement of the player.
+The block platform must not slide past the player.
+
+
+
+
+
+
+Potential states for the sides of the platform:
+
+0 - Neutral texture, cannot be activated
+1 - Red inactive (can be activated by a red player)
+2 - Green inactive (can be activated by a green player)
+3 - Blue inactive (can be activated by a blue player)
+4 - Yellow inactive (can be activated by a yellow player)
+11 - Red active (active as long as the player remains red and the player is on top of the platform)
+12 - Green active (active as long as the player remains green and the player is on top of the platform)
+13 - Blue active (active as long as the player remains blue and the player is on top of the platform)
+14 - Yellow active (active as long as the player remains yellow and the player is on top of the platform)
+
+
+
+
+Potential Variables:
+
+// The state of each platform side - this will also determine the materials used on each side, and the activation of particles
+int leftSideState
+int rightSideState
+int frontSideState
+int backSideState
+
+// The max distance/range the platform may travel
+float leftSideRange
+float rightSideRange
+float frontSideRange
+float backSideRange
+
+
+// A clockwise offset for the starting side variable may be needed if it is desired to
+// have the platform move in a specific starting direction in the case of multiple of the same color.
+
+
+// Because the materials change based on the states set it would be very helpful to allow this to work within the Unity editor.
+
+*/
+
