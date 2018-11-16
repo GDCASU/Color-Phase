@@ -104,13 +104,19 @@ public class Grapple : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Lets player add force when swinging
-        if (swinging && transform.position.y < hookAnchor.position.y)
+        // Only let player add force if they are below a certain point in relation to the hook anchor point
+        if (swinging && transform.position.y < hookAnchor.position.y - 10)
         {
+            // Get orthogonal vector to player
+            Vector3 player = transform.forward;
+            Vector3 rope = hookAnchor.position - transform.position;
+            Vector3.OrthoNormalize(ref rope, ref player);
+
             float x = InputManager.GetAxis(PlayerAxis.MoveHorizontal);
             float z = InputManager.GetAxis(PlayerAxis.MoveVertical);
-            rb.AddForce(transform.forward * z * swingSpeed);
+
             rb.AddForce(transform.right * x * swingStrafeSpeed);
+            rb.AddForce(player * z * swingSpeed);
         }
     }
 
