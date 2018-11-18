@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ColorSwap : MonoBehaviour
 {
@@ -49,14 +50,17 @@ public class ColorSwap : MonoBehaviour
 
         // Get component references
         playerMesh = playerModel.GetComponent<SkinnedMeshRenderer>(); 
-        crossHairRender = crossHair.GetComponent<SpriteRenderer>(); 
-
-        // Add self to singleton
-        players.Add(this);
+        crossHairRender = crossHair.GetComponent<SpriteRenderer>();
+        SceneManager.activeSceneChanged += clearColors;
     }
-
+    void clearColors(Scene current,Scene next)
+    {
+        players.Clear();
+    }
     void Start()
     {
+        
+        players.Add(this);
         // swap materials for color
         // swap lights for color
         SetColor(currentColor);
