@@ -12,6 +12,7 @@ public class ButtonToggle : MonoBehaviour
     public Material on;
     public bool state = false;
     public int colorValue = 0;
+    public bool neutralColor=false;
 
     // Used for animated button
     public bool holdState = false;
@@ -23,46 +24,60 @@ public class ButtonToggle : MonoBehaviour
 
     void Start()
     {
+        if (colorValue==-1)
+        {
+            neutralColor = true;
+        }
         GetComponent<MeshRenderer>().material = state ? on : off;
         startPosition = transform.position;
     }
-
-    public void OnTriggerEnter(Collider other)
+    
+    public void OnTriggerExit(Collider other)
     {
-        if (holdState == false)
+        if(neutralColor==true)
         {
-            if (!state || onOnly == false)
-            {
-                if (other.gameObject.tag.StartsWith("Player"))
-                {
-                    ColorSwap color = other.GetComponent<ColorSwap>();
-                    if (color.currentColor == colorValue)
-                    {
-                        state = !state;
-                        GetComponent<MeshRenderer>().material = state ? on : off;
-                    }
-                }
-            }
+            colorValue = -1;
         }
+        state =false;
+        GetComponent<MeshRenderer>().material = state ? on : off;
     }
-
     // Used for the hold down button trigger collision
     public void OnTriggerStay(Collider other)
     {
-        if (holdState == true)
+        if (other.gameObject.tag.StartsWith("Player"))
         {
-            if (other.gameObject.tag.StartsWith("Player"))
+            if (colorValue == -1)
+            {
+                colorValue = other.GetComponent<ColorSwap>().currentColor;
+            }
+            if (holdState == true)
+            {
+                if (!state || onOnly == false)
+                {
+                
+                    ColorSwap color = other.GetComponent<ColorSwap>();
+                    if (color.currentColor == colorValue)
+                    {
+                        state = true;
+                        GetComponent<MeshRenderer>().material = state ? on : off;
+                        color.transform.Translate(Vector3.down * 0.07f);
+                        offset = offset + 0.08f;
+                        if (offset > 0.64f)
+                        {
+                            offset = 0.64f;
+                        }
+                        onButton = 4;
+                    }
+                
+                }
+            }
+            else
             {
                 ColorSwap color = other.GetComponent<ColorSwap>();
                 if (color.currentColor == colorValue)
                 {
-                    color.transform.Translate(Vector3.down * 0.07f);
-                    offset = offset + 0.08f;
-                    if (offset > 0.64f)
-                    {
-                        offset = 0.64f;
-                    }
-                    onButton = 4;
+                    GetComponent<MeshRenderer>().material = state ? on : off;
+                    state = true;
                 }
             }
         }
