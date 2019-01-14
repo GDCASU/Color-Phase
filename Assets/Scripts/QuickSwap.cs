@@ -30,11 +30,9 @@ public class QuickSwap : MonoBehaviour {
 
         PalletCurrent.transform.parent = colorSwap.playerCamera.transform;
         PalletCurrent.transform.localPosition = new Vector3 (0.29F, -0.18F, 0.4F); // These are hardcoded for now (no UI canvas)
-        PalletCurrent.transform.localRotation = Quaternion.identity; 
 
         PalletBackup.transform.parent = colorSwap.playerCamera.transform;
         PalletBackup.transform.localPosition = new Vector3 (0.35F, -0.18F, 0.4F);
-        PalletBackup.transform.localRotation = Quaternion.identity;
 
         // Get references to sprite renderers for setting colors 
         PalletCurrentRender = PalletCurrent.GetComponent<SpriteRenderer>();
