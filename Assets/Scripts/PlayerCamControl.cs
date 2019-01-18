@@ -21,6 +21,8 @@ public class PlayerCamControl : MonoBehaviour
     private KeyCode orbitCamInput = KeyCode.Mouse2;
     private float cameraHorizAngle = 0;
     private float cameraVertAngle = 0;
+    public float minVertAngle;
+    public float maxVertAngle;
     private IInputPlayer player;
 
     // Use this for initialization
@@ -44,7 +46,9 @@ public class PlayerCamControl : MonoBehaviour
         
         
         cameraHorizAngle += xAxis;
-        cameraVertAngle += yAxis;
+        if(cameraVertAngle + yAxis > minVertAngle && cameraVertAngle + yAxis < maxVertAngle)
+            cameraVertAngle += yAxis;
+        //Debug.Log(cameraVertAngle);
         switch (activecam)
         {
             case 0:
