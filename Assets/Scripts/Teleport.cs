@@ -12,18 +12,18 @@ public class Teleport : MonoBehaviour
     public bool stop;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         timer = 0;
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
         //Debug.Log(ColorSwap.players[0].currentPlayerColor);
 
         //The purpose of the countdown timer is so that it doesn't teleport the player infinitely.
-        if (timer > 0 && timer <= 0.3)
+        if (timer > 0 && timer <= 0.2)
         {
             timer -= Time.deltaTime;
         }
@@ -31,19 +31,22 @@ public class Teleport : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (stop == false)
+        if (other.tag.StartsWith("Player"))
         {
-            //this operates on the same logic as ColorChangeTrigger
-            if (other.GetComponent<ColorSwap>().currentColor == colorValue)
+            if (stop == false)
             {
-                if (other.tag.StartsWith("Player"))
+                //this operates on the same logic as ColorChangeTrigger
+                if (other.GetComponent<ColorSwap>().currentColor == colorValue)
                 {
-                    //starts a countdown timer at 0.3 seconds
-                    timer = 0.3;
+                    if (other.tag.StartsWith("Player"))
+                    {
+                        //starts a countdown timer at 0.3 seconds
+                        timer = 0.2;
 
-                    //teleports the player to the teleporter and stops the player's movement
-                    other.transform.position = teleporter.transform.position;
-                    other.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                        //teleports the player to the teleporter and stops the player's movement
+                        other.transform.position = teleporter.transform.position;
+                        other.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    }
                 }
             }
         }
@@ -51,17 +54,20 @@ public class Teleport : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        //This will stop the player from teleporting again immediately after teleporting.
-        if (timer > 0 && timer <= 0.3)
+        if (other.tag.StartsWith("Player"))
         {
-            timer = 0;
-            stop = true;
-        }
+            //This will stop the player from teleporting again immediately after teleporting.
+            if (timer > 0 && timer <= 0.2)
+            {
+                timer = 0;
+                stop = true;
+            }
 
-        //This allows the player to teleport again once they exit the teleporter.
-        else
-        {
-            stop = false;
+            //This allows the player to teleport again once they exit the teleporter.
+            else
+            {
+                stop = false;
+            }
         }
     }
 }
