@@ -49,7 +49,7 @@ public class Teleport : MonoBehaviour
                     }
                 }
             }
-        }
+        }       
     }
 
     void OnTriggerExit(Collider other)
@@ -68,6 +68,6 @@ public class Teleport : MonoBehaviour
             {
                 stop = false;
             }
-        }
+        }        
     }
 }

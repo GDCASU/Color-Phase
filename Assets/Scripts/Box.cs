@@ -14,6 +14,7 @@ public class Box : MonoBehaviour
 
     //the hitbox is a separate object from the box so that the box can collide with objects
     public GameObject hitbox;
+
     public int colorValue = 0;
 
     // Use this for initialization
