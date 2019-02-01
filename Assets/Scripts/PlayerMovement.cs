@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
     
     private void Animations() 
     {
-        animator.SetFloat("Speed", Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)));
+        animator.SetFloat("Speed", 1 + Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)) / moveSpeedCap );
         animator.SetBool("Grounded", grounded);
     }
 
