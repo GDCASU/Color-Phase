@@ -6,18 +6,6 @@ public class Vents : MonoBehaviour
 {
     public float vent_strength = 0;
     
-	// Use this for initialization
-	void Start ()
-    {
-        
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        
-
-    }
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == ("Player"))
