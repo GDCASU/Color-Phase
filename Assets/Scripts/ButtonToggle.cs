@@ -33,7 +33,7 @@ public class ButtonToggle : MonoBehaviour
         {
             if (!state || onOnly == false)
             {
-                if (other.gameObject.tag.StartsWith("Player"))
+                if (other.gameObject.CompareTag("Player"))
                 {
                     ColorSwap color = other.GetComponent<ColorSwap>();
                     if (color.currentColor == colorValue)
@@ -42,9 +42,10 @@ public class ButtonToggle : MonoBehaviour
                         GetComponent<MeshRenderer>().material = state ? on : off;
                     }
                 }
-                if (other.gameObject.tag.StartsWith("Box"))
+                if (other.gameObject.CompareTag("Box"))
                 {
-                    if (other.GetComponent<Box>().colorValue == colorValue)
+                    Box color = other.GetComponent<Box>();
+                    if (color.currentColor == colorValue)
                     {
                         state = !state;
                         GetComponent<MeshRenderer>().material = state ? on : off;
@@ -59,7 +60,7 @@ public class ButtonToggle : MonoBehaviour
     {
         if (holdState == true)
         {
-            if (other.gameObject.tag.StartsWith("Player"))
+            if (other.gameObject.CompareTag("Player"))
             {
                 ColorSwap color = other.GetComponent<ColorSwap>();
                 if (color.currentColor == colorValue)
@@ -73,11 +74,12 @@ public class ButtonToggle : MonoBehaviour
                     onButton = 4;
                 }
             }
-            if (other.gameObject.tag.StartsWith("Box"))
+            if (other.gameObject.CompareTag("Box"))
             {
-                if (other.GetComponent<Box>().colorValue == colorValue)
+                Box color = other.GetComponent<Box>();
+                if (color.currentColor == colorValue)
                 {
-                    other.GetComponent<Box>().transform.Translate(Vector3.down * 0.07f);
+                    color.transform.Translate(Vector3.down * 0.07f);
                     offset = offset + 0.08f;
                     if (offset > 0.64f)
                     {

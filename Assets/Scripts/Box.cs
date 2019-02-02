@@ -15,7 +15,7 @@ public class Box : MonoBehaviour
     //the hitbox is a separate object from the box so that the box can collide with objects
     public GameObject hitbox;
 
-    public int colorValue = 0;
+    public int currentColor = 0;
 
     // Use this for initialization
     void Start()
@@ -29,32 +29,36 @@ public class Box : MonoBehaviour
     void Update()
     {
         //drop the box when you stop holding left click or whatever button
-        if (Input.GetMouseButtonUp(0) && onHand == true)
+        if (InputManager.GetButtonUp(PlayerInput.PlayerButton.PickUp) && onHand == true)
         {
+            Rigidbody box = gameObject.GetComponent<Rigidbody>();
+
             gameObject.transform.parent = null;
-            gameObject.GetComponent<Rigidbody>().useGravity = true;
-            gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            box.useGravity = true;
+            box.constraints = RigidbodyConstraints.None;
             onHand = false;
             hitbox.SetActive(false);
             hitbox.transform.parent = gameObject.transform;
         }
 
         //pick up the box in front of the player when the button is pressed and held
-        if (Input.GetMouseButtonDown(0) && onHand == false)
+        if (InputManager.GetButtonDown(PlayerInput.PlayerButton.PickUp) && onHand == false)
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 5, ignorePlayer))
+            if (Physics.Raycast(ray, out hit, 100, ignorePlayer))
             {
                 if (hit.collider.gameObject == gameObject)
                 {
+                    Rigidbody box = gameObject.GetComponent<Rigidbody>();
+
                     //set box in front of player while they're holding it
                     gameObject.transform.position = player.transform.position + player.transform.forward;
                     gameObject.transform.position = new Vector3(gameObject.transform.position.x, 1, gameObject.transform.position.z);
                     gameObject.transform.rotation = player.transform.rotation;
                     gameObject.transform.parent = player.transform;
-                    gameObject.GetComponent<Rigidbody>().useGravity = false;
-                    gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                    box.useGravity = false;
+                    box.constraints = RigidbodyConstraints.FreezeAll;
                     onHand = true;
                     //same thing for its hitbox
                     hitbox.transform.position = player.transform.position + player.transform.forward;
@@ -72,7 +76,7 @@ public class Box : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<ColorBarrier>() != null)
         {
-            if (collision.gameObject.GetComponent<ColorBarrier>().barrierColor == colorValue || colorValue > 3)
+            if (collision.gameObject.GetComponent<ColorBarrier>().barrierColor == currentColor || currentColor > 3)
             {
                 Physics.IgnoreCollision(collision.gameObject.GetComponent<Collider>(), hitbox.GetComponent<Collider>());
             }

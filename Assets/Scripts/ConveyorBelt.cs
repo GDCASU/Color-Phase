@@ -12,14 +12,16 @@ public class ConveyorBelt : MonoBehaviour
 
     void OnCollisionStay(Collision obj)
     {
-        if (reverseDirection == false)
+        Rigidbody objOnBelt = obj.gameObject.GetComponent<Rigidbody>();
+
+        if (!reverseDirection)
         {
-            obj.gameObject.GetComponent<Rigidbody>().velocity = obj.gameObject.GetComponent<Rigidbody>().velocity + beltVelocity * Time.deltaTime * transform.right;
+            objOnBelt.velocity = objOnBelt.velocity + beltVelocity * Time.deltaTime * transform.right;
         }
 
         else
         {
-            obj.gameObject.GetComponent<Rigidbody>().velocity = obj.gameObject.GetComponent<Rigidbody>().velocity + beltVelocity * Time.deltaTime * -transform.right;
+            objOnBelt.velocity = objOnBelt.velocity + beltVelocity * Time.deltaTime * -transform.right;
         }
     }
 }
