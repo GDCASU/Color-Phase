@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayerInput;
 
 public class PlayerCamControl : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class PlayerCamControl : MonoBehaviour
     private KeyCode orbitCamInput = KeyCode.Mouse2;
     private float cameraHorizAngle = 0;
     private float cameraVertAngle = 0;
+    private IInputPlayer player;
 
     //Camera restraint variables
     [SerializeField] private float minVertAngle = 0;
@@ -35,11 +37,15 @@ public class PlayerCamControl : MonoBehaviour
     }
 
     void LateUpdate()
-    {
+    {        
         // Camera Angle Input
-        float xAxis = Input.GetAxis(camHorizAxis) * Time.deltaTime * sensitivity;
-        float yAxis = -Input.GetAxis(camVertAxis) * Time.deltaTime * sensitivity;
-
+        // THIS IS OBSOLETE AND MUST BE UPDATED WHEN MOUSE IS ADDED TO INPUT MANAGER
+        float xAxis = Input.GetAxis(camHorizAxis) * Time.deltaTime * sensitivity / 2;
+        float yAxis = -Input.GetAxis(camVertAxis) * Time.deltaTime * sensitivity / 2;
+        
+        xAxis += InputManager.GetAxis(PlayerAxis.CameraHorizontal, player) * Time.deltaTime * sensitivity * 2;
+        yAxis += -InputManager.GetAxis(PlayerAxis.CameraVertical, player) * Time.deltaTime * sensitivity;
+        
         cameraHorizAngle += xAxis;
         if(cameraVertAngle + yAxis > minVertAngle && cameraVertAngle + yAxis < maxVertAngle)
             cameraVertAngle += yAxis;
