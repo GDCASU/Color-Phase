@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class ButtonToggle : MonoBehaviour
 {
-    public ColorSwap playerColor1;
-    public ColorSwap playerColor2;
-    public ColorSwap playerColor3;
-    public ColorSwap playerColor4;
     public Material off;
     public Material on;
     public bool state = false;
-    public int colorValue = 0;
+    public GameColor colorValue;
 
     // Used for animated button
     public bool holdState = false;
@@ -35,7 +31,7 @@ public class ButtonToggle : MonoBehaviour
             {
                 if (other.gameObject.tag.StartsWith("Player"))
                 {
-                    ColorSwap color = other.GetComponent<ColorSwap>();
+                    ColorState color = other.GetComponent<ColorState>();
                     if (color.currentColor == colorValue)
                     {
                         state = !state;
@@ -53,7 +49,7 @@ public class ButtonToggle : MonoBehaviour
         {
             if (other.gameObject.tag.StartsWith("Player"))
             {
-                ColorSwap color = other.GetComponent<ColorSwap>();
+                ColorState color = other.GetComponent<ColorState>();
                 if (color.currentColor == colorValue)
                 {
                     color.transform.Translate(Vector3.down * 0.07f);

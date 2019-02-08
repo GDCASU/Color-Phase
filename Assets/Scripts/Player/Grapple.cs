@@ -64,20 +64,20 @@ public class Grapple : MonoBehaviour
         // Handles when grapple is at the object it collided with and does actions based on color
         if (isGrappled)
         {
-            int color = col.GetComponent<ColorSwap>().currentColor;
-            swinging = color == 3;
+            GameColor color = col.GetComponent<ColorState>().currentColor;
+            swinging = color == GameColor.Yellow;
             switch (color)
             {
-                case 0: // Red
+                case GameColor.Red:
                     GrapplePullObject();
                     break;
-                case 1: // Green
+                case GameColor.Green: 
                     GrapplePushObject();
                     break;
-                case 2: // Blue
+                case GameColor.Blue:
                     GrapplePullPlayer();
                     break;
-                case 3: // Yellow
+                case GameColor.Yellow:
                     GrappleSwing();
                     break;
             }
