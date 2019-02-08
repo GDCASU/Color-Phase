@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class crackedFloor : MonoBehaviour {
+public class CrackedFloor : MonoBehaviour {
 
     public GameObject objReplace;
 

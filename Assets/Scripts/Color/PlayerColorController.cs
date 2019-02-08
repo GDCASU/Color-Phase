@@ -25,20 +25,10 @@ public class PlayerColorController : MonoBehaviour
         crossHairRender = crossHair.GetComponent<SpriteRenderer>();
         playerColor = GetComponent<ColorState>();
 
-        // add clear event to scene change 
-        SceneManager.activeSceneChanged += clearSingleton;
-
         // add to the color swap events
         GetComponent<ColorState>().onSwap += PlayerSetColor;
-    }
 
-    void Start()
-    {
         singleton = this;
-    }
-
-    void clearSingleton (Scene current, Scene next) {
-        singleton = null;
     }
 
     public void PlayerSetColor(GameColor prev, GameColor color)

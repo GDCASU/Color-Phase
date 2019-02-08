@@ -8,7 +8,10 @@ using System;
 /// </summary>
 [ExecuteInEditMode]
 public class ColorState : MonoBehaviour {
-    
+    [SerializeField]
+    private GameColor colorToSet;
+    [SerializeField]
+    private bool updateColor;
     public static Dictionary<GameColor, Color > RGBColors = new Dictionary <GameColor, Color> {
         {GameColor.Red, new Color(0.5490196f, 0.2614016f, 0.2588235f) },
         {GameColor.Green, new Color(0.2659206f, 0.5471698f, 0.26068f) },
@@ -21,12 +24,24 @@ public class ColorState : MonoBehaviour {
     private GameColor currentcolor;
     public GameColor currentColor {
         set {
-            if(onSwap != null) onSwap.Invoke(currentcolor, value);
+            onSwap(currentcolor, value);
             currentcolor = value;
+            // Update this one too so we can see in editor
+            colorToSet = value;
         }
         get {
             return currentcolor;
         } 
+    }
+    /// <summary>
+    /// This is called from the editor and nowhere else
+    /// It allows us to update our property 
+    /// </summary>
+    private void Update() {
+        if(updateColor) {
+            updateColor = false;
+            currentColor = colorToSet;
+        }
     }
 }
 

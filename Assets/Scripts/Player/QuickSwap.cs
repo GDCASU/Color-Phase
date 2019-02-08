@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PlayerInput;
-
+[RequireComponent(typeof(ColorState))]
+[RequireComponent(typeof(PlayerColorController))]
 public class QuickSwap : MonoBehaviour {
     /*
     Allows the player to swap between a stored color and their currect color
      */
     public GameObject PalletCurrentPrefab;
     public GameObject PalletBackupPrefab;
-    ColorState playerColor;
+    private ColorState playerColor;
     private InputPlayer inputPlayer;
     private GameObject PalletCurrent;
     private GameObject PalletBackup;
@@ -42,6 +43,9 @@ public class QuickSwap : MonoBehaviour {
 
         // Set colors on the UI
         updatePalletUI(storedColor, playerColor.currentColor);
+        
+        // Add it to swap events
+        playerColor.onSwap+=updatePalletUI;
     }
 	
 	void Update () {

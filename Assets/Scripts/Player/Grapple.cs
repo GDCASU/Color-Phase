@@ -8,7 +8,7 @@ using PlayerInput;
 //              Green: Pushes an object away from you
 //              Blue: Brings you towards another object
 //              Yellow: Lets you swing from a fixed point
-
+[RequireComponent(typeof(ColorState))]
 public class Grapple : MonoBehaviour
 {
     [Header("Grapple Attributes")]
