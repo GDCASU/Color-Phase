@@ -19,7 +19,7 @@ public class ColorState : MonoBehaviour {
         {GameColor.Yellow, new Color(0.5490196f, 0.5487493f, 0.2588235f)},
     };
 
-    public delegate void colorSwapEvent(GameColor current, GameColor next);
+    public delegate void colorSwapEvent(GameColor prev, GameColor next);
     public event colorSwapEvent onSwap;
     private GameColor currentcolor;
     public GameColor currentColor {
@@ -42,6 +42,11 @@ public class ColorState : MonoBehaviour {
             updateColor = false;
             currentColor = colorToSet;
         }
+    }
+
+    // Refresh color on start
+    private void Start() {
+        currentColor = colorToSet;
     }
 }
 

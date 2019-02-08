@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 
 
 [RequireComponent(typeof(ColorState))]
+[ExecuteInEditMode]
 public class PlayerColorController : MonoBehaviour
 {
     public static PlayerColorController singleton;
@@ -35,6 +36,7 @@ public class PlayerColorController : MonoBehaviour
     {
         gameObject.layer = 20 + (int)color;
 
+        // I genuinly have no idea what this is supposed to do 
         for (int i = 0; i < lights.Length; i++)
             lights[i].SetActive(i == (int)color);
 
