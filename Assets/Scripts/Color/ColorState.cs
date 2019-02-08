@@ -33,6 +33,7 @@ public class ColorState : MonoBehaviour {
             return currentcolor;
         } 
     }
+    
     /// <summary>
     /// This is called from the editor and nowhere else
     /// It allows us to update our property 
