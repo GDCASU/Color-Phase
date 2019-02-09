@@ -22,10 +22,11 @@ public class PlayerColorController : MonoBehaviour
     private SpriteRenderer crossHairRender;
 
     void Awake() {
-        // Get component references
-        crossHairRender = crossHair.GetComponent<SpriteRenderer>();
+        // We need to change to a canvas
+        //crossHairRender = crossHair.GetComponent<SpriteRenderer>();
         playerColor = GetComponent<ColorState>();
 
+        // Get component references
         // add to the color swap events
         GetComponent<ColorState>().onSwap += PlayerSetColor;
 
@@ -40,6 +41,6 @@ public class PlayerColorController : MonoBehaviour
         for (int i = 0; i < lights.Length; i++)
             lights[i].SetActive(i == (int)color);
 
-        crossHairRender.color = ColorState.RGBColors[color];
+        //crossHairRender.color = ColorState.RGBColors[color];
     }
 }
