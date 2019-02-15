@@ -88,7 +88,6 @@ public class ColorSwap : MonoBehaviour
 
     public void SetColor(int color)
     {
-        //playerModel.GetComponentInParent<Flyingcamera>().gameObject.layer = 20 + color;
         gameObject.layer = 20 + color;
 
         for (int i = 0; i < lights.Length; i++)
