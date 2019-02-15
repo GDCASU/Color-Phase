@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ColorSwap : MonoBehaviour
+public class ColorSwapOld : MonoBehaviour
 {
-    public static List<ColorSwap> players = new List<ColorSwap>(); // Easy access for puzzle objects
+    //public static List<ColorSwap> players = new List<ColorSwap>(); // Easy access for puzzle objects
     public GameObject playerModel;
     public GameObject playerCamera;
     public GameObject crossHair;
@@ -57,12 +57,12 @@ public class ColorSwap : MonoBehaviour
     }
     void clearColors(Scene current, Scene next)
     {
-        players.Clear();
+       // players.Clear();
     }
     void Start()
     {
 
-        players.Add(this);
+        //players.Add(this);
         // swap materials for color
         // swap lights for color
         SetColor(currentColor);
@@ -105,6 +105,6 @@ public class ColorSwap : MonoBehaviour
 
         // This isn't very efficent but it means we can decide if this is a given ability 
         QuickSwap q = GetComponent<QuickSwap>();
-        if (q != null) q.updatePalletUI();
+        //if (q != null) q.updatePalletUI();
     }
 }

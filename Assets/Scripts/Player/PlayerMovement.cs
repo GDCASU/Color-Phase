@@ -16,9 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Vector3 ledgeMemory;
     private Animator animator;
-    private PhysicMaterial physicsMaterial;
     private static readonly float axisModifier = Mathf.Sqrt(2) / 2;
-    private static readonly float pushModifier = 50f;
 
     #region Jump Parm
     private bool grounded = true;
@@ -46,7 +44,6 @@ public class PlayerMovement : MonoBehaviour
         player = GetComponent<IInputPlayer>();
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        physicsMaterial = GetComponent<PhysicMaterial>();
         playerCollider = GetComponent<Collider>();
     }
 
@@ -59,13 +56,14 @@ public class PlayerMovement : MonoBehaviour
         // OnCollisionStay needs to verify that we are still grounded
         // Obviously it would be better to use OnCollisionExit 
         // but we can't check the normal
-        if(!Physics.Raycast(playerCollider.bounds.center, Vector3.down, playerCollider.bounds.extents.y + 0.5f)) grounded = false;
+        if(grounded && !Physics.Raycast(playerCollider.bounds.center, Vector3.down, playerCollider.bounds.extents.y + 0.5f)) grounded = false;
     }
     
     private void Animations() 
     {
         animator.SetFloat("Speed", 1 + Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)) / moveSpeedCap );
         animator.SetBool("Grounded", grounded);
+        animator.SetBool("Walking", xAxis != 0 || zAxis != 0);
     }
 
 
@@ -75,24 +73,32 @@ public class PlayerMovement : MonoBehaviour
         // Note: This can be accomplished by checking collision.other
 
         // Check if grounded and handle some other behavior that happens we we ground
-        if(collision.contacts[0].normal == Vector3.up ) {
+        if(!jumpHeld && Vector3.Dot(collision.contacts[0].normal, Vector3.up ) > 0 ) {
             grounded = true;
         }
     }
 
     void OnCollisionStay(Collision collision)
     {
-        if(collision.contacts[0].normal == Vector3.up )  grounded = true;
+        if( Vector3.Dot(collision.contacts[0].normal, Vector3.up ) > 0 ) {
+            jumpHeld = false;
+            grounded = true;
+        } 
     }
 
     float xAxisOld = 0;
     float zAxisOld = 0;
+    float xAxis = 0;
+    float zAxis = 0;
 
+    /// <summary>
+    /// This controls the basic aspects of the players ground and jump movement
+    /// </summary>
     private void Move()
     {
         // Movement Input
-        float xAxis = 0;
-        float zAxis = 0;
+        xAxis = 0;
+        zAxis = 0;
 
         xAxis += InputManager.GetAxis(PlayerAxis.MoveHorizontal, player);
         zAxis += InputManager.GetAxis(PlayerAxis.MoveVertical, player);
@@ -107,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = ledgeMemory;
         }
 
-        # region Jump 
+    # region Jump 
         if (grounded) {
             // Update the last on ledge position of the player
             ledgeMemory = transform.position; 
@@ -120,26 +126,29 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         else {
-            if (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime) 
-                jumpHeld = false;
-            if (!jumpHeld) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
+            // Check if the player is still holding jump from the button and from the hang time
+            jumpHeld = !( (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime) );
+            // Only use the fall coefficent if we're less then the max fall speed 
+            float ySpeed = rb.velocity.y  - fallCoefficent;
+            if (!jumpHeld && ySpeed > -fallSpeedCap) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
         }
-        //uncomment to prevent movement mid-air
-        //if (grounded)
-        {
-            force = cam.transform.forward.normalized * zAxis * runSpeed + cam.transform.right.normalized * xAxis * runSpeed;
-            force.y = 0;
-        }
-        # endregion
+    # endregion
 
-        // While in the air our force is an average of current input and force when we left the ground
-        rb.AddForce( (grounded) ? force : (force * jumpControl), ForceMode.Impulse );
+        // Calculate force from input, angle, and speed
+        force = cam.transform.forward.normalized * zAxis * runSpeed + cam.transform.right.normalized * xAxis * runSpeed;
+        force.y = 0;
+
+        // Apply ground friction
+        rb.velocity  /= ((grounded) ? frictionCoefficient : 1);
+
+        // check if we are going faster then the cap, if not we don't add our foce (other things can still push the player faster)
+        if(Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)) < moveSpeedCap) {
+            // While in the air our force is reduced to give the player less control and preserve momentum in the jump
+            rb.AddForce( (grounded) ? force * frictionCoefficient : (force * jumpControl)/frictionCoefficient, ForceMode.Impulse );
+        }
         // If we're off the ground rotate to our jump direction
-        rotatePlayer( (grounded) ? xAxis : xAxisOld,(grounded) ? zAxis : zAxisOld);
-        bool friction = (grounded && zAxis == 0 && xAxis == 0);
-        rb.velocity =  clampVelocities(rb.velocity, friction);
+        rotatePlayer( (grounded) ? xAxis : xAxisOld, (grounded) ? zAxis : zAxisOld);
         
-
         // Store the previous force for jump momentum 
         if(grounded) {
             xAxisOld = xAxis;
@@ -169,34 +178,12 @@ public class PlayerMovement : MonoBehaviour
             // Rotate gently until the snap threshold
             if (Mathf.Abs(playerRotation - inputRotation) > angleToSnap)
                 transform.rotation = Quaternion.Lerp(this.transform.rotation, inputLook, lookSpeed * Time.deltaTime);
-            else transform.rotation = inputLook;
+            else 
+                transform.rotation = inputLook;
         }
         rb.freezeRotation = true;
         
         // Makes sure that the x and z rotations are 0
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-    }
-
-    /// <summary>
-    /// This keeps the player from accelerating past set limits
-    /// We can't use a straight vector clamp as we treat the axes separately 
-    /// </summary>
-    private Vector3 clampVelocities(Vector3 velocity, bool friction) {
-        Vector3 moveSpeed = new Vector3(velocity.x, 0, velocity.z) / ((friction) ? frictionCoefficient:1);
-
-        Vector3 vOut = moveSpeed;
-
-        // Clamp movement speed
-        if(moveSpeed.magnitude > moveSpeedCap) 
-            vOut = moveSpeed.normalized * moveSpeedCap;
-
-        // Clamp falling speed
-        float ySpeed = velocity.y;
-        if(!grounded && ySpeed < -fallSpeedCap) 
-            ySpeed = -fallSpeedCap;
-
-        vOut = new Vector3(vOut.x, ySpeed, vOut.z);
-
-        return vOut;
     }
 }

@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class ButtonToggle : MonoBehaviour
 {
-    public ColorSwap playerColor1;
-    public ColorSwap playerColor2;
-    public ColorSwap playerColor3;
-    public ColorSwap playerColor4;
     public Material off;
     public Material on;
     public bool state = false;
-    public int colorValue = 0;
+    public GameColor colorValue;
 
     // Used for animated button
     public bool holdState = false;
@@ -33,18 +29,9 @@ public class ButtonToggle : MonoBehaviour
         {
             if (!state || onOnly == false)
             {
-                if (other.gameObject.CompareTag("Player"))
+                if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box"))
                 {
-                    ColorSwap color = other.GetComponent<ColorSwap>();
-                    if (color.currentColor == colorValue)
-                    {
-                        state = !state;
-                        GetComponent<MeshRenderer>().material = state ? on : off;
-                    }
-                }
-                if (other.gameObject.CompareTag("Box"))
-                {
-                    Box color = other.GetComponent<Box>();
+                    ColorState color = other.GetComponent<ColorState>();
                     if (color.currentColor == colorValue)
                     {
                         state = !state;
@@ -60,23 +47,9 @@ public class ButtonToggle : MonoBehaviour
     {
         if (holdState == true)
         {
-            if (other.gameObject.CompareTag("Player"))
+            if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box"))
             {
-                ColorSwap color = other.GetComponent<ColorSwap>();
-                if (color.currentColor == colorValue)
-                {
-                    color.transform.Translate(Vector3.down * 0.07f);
-                    offset = offset + 0.08f;
-                    if (offset > 0.64f)
-                    {
-                        offset = 0.64f;
-                    }
-                    onButton = 4;
-                }
-            }
-            if (other.gameObject.CompareTag("Box"))
-            {
-                Box color = other.GetComponent<Box>();
+                ColorState color = other.GetComponent<ColorState>();
                 if (color.currentColor == colorValue)
                 {
                     color.transform.Translate(Vector3.down * 0.07f);

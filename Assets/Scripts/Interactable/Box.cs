@@ -10,19 +10,23 @@ public class Box : MonoBehaviour
 
     //there should be a LayerMask that ignores the player so Raycast is only aimed at the boxes
     public LayerMask ignorePlayer;
-    public GameObject player;
+    private GameObject player;
 
     //the hitbox is a separate object from the box so that the box can collide with objects
     public GameObject hitbox;
 
-    public int currentColor = 0;
+    private ColorState color;
 
+    public void Awake () {
+        color = GetComponent< ColorState >();
+    }
     // Use this for initialization
     void Start()
     {
         //ignores collisions between the hitbox and actual box
         Physics.IgnoreCollision(hitbox.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         onHand = false;
+        player = PlayerColorController.singleton.gameObject;
     }
 
     // Update is called once per frame
@@ -69,17 +73,5 @@ public class Box : MonoBehaviour
                 }
             }
         }        
-    }
-
-    //ignores collision between barriers and boxes of the same color or boxes of no color
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<ColorBarrier>() != null)
-        {
-            if (collision.gameObject.GetComponent<ColorBarrier>().barrierColor == currentColor || currentColor > 3)
-            {
-                Physics.IgnoreCollision(collision.gameObject.GetComponent<Collider>(), hitbox.GetComponent<Collider>());
-            }
-        }
     }
 }

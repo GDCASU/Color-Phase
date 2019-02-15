@@ -42,7 +42,9 @@ GameObject:
   - component: {fileID: 65308739724451718}
   - component: {fileID: 54260022700953014}
   - component: {fileID: 114700327472178860}
-  m_Layer: 25
+  - component: {fileID: 114523217068114708}
+  - component: {fileID: 114014024008368830}
+  m_Layer: 20
   m_Name: Box
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -56,7 +58,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1299066514512774}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.14, y: 0.5, z: 12.117864}
+  m_LocalPosition: {x: 4.9319572, y: 0.89, z: 19.35372}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
   - {fileID: 4447538697403350}
@@ -199,6 +201,30 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.01, y: 0.01, z: 0.01}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114014024008368830
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1299066514512774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eeaea7693a9433459710d83358fe392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114523217068114708
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1299066514512774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b43e23cc808991418c423a16aadcf9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorToSet: 0
+  updateColor: 0
 --- !u!114 &114700327472178860
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -213,7 +239,5 @@ MonoBehaviour:
   onHand: 0
   ignorePlayer:
     serializedVersion: 2
-    m_Bits: 33554432
-  player: {fileID: 0}
+    m_Bits: 34603008
   hitbox: {fileID: 1047265119024076}
-  colorValue: 4
