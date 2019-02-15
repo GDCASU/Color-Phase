@@ -29,7 +29,7 @@ public class ButtonToggle : MonoBehaviour
         {
             if (!state || onOnly == false)
             {
-                if (other.gameObject.tag.StartsWith("Player"))
+                if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box"))
                 {
                     ColorState color = other.GetComponent<ColorState>();
                     if (color.currentColor == colorValue)
@@ -47,7 +47,7 @@ public class ButtonToggle : MonoBehaviour
     {
         if (holdState == true)
         {
-            if (other.gameObject.tag.StartsWith("Player"))
+            if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box"))
             {
                 ColorState color = other.GetComponent<ColorState>();
                 if (color.currentColor == colorValue)

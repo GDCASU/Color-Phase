@@ -176,10 +176,11 @@ GameObject:
   - component: {fileID: 136100543912059420}
   - component: {fileID: 114623592063700904}
   - component: {fileID: 114730380888645552}
-  - component: {fileID: 114379012837433194}
+  - component: {fileID: 114025998283158406}
   - component: {fileID: 114251365184923260}
   - component: {fileID: 114633777334321368}
-  - component: {fileID: 114177570187078546}
+  - component: {fileID: 114374729449026402}
+  - component: {fileID: 114835809889207362}
   m_Layer: 23
   m_Name: Player 1 Character
   m_TagString: Player
@@ -925,7 +926,36 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114177570187078546
+--- !u!114 &114025998283158406
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1524871330306302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b43e23cc808991418c423a16aadcf9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorToSet: 3
+  updateColor: 0
+--- !u!114 &114251365184923260
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1524871330306302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 368a53c0aec0f2c4c8596818002cbe8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerColor: {fileID: 114025998283158406}
+  playerModel: {fileID: 1152904984972152}
+  playerCamera: {fileID: 1675303218584470}
+  crossHair: {fileID: 0}
+  lights: []
+--- !u!114 &114374729449026402
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -953,35 +983,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: bf616ba06d776dc459cd7de41d33360a, type: 2}
   - {fileID: 2100000, guid: 85f03dfaf0dce8547b1fe553d154db8c, type: 2}
   - {fileID: 2100000, guid: b90fa5be42df7204b84e857c04d84dd6, type: 2}
---- !u!114 &114251365184923260
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1524871330306302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 368a53c0aec0f2c4c8596818002cbe8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerColor: {fileID: 114379012837433194}
-  playerModel: {fileID: 1152904984972152}
-  playerCamera: {fileID: 1675303218584470}
-  crossHair: {fileID: 0}
-  lights: []
---- !u!114 &114379012837433194
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1524871330306302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b43e23cc808991418c423a16aadcf9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colorToSet: 3
-  updateColor: 0
 --- !u!114 &114623592063700904
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1041,6 +1042,17 @@ MonoBehaviour:
   sensitivity: 160
   camHorizAxis: Mouse X
   camVertAxis: Mouse Y
+--- !u!114 &114835809889207362
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1524871330306302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eeaea7693a9433459710d83358fe392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114982708972030296
 MonoBehaviour:
   m_ObjectHideFlags: 1

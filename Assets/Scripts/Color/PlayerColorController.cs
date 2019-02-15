@@ -35,8 +35,6 @@ public class PlayerColorController : MonoBehaviour
 
     public void PlayerSetColor(GameColor prev, GameColor color)
     {
-        gameObject.layer = 20 + (int)color;
-
         // I genuinly have no idea what this is supposed to do 
         for (int i = 0; i < lights.Length; i++)
             lights[i].SetActive(i == (int)color);
