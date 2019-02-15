@@ -10,9 +10,9 @@ public class ConveyorBelt : MonoBehaviour
     //direction the player goes in
     public bool reverseDirection = false;
 
-    void OnCollisionStay(Collision obj)
+    void OnCollisionStay(Collision collision)
     {
-        Rigidbody objOnBelt = obj.gameObject.GetComponent<Rigidbody>();
+        Rigidbody objOnBelt = collision.gameObject.GetComponent<Rigidbody>();
 
         if (!reverseDirection)
         {
