@@ -33,9 +33,18 @@ public class ButtonToggle : MonoBehaviour
         {
             if (!state || onOnly == false)
             {
-                if (other.gameObject.tag.StartsWith("Player"))
+                if (other.gameObject.CompareTag("Player"))
                 {
                     ColorSwap color = other.GetComponent<ColorSwap>();
+                    if (color.currentColor == colorValue)
+                    {
+                        state = !state;
+                        GetComponent<MeshRenderer>().material = state ? on : off;
+                    }
+                }
+                if (other.gameObject.CompareTag("Box"))
+                {
+                    Box color = other.GetComponent<Box>();
                     if (color.currentColor == colorValue)
                     {
                         state = !state;
@@ -51,9 +60,23 @@ public class ButtonToggle : MonoBehaviour
     {
         if (holdState == true)
         {
-            if (other.gameObject.tag.StartsWith("Player"))
+            if (other.gameObject.CompareTag("Player"))
             {
                 ColorSwap color = other.GetComponent<ColorSwap>();
+                if (color.currentColor == colorValue)
+                {
+                    color.transform.Translate(Vector3.down * 0.07f);
+                    offset = offset + 0.08f;
+                    if (offset > 0.64f)
+                    {
+                        offset = 0.64f;
+                    }
+                    onButton = 4;
+                }
+            }
+            if (other.gameObject.CompareTag("Box"))
+            {
+                Box color = other.GetComponent<Box>();
                 if (color.currentColor == colorValue)
                 {
                     color.transform.Translate(Vector3.down * 0.07f);
