@@ -25,8 +25,8 @@ public class PlayerCamControl : MonoBehaviour
     public float radius = -2.5f;
 
     //Camera restraint variables
-    [SerializeField] private float minVertAngle = 0;
-    [SerializeField] private float maxVertAngle = 90;
+    [SerializeField] private float minVertAngle = 0f;
+    [SerializeField] private float maxVertAngle = 90f;
 
     // Use this for initialization
     void Start()
