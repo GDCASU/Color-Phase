@@ -8,23 +8,22 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1334509894728950}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1334509894728950
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4845966574827160}
   - component: {fileID: 33929505283192112}
   - component: {fileID: 23691668520493900}
   - component: {fileID: 114301889349359692}
-  - component: {fileID: 114742262805428522}
   - component: {fileID: 64971088922269476}
-  m_Layer: 0
+  m_Layer: 25
   m_Name: Red Barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34,11 +33,11 @@ GameObject:
 --- !u!4 &4845966574827160
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1334509894728950}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.88, y: 0.29, z: -9.19}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 150, y: 150, z: 0.1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,7 +46,7 @@ Transform:
 --- !u!23 &23691668520493900
 MeshRenderer:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1334509894728950}
   m_Enabled: 1
@@ -82,14 +81,14 @@ MeshRenderer:
 --- !u!33 &33929505283192112
 MeshFilter:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1334509894728950}
   m_Mesh: {fileID: 4300000, guid: 21981a8fdac8a4a47bc9594b1e21418d, type: 3}
 --- !u!64 &64971088922269476
 MeshCollider:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1334509894728950}
   m_Material: {fileID: 0}
@@ -103,7 +102,7 @@ MeshCollider:
 --- !u!114 &114301889349359692
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1334509894728950}
   m_Enabled: 1
@@ -113,27 +112,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   U_Speed: 0
   V_Speed: -0.002
---- !u!114 &114742262805428522
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1334509894728950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c311e53a58d60d5469b4c78921b34748, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  barrierColor: 0
-  player1: {fileID: 0}
-  player1Color: {fileID: 0}
-  player2: {fileID: 0}
-  player2Color: {fileID: 0}
-  player3: {fileID: 0}
-  player3Color: {fileID: 0}
-  player4: {fileID: 0}
-  player4Color: {fileID: 0}
-  redMaterial: {fileID: 2100000, guid: a12354a3df743a9418e8ca4b2eb20fcd, type: 2}
-  greenMaterial: {fileID: 2100000, guid: 4f4559c44ea74fa448de3738d7207053, type: 2}
-  blueMaterial: {fileID: 2100000, guid: 0fa39585a66f2384eb1b9f1d102736bf, type: 2}
-  yellowMaterial: {fileID: 2100000, guid: f19524ec561247644852c85caa16c260, type: 2}
