@@ -5,7 +5,7 @@ using UnityEngine;
 public class Teleport : MonoBehaviour
 {
     public GameObject teleporter;
-    public int colorValue = 0;
+    public GameColor colorValue = GameColor.Red;
     public static double timer;
 
     //Stop must be initialized as false on the first teleporter and true on the second.
@@ -35,7 +35,7 @@ public class Teleport : MonoBehaviour
             if (timer >= -0.02 && timer <= 0.02)
             {
                 //this operates on the same logic as ColorChangeTrigger
-                if (other.GetComponent<ColorSwap>().currentColor == colorValue)
+                if (other.GetComponent<ColorState>().currentColor == colorValue)
                 {
                     //starts a countdown timer at 0.2 seconds
                     timer = 0.2;

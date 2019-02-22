@@ -23,6 +23,7 @@ public class PlayerCamControl : MonoBehaviour
     private float cameraVertAngle = 0;
     private IInputPlayer player;
     public float radius = -2.5f;
+    private float yOffset = 1.0f;
 
     //Camera restraint variables
     [SerializeField] private float minVertAngle = 0f;
@@ -56,7 +57,7 @@ public class PlayerCamControl : MonoBehaviour
             case 0:
                 cams[0].transform.rotation = Quaternion.Euler(0, cameraHorizAngle, 0);
                 cams[0].transform.Rotate(Vector3.right, cameraVertAngle);
-                cams[0].transform.position = transform.position + Vector3.up * 0.4f + cams[0].transform.forward * radius;
+                cams[0].transform.position = transform.position + Vector3.up * 0.4f + cams[0].transform.forward * radius + Vector3.up*yOffset;
                 break;
             case 1:
                 //edit to look down
