@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// This class contains an event to run for the player on colorswap
+/// This class should contain any unique events to run for the player on colorswap
 /// It also provides a singleton to access the player color from any class
 /// </summary>
 
@@ -30,7 +30,11 @@ public class PlayerColorController : MonoBehaviour
         // add to the color swap events
         GetComponent<ColorState>().onSwap += PlayerSetColor;
 
-        singleton = this;
+        // Only one player can exist
+        if (singleton == null)
+            singleton = this;
+        else
+            Destroy(gameObject);
     }
 
     public void PlayerSetColor(GameColor prev, GameColor color)
