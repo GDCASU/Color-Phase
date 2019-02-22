@@ -17,6 +17,7 @@ public class BreakableGround : MonoBehaviour {
      * This will either destroy or replace the game object
      * when the player collides with it at a certain speed
      */
+
     private void OnTriggerEnter(Collider other)
     {
         //Reads that the object collided with a player
@@ -24,12 +25,13 @@ public class BreakableGround : MonoBehaviour {
         {
             //Gets the players rigidbody
             Rigidbody player = other.gameObject.GetComponent<Rigidbody>();
+            ColorState color = other.gameObject.GetComponent<ColorState>();
 
             //Debug.Log("Player Colliding");
             //Debug.Log("Player velocity: " + player.velocity.y);
 
-            //If the player is going at the specific breaking speed
-            if (player.velocity.y < breakingSpeed)
+            //If the player is going at the specific breaking speed and is yellow
+            if ((player.velocity.y < breakingSpeed) && color.currentColor == GameColor.Yellow)
             {
                 //Debug.Log("Player going faster than breaking speed");
 
