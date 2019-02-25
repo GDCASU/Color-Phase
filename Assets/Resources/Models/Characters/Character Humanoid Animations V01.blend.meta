@@ -28,6 +28,34 @@ ModelImporter:
     100044: Upper_Arm_R_001
     100046: Upper_Leg_L
     100048: Upper_Leg_R_001
+    100050: Armature_001
+    100052: Bone
+    100054: Bone_001
+    100056: Bone_002
+    100058: Bone_003
+    100060: Bone_004
+    100062: Bone_005
+    100064: Bone_006
+    100066: Bone_007
+    100068: Bone_008
+    100070: Bone_009
+    100072: Bone_010
+    100074: Bone_011
+    100076: Bone_012
+    100078: Bone_013
+    100080: Bone_014
+    100082: Bone_016
+    100084: Bone_018
+    100086: Bone_020
+    100088: Bone_021
+    100090: Character_001
+    100092: Left_Ankle
+    100094: Left_Ankle_001
+    100096: Left_Wrist
+    100098: Plane
+    100100: Right_Ankle
+    100102: Right_Ankle_001
+    100104: Right_Wrist
     400000: Arm_L
     400002: Arm_R_001
     400004: Armature
@@ -53,9 +81,44 @@ ModelImporter:
     400044: Upper_Arm_R_001
     400046: Upper_Leg_L
     400048: Upper_Leg_R_001
+    400050: Armature_001
+    400052: Bone
+    400054: Bone_001
+    400056: Bone_002
+    400058: Bone_003
+    400060: Bone_004
+    400062: Bone_005
+    400064: Bone_006
+    400066: Bone_007
+    400068: Bone_008
+    400070: Bone_009
+    400072: Bone_010
+    400074: Bone_011
+    400076: Bone_012
+    400078: Bone_013
+    400080: Bone_014
+    400082: Bone_016
+    400084: Bone_018
+    400086: Bone_020
+    400088: Bone_021
+    400090: Character_001
+    400092: Left_Ankle
+    400094: Left_Ankle_001
+    400096: Left_Wrist
+    400098: Plane
+    400100: Right_Ankle
+    400102: Right_Ankle_001
+    400104: Right_Wrist
     2100000: Skin_Color
     2100002: Eye_Material
+    2100004: unnamed
+    2100006: Skin_Color_002
+    2100008: Eye_Material_002
+    2300000: Plane
+    3300000: Plane
     4300000: Character
+    4300002: Plane
+    4300004: Character_001
     7400000: Default Take
     7400002: ArmatureAction
     7400004: Wave
@@ -81,8 +144,15 @@ ModelImporter:
     7400044: Damaged 6 Sent Flying Stop
     7400046: Damaged 7 Knocked Down
     7400048: Jump Falling
+    7400050: JumpUpNew
+    7400052: RunNew
+    7400054: JumpLandNew
+    7400056: JumpFallingNew
+    7400058: IdleNew
+    7400060: DoubleJumpNew
     9500000: //RootNode
     13700000: Character
+    13700002: Character_001
     2186277476908879412: ImportLogs
   externalObjects:
   - first:
@@ -822,6 +892,174 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: JumpUpNew
+      takeName: ArmatureAction
+      firstFrame: 1129
+      lastFrame: 1146
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: RunNew
+      takeName: ArmatureAction
+      firstFrame: 1080
+      lastFrame: 1103
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: JumpLandNew
+      takeName: ArmatureAction
+      firstFrame: 1179
+      lastFrame: 1196
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: JumpFallingNew
+      takeName: ArmatureAction
+      firstFrame: 1145
+      lastFrame: 1146
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: IdleNew
+      takeName: ArmatureAction
+      firstFrame: 100
+      lastFrame: 938
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: DoubleJumpNew
+      takeName: ArmatureAction
+      firstFrame: 2010
+      lastFrame: 2037
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -866,7 +1104,6 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
