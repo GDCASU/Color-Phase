@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public float fallCoefficent = 1;
     public float jumpStrength = 20f;
     public float jumpControl = 1;
-
+    public float slopeSize = 0;
     #endregion
 
     #region Move Param
@@ -76,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
         // Note: This can be accomplished by checking collision.other
 
         // Check if grounded and handle some other behavior that happens we we ground
-        if (!jumpHeld && Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0)
+        if (!jumpHeld && Vector3.Dot(collision.contacts[0].normal, Vector3.up) > slopeSize)
         {
             grounded = true;
             jumpsAvailable = jumps;
@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0)
+        if (Vector3.Dot(collision.contacts[0].normal, Vector3.up) > slopeSize)
         {
             grounded = true;
         }
@@ -126,22 +126,22 @@ public class PlayerMovement : MonoBehaviour
         
         #region Jump 
        
-            
+        
             // Handle a jump input
 
             if (InputManager.GetButtonDown(PlayerButton.Jump, player) && jumpsAvailable > 0)
             {
                 jumpsAvailable--;
                 animator.SetTrigger("Jump");
-                rb.velocity = new Vector3(rb.velocity.x, jumpStrength, rb.velocity.z);
+                rb.velocity = new Vector3(rb.velocity.x, jumpStrength / (grounded ? 1 : 1.5f), rb.velocity.z);
                 jumpHeld = true;
             }
-            else
+            else if(!grounded)
             {
                 if (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime)
                     jumpHeld = false;
 
-                if (!jumpHeld || (jumps==2 && jumpsAvailable==0)) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
+                if (!jumpHeld) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
             }
         
        
