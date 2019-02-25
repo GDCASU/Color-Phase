@@ -305,6 +305,8 @@ GameObject:
   - component: {fileID: 124755311138868172}
   - component: {fileID: 54834644840772904}
   - component: {fileID: 114982708972030296}
+  - component: {fileID: 135202737648468498}
+  - component: {fileID: 114159012723459318}
   m_Layer: 0
   m_Name: Player 1 Camera
   m_TagString: MainCamera
@@ -939,6 +941,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorToSet: 3
   updateColor: 0
+--- !u!114 &114159012723459318
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1675303218584470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d6a15034cc83e4da8d67e15a051a01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camControl: {fileID: 114730380888645552}
+  layerMaskName: PermamentWall
+  distToWall: 0.1
+  radiusReductionRate: 0.1
+  radiusIncreaseRate: 0.1
+  smallestRadius: 0
 --- !u!114 &114251365184923260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -996,15 +1015,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 1675303218584470}
   minimumY: -30
-  lookSpeed: 15
+  lookSpeed: 10
   angleToSnap: 2
   hangTime: 1.5
   fallSpeedCap: 20
   fallCoefficent: 1.05
   jumpStrength: 21
   jumpControl: 0.25
-  moveSpeedCap: 11
-  runSpeed: 20
+  slopeSize: 0.05
+  moveSpeedCap: 10
+  runSpeed: 18
   frictionCoefficient: 1.2
 --- !u!114 &114633777334321368
 MonoBehaviour:
@@ -1042,6 +1062,9 @@ MonoBehaviour:
   sensitivity: 160
   camHorizAxis: Mouse X
   camVertAxis: Mouse Y
+  radius: -2.5
+  minVertAngle: 0
+  maxVertAngle: 90
 --- !u!114 &114835809889207362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1072,6 +1095,18 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1675303218584470}
   m_Enabled: 1
+--- !u!135 &135202737648468498
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1675303218584470}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &136100543912059420
 CapsuleCollider:
   m_ObjectHideFlags: 1
