@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockBehavior : MonoBehaviour {
-    public int color;//0=red,1=green,2=blue,3=yellow,4=no color
+    public GameColor color;
     [Header("Crumble")]
     public bool enableTheCrumble;
     public bool enableCrumbleReset;
@@ -36,7 +36,7 @@ public class BlockBehavior : MonoBehaviour {
         physical=GetComponents<BoxCollider>()[0];
         trigger = GetComponents<BoxCollider>()[1];
         if(enableSemiSolid)
-            this.gameObject.layer = 20 + color;
+            this.gameObject.layer = 20 + (int)color;
         beginMove();
     }
     
@@ -100,7 +100,7 @@ public class BlockBehavior : MonoBehaviour {
         {
             if (other.tag.StartsWith("Player"))
             {
-                if (cumbleBasedOnColor && other.GetComponent<ColorSwap>().currentColor != color)
+                if (cumbleBasedOnColor && other.GetComponent<ColorState>().currentColor != color)
                 {
                     crumbling = true;
                 }
