@@ -234,10 +234,12 @@ public class PlayerMovement : MonoBehaviour
             jumps = 1;
         }
     }
-    private void Stick(Collision a)
+    private void Stick(Collision collision)
     {
         
-        if (GetComponent<ColorState>().currentColor == GameColor.Red && !(Vector3.Dot(a.contacts[0].normal, Vector3.up)>0) && grounded==false && stuck==false && jumpHeld==false)
+        if (GetComponent<ColorState>().currentColor == GameColor.Red 
+            && !(Vector3.Dot(collision.contacts[0].normal, Vector3.up)>0) 
+            && grounded==false && stuck==false && jumpHeld==false && collision.gameObject.layer==29)
         {
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
             stuck = true;
@@ -246,7 +248,7 @@ public class PlayerMovement : MonoBehaviour
         else if(InputManager.GetButtonDown(PlayerButton.Jump, player) && stuck == true && detached==false )
         {
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-            rb.velocity = a.contacts[0].normal*10+ new Vector3(0, jumpStrength, 0);
+            rb.velocity = collision.contacts[0].normal*10+ new Vector3(0, jumpStrength, 0);
             detached = true;
         }
 
