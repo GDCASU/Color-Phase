@@ -27,9 +27,6 @@ public class BreakableGround : MonoBehaviour {
             Rigidbody player = other.gameObject.GetComponent<Rigidbody>();
             ColorState color = other.gameObject.GetComponent<ColorState>();
 
-            //Debug.Log("Player Colliding");
-            //Debug.Log("Player velocity: " + player.velocity.y);
-
             //If the player is going at the specific breaking speed and is yellow
             if ((player.velocity.y < breakingSpeed) && color.currentColor == GameColor.Yellow)
             {

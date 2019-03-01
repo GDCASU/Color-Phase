@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
     public float fallCoefficent = 1;
     public float jumpStrength = 20f;
     public float jumpControl = 1;
+    public float yellowJumpHeightPercent = 75;
+    public float yellowMassMultiplier = 2;
 
     #endregion
 
@@ -45,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<Collider>();
+        GetComponent<ColorState>().onSwap += YellowProperties;
     }
 
     private void FixedUpdate()
@@ -56,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
         // OnCollisionStay needs to verify that we are still grounded
         // Obviously it would be better to use OnCollisionExit 
         // but we can't check the normal
-        if(grounded && !Physics.Raycast(playerCollider.bounds.center, Vector3.down, playerCollider.bounds.extents.y + 0.5f)) grounded = false;
+        if (grounded && !Physics.Raycast(playerCollider.bounds.center, Vector3.down, playerCollider.bounds.extents.y + 0.5f)) grounded = false;
     }
     
     private void Animations() 
@@ -65,7 +68,6 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("Grounded", grounded);
         animator.SetBool("Walking", xAxis != 0 || zAxis != 0);
     }
-
 
     void OnCollisionEnter(Collision collision) 
     {
@@ -140,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Apply ground friction
         rb.velocity  /= ((grounded) ? frictionCoefficient : 1);
-
+ 
         // check if we are going faster then the cap, if not we don't add our foce (other things can still push the player faster)
         if(Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)) < moveSpeedCap) {
             // While in the air our force is reduced to give the player less control and preserve momentum in the jump
@@ -153,6 +155,21 @@ public class PlayerMovement : MonoBehaviour
         if(grounded) {
             xAxisOld = xAxis;
             zAxisOld = zAxis;
+        }
+    }
+
+    //adds properties of yellow when you swap to yellow and returns to original values when you swap to a different color
+    private void YellowProperties(GameColor prev, GameColor next)
+    {
+        if (next != GameColor.Yellow)
+        {
+            jumpStrength = 20f;
+            rb.mass = 10;
+        }
+        else
+        {
+            jumpStrength = jumpStrength * (yellowJumpHeightPercent/100);
+            rb.mass = rb.mass * yellowMassMultiplier;
         }
     }
     
