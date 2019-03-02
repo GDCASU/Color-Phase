@@ -9,7 +9,8 @@ public class Teleport : MonoBehaviour
     public static double timer;
 
     //Stop must be initialized as false on the first teleporter and true on the second.
-    public bool stop;
+    //public bool stop; // WHY? - stop is not used in the script.
+    public bool neutralColor;
 
     // Use this for initialization
     void Start()
@@ -32,13 +33,14 @@ public class Teleport : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             //ideally would be 0 but timer isn't decremented perfectly
-            if (timer >= -0.02 && timer <= 0.02)
+            //if (timer >= -0.02 && timer <= 0.02) // line caused timer to go below 0.02 in some cases of deltaTime (it broke the portal because the timer isn't decremented perfectly)
+            if (timer <= 0.02)
             {
                 //this operates on the same logic as ColorChangeTrigger
-                if (other.GetComponent<ColorState>().currentColor == colorValue)
+                if (other.GetComponent<ColorState>().currentColor == colorValue || neutralColor == true)
                 {
-                    //starts a countdown timer at 0.2 seconds
-                    timer = 0.2;
+                    //starts a countdown timer at 0.5 seconds
+                    timer = 0.5;
 
                     //teleports the player to the teleporter and stops the player's movement
                     other.transform.position = teleporter.transform.position;
