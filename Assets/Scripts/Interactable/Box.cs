@@ -8,8 +8,8 @@ public class Box : MonoBehaviour
     //player is holding the box
     public bool onHand;
 
-    //there should be a LayerMask that ignores the player so Raycast is only aimed at the boxes
-    public LayerMask ignorePlayer;
+    //raycastLayerMask goes through player and blocks player from picking up box through wrong barriers
+    public LayerMask raycastLayerMask;
     private GameObject player;
 
     //the hitbox is a separate object from the box so that the box can collide with objects
@@ -17,8 +17,9 @@ public class Box : MonoBehaviour
 
     private ColorState color;
 
-    public void Awake () {
-        color = GetComponent< ColorState >();
+    public void Awake ()
+    {
+        color = GetComponent< ColorState >();      
     }
     // Use this for initialization
     void Start()
@@ -27,6 +28,21 @@ public class Box : MonoBehaviour
         Physics.IgnoreCollision(hitbox.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         onHand = false;
         player = PlayerColorController.singleton.gameObject;
+
+        //set raycastLayerMask based on box color
+        switch (gameObject.layer)
+        {
+            case (20):
+                raycastLayerMask = 1 << 20 | 1 << 26 | 1 << 27 | 1 << 28; break;
+            case (21):
+                raycastLayerMask = 1 << 21 | 1 << 25 | 1 << 27 | 1 << 28; break;
+            case (22):
+                raycastLayerMask = 1 << 22 | 1 << 25 | 1 << 26 | 1 << 28; break;
+            case (23):
+                raycastLayerMask = 1 << 23 | 1 << 25 | 1 << 26 | 1 << 27; break;
+            default:
+                raycastLayerMask = 1 << 24; break;
+        }
     }
 
     // Update is called once per frame
@@ -43,6 +59,7 @@ public class Box : MonoBehaviour
             onHand = false;
             hitbox.SetActive(false);
             hitbox.transform.parent = gameObject.transform;
+            hitbox.layer = 0;
         }
 
         //pick up the box in front of the player when the button is pressed and held
@@ -50,7 +67,7 @@ public class Box : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 100, ignorePlayer))
+            if (Physics.Raycast(ray, out hit, 100, raycastLayerMask))
             {
                 if (hit.collider.gameObject == gameObject)
                 {
@@ -70,6 +87,7 @@ public class Box : MonoBehaviour
                     hitbox.transform.rotation = player.transform.rotation;
                     hitbox.transform.parent = player.transform;
                     hitbox.SetActive(true);
+                    hitbox.layer = gameObject.layer;
                 }
             }
         }        
