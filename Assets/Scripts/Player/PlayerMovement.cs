@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpControl = 1;
     public float yellowJumpHeightPercent = 75;
     public float yellowMassMultiplier = 2;
+    public float yellowFallCapMultiplier = 2;
 
     #endregion
 
@@ -165,11 +166,13 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpStrength = 20f;
             rb.mass = 10;
+            fallSpeedCap = 10;
         }
         else
         {
             jumpStrength = jumpStrength * (yellowJumpHeightPercent/100);
             rb.mass = rb.mass * yellowMassMultiplier;
+            fallSpeedCap = fallSpeedCap * yellowFallCapMultiplier;
         }
     }
     
