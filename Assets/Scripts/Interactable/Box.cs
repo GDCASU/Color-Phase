@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Box : MonoBehaviour
 {
-
-    //player is holding the box
-    public bool onHand;
+    //distance from which the player can pick up the box
+    public int pickupDistance = 10;
 
     //raycastLayerMask goes through player and blocks player from picking up box through wrong barriers
     public LayerMask raycastLayerMask;
@@ -14,6 +13,9 @@ public class Box : MonoBehaviour
 
     //the hitbox is a separate object from the box so that the box can collide with objects
     public GameObject hitbox;
+
+    //player is holding the box
+    bool onHand;
 
     private ColorState color;
 
@@ -67,7 +69,7 @@ public class Box : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 100, raycastLayerMask))
+            if (Physics.Raycast(ray, out hit, pickupDistance, raycastLayerMask))
             {
                 if (hit.collider.gameObject == gameObject)
                 {
