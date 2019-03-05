@@ -7,6 +7,7 @@ public class BreakableGround : MonoBehaviour {
     public GameObject replacement;
     public float breakingSpeed;
     public bool destroyObject;
+    public GameColor colorValue = GameColor.Yellow;
 
     /**
      * IMPORTANT NOTICE:
@@ -20,7 +21,7 @@ public class BreakableGround : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         //Reads that the object collided with a player
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.tag == "Player" && other.GetComponent<ColorState>().currentColor == colorValue)
         {
             //Gets the players rigidbody
             Rigidbody player = other.gameObject.GetComponent<Rigidbody>();
