@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(ColorState))]
 public class Box : MonoBehaviour
 {
     //distance from which the player can pick up the box
@@ -70,7 +70,7 @@ public class Box : MonoBehaviour
         if (InputManager.GetButtonDown(PlayerInput.PlayerButton.PickUp) && !onHand && !Holding)
         {
             RaycastHit hit;
-            Ray ray = new Ray(player.transform.position, player.transform.forward); //Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = new Ray(player.transform.position+Vector3.up/2, player.transform.forward); //Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, pickupDistance, raycastLayerMask))
             {
                 if (hit.collider.gameObject == gameObject)
