@@ -16,7 +16,8 @@ public class Box : MonoBehaviour
 
     //player is holding the box
     bool onHand;
-
+    // static var to check if any boxes are held
+    public static bool Holding;
     private ColorState color;
 
     public void Awake ()
@@ -51,7 +52,7 @@ public class Box : MonoBehaviour
     void Update()
     {
         //drop the box when you stop holding left click or whatever button
-        if (InputManager.GetButtonUp(PlayerInput.PlayerButton.PickUp) && onHand == true)
+        if (InputManager.GetButtonUp(PlayerInput.PlayerButton.PickUp) && onHand)
         {
             Rigidbody box = gameObject.GetComponent<Rigidbody>();
 
@@ -59,16 +60,17 @@ public class Box : MonoBehaviour
             box.useGravity = true;
             box.constraints = RigidbodyConstraints.None;
             onHand = false;
+            Holding = false;
             hitbox.SetActive(false);
             hitbox.transform.parent = gameObject.transform;
             hitbox.layer = 0;
         }
 
         //pick up the box in front of the player when the button is pressed and held
-        if (InputManager.GetButtonDown(PlayerInput.PlayerButton.PickUp) && onHand == false)
+        if (InputManager.GetButtonDown(PlayerInput.PlayerButton.PickUp) && !onHand && !Holding)
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = new Ray(player.transform.position, player.transform.forward); //Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, pickupDistance, raycastLayerMask))
             {
                 if (hit.collider.gameObject == gameObject)
@@ -82,6 +84,7 @@ public class Box : MonoBehaviour
                     box.useGravity = false;
                     box.constraints = RigidbodyConstraints.FreezeAll;
                     onHand = true;
+                    Holding = true;
                     //same thing for its hitbox
                     hitbox.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) + player.transform.forward;
                     hitbox.transform.rotation = player.transform.rotation;

@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
             grounded = true;
             if(rb.velocity.y <= 0) resetJumpInfo();
         }
-        Stick(collision);
+        if(!Box.Holding) Stick(collision);
     }
 
     float xAxisOld = 0;
