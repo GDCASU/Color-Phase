@@ -44,6 +44,15 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 force;
 
     #endregion
+
+    #region Yellow Param
+    [Header("Yellow Info")]
+    public float yellowJumpHeightPercent = 75;
+    public float yellowMassMultiplier = 2;
+    public float yellowFallCapMultiplier = 2;
+    public float yellowFallCoefficent = 1.3f;
+    public float yellowRunForceMultiplyer = 1.5f;
+    #endregion
     private void Start()
     {
         GetComponent<ColorState>().onSwap += ResetJumps;
@@ -51,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<Collider>();
+        GetComponent<ColorState>().onSwap += YellowProperties;
     }
 
     private void FixedUpdate()
@@ -72,8 +82,7 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("Walking", xAxis != 0 || zAxis != 0);
     }
 
-
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision) 
     {
         // TODO: Detect if it is a valid platform (Not a moving object)
         // Note: This can be accomplished by checking collision.other
@@ -178,9 +187,36 @@ public class PlayerMovement : MonoBehaviour
         {
             rotatePlayer((grounded) ? xAxis : xAxisOld, (grounded) ? zAxis : zAxisOld);
         }
+
+        // Yellow momentum 
+        if(!grounded && GetComponent<ColorState>().currentColor == GameColor.Yellow) {
+            var temp = rb.velocity;
+            rb.velocity = rb.velocity /= 1.025f;
+            rb.velocity = new Vector3(rb.velocity.x, temp.y, rb.velocity.z);
+        }
         
     }
 
+    //adds properties of yellow when you swap to yellow and returns to original values when you swap to a different color
+    private void YellowProperties(GameColor prev, GameColor next)
+    {
+        if (next != GameColor.Yellow)
+        {
+            jumpStrength = 21f;
+            rb.mass = 10;
+            fallSpeedCap = 20;
+            fallCoefficent = 1.05f;
+        }
+        else
+        {
+            jumpStrength = 21f * (yellowJumpHeightPercent/100);
+            rb.mass = 10 * yellowMassMultiplier;
+            fallSpeedCap = 20 * yellowFallCapMultiplier;
+            fallCoefficent = yellowFallCoefficent;
+            runSpeed = 18 * yellowRunForceMultiplyer;
+        }
+    }
+    
     /// <summary>
     /// This rotates the player according to
     /// the camera position and player input
