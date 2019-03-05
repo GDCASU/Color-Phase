@@ -10,14 +10,13 @@ public class SinMotion : MonoBehaviour
     public float offset = 0.0f;
     private Vector3 startPosition;
     public int Axis = 1;
-    public Vector3 axis = Vector3.up;
 
     private float num = 0;
 
     // Use this for initialization
     void Start()
     {
-        startPosition = transform.position;
+        startPosition = transform.localPosition;
         //float xp = transform.position.x;
         //float yp = transform.position.y;
         //float zp = transform.position.z;
@@ -46,7 +45,6 @@ public class SinMotion : MonoBehaviour
             case 2:
                 //transform.Rotate(Vector3.right, Time.deltaTime*RotationSpeed);
                 //transform.Translate (Vector3.right * Time.deltaTime * Mathf.Sin (num + offset) * SinMagnitude);
-                transform.position = startPosition + axis * Mathf.Sin(num) * SinMagnitude;
                 break;
             case 3:
                 //transform.Rotate(Vector3.forward, Time.deltaTime*RotationSpeed);
