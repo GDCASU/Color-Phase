@@ -21,10 +21,11 @@ public class ColorState : MonoBehaviour {
 
     public delegate void colorSwapEvent(GameColor prev, GameColor next);
     public event colorSwapEvent onSwap;
+    [SerializeField]
     private GameColor currentcolor;
     public GameColor currentColor {
         set {
-            onSwap(currentcolor, value);
+            if(onSwap != null) onSwap(currentcolor, value);
             currentcolor = value;
             // Update this one too so we can see in editor
             colorToSet = value;

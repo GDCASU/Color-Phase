@@ -52,8 +52,8 @@ public class ButtonToggle : MonoBehaviour
                 ColorState color = other.GetComponent<ColorState>();
                 if (color.currentColor == colorValue)
                 {
-                    color.transform.Translate(Vector3.down * 0.07f);
-                    offset = offset + 0.08f;
+                    // color.transform.Translate(Vector3.down * 0.07f);
+                    offset = offset + 0.04f;
                     if (offset > 0.64f)
                     {
                         offset = 0.64f;
