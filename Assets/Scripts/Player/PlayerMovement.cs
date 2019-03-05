@@ -206,6 +206,7 @@ public class PlayerMovement : MonoBehaviour
             rb.mass = 10;
             fallSpeedCap = 20;
             fallCoefficent = 1.05f;
+            runSpeed = 18;
         }
         else
         {
