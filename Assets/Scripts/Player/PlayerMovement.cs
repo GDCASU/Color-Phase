@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
     #endregion
     private void Start()
     {
-        GetComponent<ColorState>().onSwap += ResetJumps;
+        GetComponent<ColorState>().onSwap += HandleColors;
         player = GetComponent<IInputPlayer>();
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -267,8 +267,13 @@ public class PlayerMovement : MonoBehaviour
         hasJumped = 0;
     }
 
-    private void ResetJumps(GameColor previous, GameColor next)
+    private void HandleColors(GameColor previous, GameColor next)
     {
+        if (previous == GameColor.Red && detached == false)
+        {
+            detached = true;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        }
         if (previous == GameColor.Blue && jumpsAvailable > 0)
         {
             jumpsAvailable--;
