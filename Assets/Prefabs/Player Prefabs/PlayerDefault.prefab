@@ -181,7 +181,8 @@ GameObject:
   - component: {fileID: 114633777334321368}
   - component: {fileID: 114374729449026402}
   - component: {fileID: 114835809889207362}
-  m_Layer: 23
+  - component: {fileID: 114998166646901258}
+  m_Layer: 21
   m_Name: Player 1 Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -307,6 +308,8 @@ GameObject:
   - component: {fileID: 114982708972030296}
   - component: {fileID: 135202737648468498}
   - component: {fileID: 114159012723459318}
+  - component: {fileID: 135414234420751804}
+  - component: {fileID: 114837578976449036}
   m_Layer: 0
   m_Name: Player 1 Camera
   m_TagString: MainCamera
@@ -939,7 +942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b43e23cc808991418c423a16aadcf9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorToSet: 3
+  colorToSet: 1
   updateColor: 0
 --- !u!114 &114159012723459318
 MonoBehaviour:
@@ -1026,6 +1029,11 @@ MonoBehaviour:
   moveSpeedCap: 10
   runSpeed: 18
   frictionCoefficient: 1.2
+  yellowJumpHeightPercent: 85
+  yellowMassMultiplier: 2.5
+  yellowFallCapMultiplier: 2
+  yellowFallCoefficent: 1.75
+  yellowRunForceMultiplyer: 1.8
 --- !u!114 &114633777334321368
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1076,6 +1084,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eeaea7693a9433459710d83358fe392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114837578976449036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1675303218584470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d6a15034cc83e4da8d67e15a051a01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camControl: {fileID: 114730380888645552}
+  layerMaskName: PermamentWall
+  distToWall: 0.1
+  radiusReductionRate: 0.1
+  radiusIncreaseRate: 0.1
+  smallestRadius: 0
 --- !u!114 &114982708972030296
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1088,6 +1113,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: c9d85d90464224f42931f6ec0cd98b17, type: 2}
+--- !u!114 &114998166646901258
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1524871330306302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fec77006089abb4b86146d800d31e5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rendererLocation: {fileID: 1152904984972152}
+  redMesh: {fileID: 4300000, guid: 434a93e824dc69c409e361a8e4e00297, type: 3}
+  greenMesh: {fileID: 4300000, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
+  blueMesh: {fileID: 4300000, guid: f255daf4ad69e9046910ad88b7974a98, type: 3}
+  yellowMesh: {fileID: 4300000, guid: 3bc187c19377dc24d9f6b2dadf64d042, type: 3}
 --- !u!124 &124755311138868172
 Behaviour:
   m_ObjectHideFlags: 1
@@ -1096,6 +1137,18 @@ Behaviour:
   m_GameObject: {fileID: 1675303218584470}
   m_Enabled: 1
 --- !u!135 &135202737648468498
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1675303218584470}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &135414234420751804
 SphereCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1135,9 +1188,9 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: bf616ba06d776dc459cd7de41d33360a, type: 2}
+  - {fileID: 2100000, guid: 4029a364043a19944b676d9325cf3ab1, type: 2}
   - {fileID: 2100000, guid: 85f03dfaf0dce8547b1fe553d154db8c, type: 2}
-  - {fileID: 2100000, guid: b90fa5be42df7204b84e857c04d84dd6, type: 2}
+  - {fileID: 2100000, guid: a3a57147f5ce09b46ac612d14fa84bda, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

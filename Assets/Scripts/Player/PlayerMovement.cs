@@ -44,6 +44,15 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 force;
 
     #endregion
+
+    #region Yellow Param
+    [Header("Yellow Info")]
+    public float yellowJumpHeightPercent = 75;
+    public float yellowMassMultiplier = 2;
+    public float yellowFallCapMultiplier = 2;
+    public float yellowFallCoefficent = 1.3f;
+    public float yellowRunForceMultiplyer = 1.5f;
+    #endregion
     private void Start()
     {
         GetComponent<ColorState>().onSwap += ResetJumps;
@@ -51,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<Collider>();
+        GetComponent<ColorState>().onSwap += YellowProperties;
     }
 
     private void FixedUpdate()
@@ -72,8 +82,7 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("Walking", xAxis != 0 || zAxis != 0);
     }
 
-
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision) 
     {
         // TODO: Detect if it is a valid platform (Not a moving object)
         // Note: This can be accomplished by checking collision.other
@@ -82,11 +91,7 @@ public class PlayerMovement : MonoBehaviour
         if (!jumpHeld && Vector3.Dot(collision.contacts[0].normal, Vector3.up) > slopeSize)
         {
             grounded = true;
-            jumpsAvailable = jumps;
-            stuck = false;
-            detached = false;
-            hasJumped = 0;
-
+            resetJumpInfo();
         }
     }
 
@@ -95,8 +100,9 @@ public class PlayerMovement : MonoBehaviour
         if (Vector3.Dot(collision.contacts[0].normal, Vector3.up) > slopeSize)
         {
             grounded = true;
+            if(rb.velocity.y <= 0) resetJumpInfo();
         }
-        Stick(collision);
+        if(!Box.Holding) Stick(collision);
     }
 
     float xAxisOld = 0;
@@ -127,15 +133,13 @@ public class PlayerMovement : MonoBehaviour
         }
         if (grounded)
         {
-            // Update the last on ledge position of the player
-            ledgeMemory = transform.position;
+            setGroundInfo();
         }
 
         #region Jump 
     
         
             // Handle a jump input
-
             if (InputManager.GetButtonDown(PlayerButton.Jump, player) && jumpsAvailable > 0 && hasJumped<2)
             {
                 jumpsAvailable--;
@@ -143,13 +147,9 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector3(rb.velocity.x, jumpStrength / (grounded ? 1 : 1.5f), rb.velocity.z);
                 jumpHeld = true;
                 hasJumped++;
+                grounded = false;
 
-                // Store the previous force for jump momentum 
-                if(grounded)
-                {
-                    xAxisOld = xAxis;
-                    zAxisOld = zAxis;
-                }
+                setGroundInfo();
             }
             else if(!grounded)
             {
@@ -158,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
 
                 if (!jumpHeld) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
             }
+
 
         //uncomment to prevent movement mid-air
         //if (grounded)
@@ -186,9 +187,37 @@ public class PlayerMovement : MonoBehaviour
         {
             rotatePlayer((grounded) ? xAxis : xAxisOld, (grounded) ? zAxis : zAxisOld);
         }
+
+        // Yellow momentum 
+        if(!grounded && GetComponent<ColorState>().currentColor == GameColor.Yellow) {
+            var temp = rb.velocity;
+            rb.velocity = rb.velocity /= 1.025f;
+            rb.velocity = new Vector3(rb.velocity.x, temp.y, rb.velocity.z);
+        }
         
     }
 
+    //adds properties of yellow when you swap to yellow and returns to original values when you swap to a different color
+    private void YellowProperties(GameColor prev, GameColor next)
+    {
+        if (next != GameColor.Yellow)
+        {
+            jumpStrength = 21f;
+            rb.mass = 10;
+            fallSpeedCap = 20;
+            fallCoefficent = 1.05f;
+            runSpeed = 18;
+        }
+        else
+        {
+            jumpStrength = 21f * (yellowJumpHeightPercent/100);
+            rb.mass = 10 * yellowMassMultiplier;
+            fallSpeedCap = 20 * yellowFallCapMultiplier;
+            fallCoefficent = yellowFallCoefficent;
+            runSpeed = 18 * yellowRunForceMultiplyer;
+        }
+    }
+    
     /// <summary>
     /// This rotates the player according to
     /// the camera position and player input
@@ -221,6 +250,23 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
     }
 
+    /// <summary>
+    /// This sets the info on last position and direction for when the player is in the air
+    /// </summary>
+    private void setGroundInfo() {
+        // Update the last on ledge position of the player
+        ledgeMemory = transform.position;
+        // Store the previous force for jump momentum 
+        xAxisOld = xAxis;
+        zAxisOld = zAxis;
+    }
+
+    private void resetJumpInfo() {
+        jumpsAvailable = jumps;
+        stuck = false;
+        detached = false;
+        hasJumped = 0;
+    }
 
     private void ResetJumps(GameColor previous, GameColor next)
     {
@@ -240,20 +286,25 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Stick(Collision collision)
     {
-        
+        Vector3 dir = collision.contacts[0].normal;
         if (GetComponent<ColorState>().currentColor == GameColor.Red 
             && !(Vector3.Dot(collision.contacts[0].normal, Vector3.up)>0) 
-            && grounded==false && stuck==false && jumpHeld==false && collision.gameObject.tag=="StickableWall")
+            && grounded==false && stuck==false && collision.gameObject.tag=="StickableWall")
         {
-            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
             stuck = true;
+            animator.SetTrigger("Stuck");
             
+            transform.LookAt(new Vector3(transform.position.x - dir.x, transform.position.y, transform.position.z - dir.z));
         }
         else if(InputManager.GetButtonDown(PlayerButton.Jump, player) && stuck == true && detached==false )
         {
-            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-            rb.velocity = collision.contacts[0].normal*10+ new Vector3(0, jumpStrength, 0);
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            rb.velocity = new Vector3(dir.x * 10, 1.5f*jumpStrength, dir.z *10);
             detached = true;
+            animator.SetTrigger("Jump");
+
+            transform.LookAt(new Vector3(transform.position.x + dir.x, transform.position.y, transform.position.z+ dir.z));
         }
 
     }
