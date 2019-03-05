@@ -51,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
     public float yellowMassMultiplier = 2;
     public float yellowFallCapMultiplier = 2;
     public float yellowFallCoefficent = 1.3f;
+    public float yellowRunForceMultiplyer = 1.5f;
     #endregion
     private void Start()
     {
@@ -186,6 +187,13 @@ public class PlayerMovement : MonoBehaviour
         {
             rotatePlayer((grounded) ? xAxis : xAxisOld, (grounded) ? zAxis : zAxisOld);
         }
+
+        // Yellow momentum 
+        if(!grounded && GetComponent<ColorState>().currentColor == GameColor.Yellow) {
+            var temp = rb.velocity;
+            rb.velocity = rb.velocity /= 1.025f;
+            rb.velocity = new Vector3(rb.velocity.x, temp.y, rb.velocity.z);
+        }
         
     }
 
@@ -201,10 +209,11 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            jumpStrength = jumpStrength * (yellowJumpHeightPercent/100);
-            rb.mass = rb.mass * yellowMassMultiplier;
-            fallSpeedCap = fallSpeedCap * yellowFallCapMultiplier;
+            jumpStrength = 21f * (yellowJumpHeightPercent/100);
+            rb.mass = 10 * yellowMassMultiplier;
+            fallSpeedCap = 20 * yellowFallCapMultiplier;
             fallCoefficent = yellowFallCoefficent;
+            runSpeed = 18 * yellowRunForceMultiplyer;
         }
     }
     
