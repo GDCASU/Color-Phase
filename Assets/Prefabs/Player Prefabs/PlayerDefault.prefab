@@ -487,7 +487,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1605622675145520}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.35477, y: 0.061, z: -11.26605}
+  m_LocalPosition: {x: -0.31, y: 18, z: -23.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4215920851088580}
@@ -944,6 +944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorToSet: 1
   updateColor: 0
+  currentcolor: 1
 --- !u!114 &114159012723459318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1030,10 +1031,10 @@ MonoBehaviour:
   runSpeed: 18
   frictionCoefficient: 1.2
   yellowJumpHeightPercent: 85
-  yellowMassMultiplier: 2.5
+  yellowMassMultiplier: 10
   yellowFallCapMultiplier: 2
-  yellowFallCoefficent: 1.75
-  yellowRunForceMultiplyer: 1.8
+  yellowFallCoefficent: 1.25
+  yellowRunForceMultiplyer: 8
 --- !u!114 &114633777334321368
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1049,7 +1050,7 @@ MonoBehaviour:
     type: 2}
   PalletBackupPrefab: {fileID: 1610772120150412, guid: f29d3cf41205cf1489ffe5ff66b42bcb,
     type: 2}
-  storedColor: 0
+  storedColor: 1
 --- !u!114 &114730380888645552
 MonoBehaviour:
   m_ObjectHideFlags: 1
