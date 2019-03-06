@@ -270,10 +270,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (previous == GameColor.Red && detached == false)
         {
+            if(stuck) transform.LookAt(transform.position-transform.forward);
             detached = true;
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             animator.SetBool("Detach",true);
-            transform.LookAt(transform.position-transform.forward);
         }
         if (previous == GameColor.Blue && jumpsAvailable > 0)
         {
