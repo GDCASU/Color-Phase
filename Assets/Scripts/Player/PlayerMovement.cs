@@ -168,7 +168,9 @@ public class PlayerMovement : MonoBehaviour
 
         // Calculate force from input, angle, and speed
         var direction = new Vector2(xAxis, zAxis).normalized;
-        force = cam.transform.forward.normalized * direction.y * runSpeed + cam.transform.right.normalized * direction.x * runSpeed;
+        var forward = cam.transform.forward; forward.y = 0;
+        var right = cam.transform.right; right.y = 0;
+        force = forward.normalized * direction.y * runSpeed + right.normalized * direction.x * runSpeed;
         force.y = 0;
 
         // Apply ground friction
