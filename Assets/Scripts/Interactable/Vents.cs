@@ -10,7 +10,7 @@ public class Vents : MonoBehaviour
     {
         if (other.gameObject.tag == ("Player"))
         {
-            other.GetComponent<Rigidbody>().velocity = other.GetComponent<Rigidbody>().velocity + transform.up * vent_strength;
+            other.GetComponent<Rigidbody>().velocity = other.GetComponent<Rigidbody>().velocity + transform.up * vent_strength/ other.GetComponent<Rigidbody>().mass;
         }
     }
     
