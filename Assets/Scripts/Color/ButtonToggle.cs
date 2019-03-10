@@ -14,6 +14,12 @@ public class ButtonToggle : MonoBehaviour
     public bool onOnly = false;
 
 
+    public float countdownTime = 0; // anything larger than 0 will do a countdown then toggle the state off - 0 ignores the timer and will not toggle off
+    private float timeCounter = 0;
+
+    public AudioClip buttonTimer;
+
+
     public AudioClip buttonTrigger;
     AudioSource audioSource;
     private bool stateChangeMemory;
@@ -22,6 +28,8 @@ public class ButtonToggle : MonoBehaviour
     private Vector3 startPosition;
 
     private int onButton = 0;
+
+    
 
     void Start()
     {
@@ -44,6 +52,11 @@ public class ButtonToggle : MonoBehaviour
                     {
                         state = !state;
                         GetComponent<MeshRenderer>().material = state ? on : off;
+                        if (countdownTime > 0)
+                        {
+                            audioSource.Stop();
+                            timeCounter = countdownTime;
+                        }
                     }
                 }
             }
@@ -100,6 +113,28 @@ public class ButtonToggle : MonoBehaviour
 
             transform.position = new Vector3(startPosition.x, startPosition.y, startPosition.z);
             transform.Translate(Vector3.back * offset);
+        } else
+        {
+            if (timeCounter > 0) {
+                timeCounter = timeCounter - Time.deltaTime;
+
+                //audioSource.clip = buttonTimer;
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.clip = buttonTimer;
+                    audioSource.Play();
+                }
+
+                //audioSource.PlayOneShot(buttonTimer, 1.0F);
+
+                if (timeCounter < 0)
+                {
+                    audioSource.Stop();
+                    GetComponent<MeshRenderer>().material = off;
+                    timeCounter = 0;
+                    state = false;
+                }
+            }
         }
     }
 }
