@@ -864,6 +864,29 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9b2e5bfc07001e4c8442a7bb10147a5, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &43836620 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1524871330306302, guid: 92c73d6923e87c148b8d12606fe303df,
+    type: 2}
+  m_PrefabInternal: {fileID: 1575572585}
+--- !u!114 &43836622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 43836620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978eb54c65b65dc418a9c83258ff1342, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hookRange: 50
+  grappleSpeed: 1
+  pullPlayerSpeed: 1
+  pullObjectSpeed: 1
+  pushObjectSpeed: 20000
+  swingSpeed: 200
+  swingStrafeSpeed: 200
 --- !u!4 &43866518 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4092131108141420, guid: f4b4926f35d213e4da3c9c18e26833b8,
@@ -29389,6 +29412,16 @@ Prefab:
     - target: {fileID: 4169075078251942, guid: 92c73d6923e87c148b8d12606fe303df, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114730380888645552, guid: 92c73d6923e87c148b8d12606fe303df,
+        type: 2}
+      propertyPath: maxVertAngle
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 114730380888645552, guid: 92c73d6923e87c148b8d12606fe303df,
+        type: 2}
+      propertyPath: minVertAngle
+      value: -50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92c73d6923e87c148b8d12606fe303df, type: 2}

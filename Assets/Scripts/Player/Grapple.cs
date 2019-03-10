@@ -50,9 +50,9 @@ public class Grapple : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (InputManager.GetButtonDown(PlayerButton.Grapple))
         {
-            if (Physics.Raycast(gameObject.transform.position, Camera.main.transform.forward, out hit, hookRange, 9))
+            if (Physics.Raycast(gameObject.transform.position, Camera.main.transform.forward, out hit, hookRange))
             {
                 if (hit.collider)
                 {
@@ -96,7 +96,7 @@ public class Grapple : MonoBehaviour
             line.SetPosition(1, grappleAnchor.transform.position);
         }
 
-        if (Input.GetButtonUp("Fire1"))
+        if (InputManager.GetButtonUp(PlayerButton.Grapple))
         {
             disableGrapple();
         }

@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
     #endregion
     private void Start()
     {
-        GetComponent<ColorState>().onSwap += ResetJumps;
+        GetComponent<ColorState>().onSwap += HandleColors;
         player = GetComponent<IInputPlayer>();
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -94,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
             grounded = true;
             resetJumpInfo();
         }
+        if(!Box.Holding) Stick(collision);
     }
 
     void OnCollisionStay(Collision collision)
@@ -103,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
             grounded = true;
             if(rb.velocity.y <= 0) resetJumpInfo();
         }
-        if(!Box.Holding) Stick(collision);
+        if(stuck) checkDetatch(collision);
     }
 
     float xAxisOld = 0;
@@ -137,29 +138,26 @@ public class PlayerMovement : MonoBehaviour
             setGroundInfo();
         }
 
-        #region Jump 
-    
-        
-            // Handle a jump input
-            if (InputManager.GetButtonDown(PlayerButton.Jump, player) && jumpsAvailable > 0 && hasJumped<2)
-            {
-                jumpsAvailable--;
-                animator.SetTrigger("Jump");
-                rb.velocity = new Vector3(rb.velocity.x, jumpStrength / (grounded ? 1 : 1.5f), rb.velocity.z);
-                jumpHeld = true;
-                hasJumped++;
-                grounded = false;
+        #region Jump  
+        // Handle a jump input
+        if (InputManager.GetButtonDown(PlayerButton.Jump, player) && jumpsAvailable > 0 && hasJumped<2)
+        {
+            jumpsAvailable--;
+            animator.SetTrigger("Jump");
+            rb.velocity = new Vector3(rb.velocity.x, jumpStrength / (grounded ? 1 : 1.5f), rb.velocity.z);
+            jumpHeld = true;
+            hasJumped++;
+            grounded = false;
 
-                setGroundInfo();
-            }
-            else if(!grounded)
-            {
-                if (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime)
-                    jumpHeld = false;
+            setGroundInfo();
+        }
+        else if(!grounded)
+        {
+            if (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime)
+                jumpHeld = false;
 
-                if (!jumpHeld) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
-            }
-
+            if (!jumpHeld) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
+        }
 
         //uncomment to prevent movement mid-air
         //if (grounded)
@@ -171,7 +169,9 @@ public class PlayerMovement : MonoBehaviour
 
         // Calculate force from input, angle, and speed
         var direction = new Vector2(xAxis, zAxis).normalized;
-        force = cam.transform.forward.normalized * direction.y * runSpeed + cam.transform.right.normalized * direction.x * runSpeed;
+        var forward = cam.transform.forward; forward.y = 0;
+        var right = cam.transform.right; right.y = 0;
+        force = forward.normalized * direction.y * runSpeed + right.normalized * direction.x * runSpeed;
         force.y = 0;
 
         // Apply ground friction
@@ -267,8 +267,15 @@ public class PlayerMovement : MonoBehaviour
         hasJumped = 0;
     }
 
-    private void ResetJumps(GameColor previous, GameColor next)
+    private void HandleColors(GameColor previous, GameColor next)
     {
+        if (previous == GameColor.Red && detached == false)
+        {
+            if(stuck) transform.LookAt(transform.position-transform.forward);
+            detached = true;
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            animator.SetBool("Detach",true);
+        }
         if (previous == GameColor.Blue && jumpsAvailable > 0)
         {
 
@@ -297,16 +304,23 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 dir = collision.contacts[0].normal;
         if (GetComponent<ColorState>().currentColor == GameColor.Red 
-            && !(Vector3.Dot(collision.contacts[0].normal, Vector3.up)>0) 
-            && grounded==false && stuck==false && collision.gameObject.tag=="StickableWall")
+            && !grounded && (!stuck || detached)
+            && collision.gameObject.tag=="StickableWall")
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
             stuck = true;
+            detached = false;
+            animator.SetBool("Detach",false);
             animator.SetTrigger("Stuck");
             
             transform.LookAt(new Vector3(transform.position.x - dir.x, transform.position.y, transform.position.z - dir.z));
         }
-        else if(InputManager.GetButtonDown(PlayerButton.Jump, player) && stuck == true )
+
+    }
+    private void checkDetatch(Collision collision)
+    {
+        Vector3 dir = collision.contacts[0].normal;
+        if(InputManager.GetButtonDown(PlayerButton.Jump, player) && !detached )
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             rb.velocity = new Vector3(dir.x * 10, 1.5f * jumpStrength, dir.z * 10);
@@ -315,6 +329,5 @@ public class PlayerMovement : MonoBehaviour
 
             transform.LookAt(new Vector3(transform.position.x + dir.x, transform.position.y, transform.position.z+ dir.z));
         }
-
     }
 }
