@@ -12,6 +12,12 @@ public class ButtonToggle : MonoBehaviour
     // Used for animated button
     public bool holdState = false;
     public bool onOnly = false;
+
+
+    public AudioClip buttonTrigger;
+    AudioSource audioSource;
+    private bool stateChangeMemory;
+    
     private float offset = 0.0f;
     private Vector3 startPosition;
 
@@ -19,6 +25,8 @@ public class ButtonToggle : MonoBehaviour
 
     void Start()
     {
+        stateChangeMemory = state;
+        audioSource = GetComponent<AudioSource>();
         GetComponent<MeshRenderer>().material = state ? on : off;
         startPosition = transform.position;
     }
@@ -67,6 +75,11 @@ public class ButtonToggle : MonoBehaviour
 
     private void Update()
     {
+        if (stateChangeMemory != state)
+        {
+            audioSource.PlayOneShot(buttonTrigger, 1.0F);
+            stateChangeMemory = state;
+        }
         // Animate and detect state of the hold down buttons
         if (holdState == true)
         {
