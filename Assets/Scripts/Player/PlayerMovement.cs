@@ -19,13 +19,13 @@ public class PlayerMovement : MonoBehaviour
     private static readonly float axisModifier = Mathf.Sqrt(2) / 2;
 
     #region Jump Parm
-    private bool grounded = true;
-    private bool jumpHeld = false;
-    bool stuck = false;
+    public bool grounded = true;
+    public bool jumpHeld = false;
+    public bool stuck = false;
     bool detached = false;
     private int hasJumped = 0;
     private int jumps = 1;
-    private int jumpsAvailable = 0;
+    public int jumpsAvailable = 0;
 
     [Header("Jump Info")]
     public float hangTime = 1f;
@@ -65,7 +65,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-       
+        print("stuck "+stuck);
+        print("detached "+detached);
         Move();
         Animations();
         // At the end of each frame we set grounded to false so that
@@ -262,9 +263,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void resetJumpInfo() {
-        jumpsAvailable = jumps;
-        stuck = false;
-        detached = false;
+        jumpsAvailable = jumps;        
         hasJumped = 0;
     }
 
@@ -272,12 +271,22 @@ public class PlayerMovement : MonoBehaviour
     {
         if (previous == GameColor.Blue && jumpsAvailable > 0)
         {
+
             jumpsAvailable--;
+           
         }
         if (next == GameColor.Blue)
         {
-            jumpsAvailable++;
+            if(hasJumped==2)
+            {
+
+            }
+            else
+            {
+                jumpsAvailable++;
+            }
             jumps = 2;
+            
         }
         else
         {
@@ -297,11 +306,11 @@ public class PlayerMovement : MonoBehaviour
             
             transform.LookAt(new Vector3(transform.position.x - dir.x, transform.position.y, transform.position.z - dir.z));
         }
-        else if(InputManager.GetButtonDown(PlayerButton.Jump, player) && stuck == true && detached==false )
+        else if(InputManager.GetButtonDown(PlayerButton.Jump, player) && stuck == true )
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-            rb.velocity = new Vector3(dir.x * 10, 1.5f*jumpStrength, dir.z *10);
-            detached = true;
+            rb.velocity = new Vector3(dir.x * 10, 1.5f * jumpStrength, dir.z * 10);
+            stuck = false;
             animator.SetTrigger("Jump");
 
             transform.LookAt(new Vector3(transform.position.x + dir.x, transform.position.y, transform.position.z+ dir.z));
