@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 using PlayerInput;
 
+
 public class PlayerMovement : MonoBehaviour
 {
     public GameObject cam;
@@ -26,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     private int hasJumped = 0;
     private int jumps = 1;
     public int jumpsAvailable = 0;
+    private bool cooldown = false;
+    float cooldownTime = 0.1f;
 
     [Header("Jump Info")]
     public float hangTime = 1f;
@@ -65,8 +68,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        print("stuck "+stuck);
-        print("detached "+detached);
         Move();
         Animations();
         // At the end of each frame we set grounded to false so that
@@ -138,10 +139,13 @@ public class PlayerMovement : MonoBehaviour
             setGroundInfo();
         }
 
+
         #region Jump  
         // Handle a jump input
-        if (InputManager.GetButtonDown(PlayerButton.Jump, player) && jumpsAvailable > 0 && hasJumped<2)
+        if (InputManager.GetButtonDown(PlayerButton.Jump, player) && jumpsAvailable > 0 && hasJumped < 2 && !cooldown)
         {
+            cooldown = true;
+            StartCoroutine(endCooldown());
             jumpsAvailable--;
             animator.SetTrigger("Jump");
             rb.velocity = new Vector3(rb.velocity.x, jumpStrength / (grounded ? 1 : 1.5f), rb.velocity.z);
@@ -151,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
 
             setGroundInfo();
         }
-        else if(!grounded)
+        if (!grounded)
         {
             if (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime)
                 jumpHeld = false;
@@ -218,7 +222,6 @@ public class PlayerMovement : MonoBehaviour
             runSpeed = 18 * yellowRunForceMultiplyer;
         }
     }
-    
     /// <summary>
     /// This rotates the player according to
     /// the camera position and player input
@@ -265,6 +268,11 @@ public class PlayerMovement : MonoBehaviour
     private void resetJumpInfo() {
         jumpsAvailable = jumps;        
         hasJumped = 0;
+    }
+    IEnumerator endCooldown()
+    {
+        yield return new WaitForSeconds(cooldownTime);
+        cooldown = false;
     }
 
     private void HandleColors(GameColor previous, GameColor next)
