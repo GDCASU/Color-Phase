@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 114374729449026402}
   - component: {fileID: 114835809889207362}
   - component: {fileID: 114998166646901258}
-  m_Layer: 21
+  m_Layer: 23
   m_Name: Player 1 Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -310,6 +310,7 @@ GameObject:
   - component: {fileID: 114159012723459318}
   - component: {fileID: 135414234420751804}
   - component: {fileID: 114837578976449036}
+  - component: {fileID: 81481631386489534}
   m_Layer: 0
   m_Name: Player 1 Camera
   m_TagString: MainCamera
@@ -487,7 +488,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1605622675145520}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.31, y: 18, z: -23.28}
+  m_LocalPosition: {x: 4.39, y: 18, z: -23.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4215920851088580}
@@ -913,6 +914,13 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!81 &81481631386489534
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1675303218584470}
+  m_Enabled: 1
 --- !u!95 &95713243248466618
 Animator:
   serializedVersion: 3
@@ -942,9 +950,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b43e23cc808991418c423a16aadcf9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorToSet: 1
+  colorToSet: 3
   updateColor: 0
-  currentcolor: 1
+  currentcolor: 3
 --- !u!114 &114159012723459318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1041,7 +1049,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1524871330306302}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 382b23052ba706841b3bc22f7e02b088, type: 3}
   m_Name: 
@@ -1050,7 +1058,7 @@ MonoBehaviour:
     type: 2}
   PalletBackupPrefab: {fileID: 1610772120150412, guid: f29d3cf41205cf1489ffe5ff66b42bcb,
     type: 2}
-  storedColor: 1
+  storedColor: 0
 --- !u!114 &114730380888645552
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1189,9 +1197,9 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 4029a364043a19944b676d9325cf3ab1, type: 2}
+  - {fileID: 2100000, guid: bf616ba06d776dc459cd7de41d33360a, type: 2}
   - {fileID: 2100000, guid: 85f03dfaf0dce8547b1fe553d154db8c, type: 2}
-  - {fileID: 2100000, guid: a3a57147f5ce09b46ac612d14fa84bda, type: 2}
+  - {fileID: 2100000, guid: b90fa5be42df7204b84e857c04d84dd6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1215,7 +1223,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300000, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 3bc187c19377dc24d9f6b2dadf64d042, type: 3}
   m_Bones:
   - {fileID: 4669504864939820}
   - {fileID: 4296701259321840}

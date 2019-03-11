@@ -108,6 +108,11 @@ public class PlayerMovement : MonoBehaviour
         if(stuck) checkDetatch(collision);
     }
 
+    void OnCollisionExit(Collision collision) {
+        if (!detached && collision.gameObject.tag=="StickableWall")
+            detach();
+    }
+
     float xAxisOld = 0;
     float zAxisOld = 0;
     float xAxis = 0;
@@ -280,9 +285,7 @@ public class PlayerMovement : MonoBehaviour
         if (previous == GameColor.Red && detached == false)
         {
             if(stuck) transform.LookAt(transform.position-transform.forward);
-            detached = true;
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-            animator.SetBool("Detach",true);
+            detach();
         }
         if (previous == GameColor.Blue && jumpsAvailable > 0)
         {
@@ -313,7 +316,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 dir = collision.contacts[0].normal;
         if (GetComponent<ColorState>().currentColor == GameColor.Red 
             && !grounded && (!stuck || detached)
-            && collision.gameObject.tag=="StickableWall")
+            && collision.gameObject.tag=="StickableWall"
+            && Vector3.Dot(dir, -transform.forward) > 0.75)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
             stuck = true;
@@ -337,5 +341,11 @@ public class PlayerMovement : MonoBehaviour
 
             transform.LookAt(new Vector3(transform.position.x + dir.x, transform.position.y, transform.position.z+ dir.z));
         }
+    }
+
+    private void detach() {
+        detached = true;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        animator.SetBool("Detach",true);
     }
 }
