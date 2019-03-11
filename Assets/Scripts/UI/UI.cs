@@ -11,6 +11,10 @@ public class UI : MonoBehaviour
     public Image PreviousAbility;
     public Image Grapple;
     public Image GrappleCooldown;
+    public Sprite GreenAbilitySprite;
+    public Sprite RedAbilitySprite;
+    public Sprite YellowAbilitySprite;
+    public Sprite BlueAbilitySprite;
     public Sprite GreenSprite;
     public Sprite RedSprite;
     public Sprite YellowSprite;
@@ -25,8 +29,8 @@ public class UI : MonoBehaviour
 
     void Awake()
     {
-        playerColor = GetComponentInParent<ColorState>();
-        playerMoevement = GetComponentInParent<PlayerMovement>();
+        playerColor = gameObject.transform.parent.transform.parent.GetComponentInChildren<ColorState>();
+        playerMoevement = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerMovement>();
     }
 
         // Use this for initialization
@@ -45,7 +49,7 @@ public class UI : MonoBehaviour
             playerColor.currentColor = temp;
         }
 
-        PreviousAbility.color = ColorState.RGBColors[storedColor];
+        previousColor();
 
         if (playerColor.currentColor == GameColor.Green)
         {
@@ -67,14 +71,12 @@ public class UI : MonoBehaviour
     }
     public void Green()
     {
-        AbilityCoolDown.sprite = GreenSprite;
-        Ability.sprite = GreenSprite;
+        Ability.sprite = GreenAbilitySprite;
         AbilityCoolDown.fillAmount = 0;
     }
     public void Red()
     {
-        AbilityCoolDown.sprite = RedSprite;
-        Ability.sprite = RedSprite;
+        Ability.sprite = RedAbilitySprite;
 
         if (playerMoevement.stuck)
         {
@@ -87,8 +89,7 @@ public class UI : MonoBehaviour
     }
     public void Yellow()
     {
-        AbilityCoolDown.sprite = YellowSprite;
-        Ability.sprite = YellowSprite;
+        Ability.sprite = YellowAbilitySprite;
         if(playerMoevement.grounded==false && playerMoevement.jumpHeld==false)
         {
             AbilityCoolDown.fillAmount = 1;
@@ -100,8 +101,7 @@ public class UI : MonoBehaviour
     }
     public void Blue()
     {
-        AbilityCoolDown.sprite = BlueSprite;
-        Ability.sprite = BlueSprite;
+        Ability.sprite = BlueAbilitySprite;
 
         if (playerMoevement.jumpsAvailable == 1)
         {
@@ -114,6 +114,25 @@ public class UI : MonoBehaviour
         else
         {
             AbilityCoolDown.fillAmount = 0;
+        }
+    }
+    public void previousColor()
+    {
+        if(storedColor==GameColor.Green)
+        {
+            PreviousAbility.sprite = GreenSprite;
+        }
+        if (storedColor == GameColor.Red)
+        {
+            PreviousAbility.sprite = RedSprite;
+        }
+        if (storedColor == GameColor.Yellow)
+        {
+            PreviousAbility.sprite = YellowSprite;
+        }
+        if (storedColor == GameColor.Blue)
+        {
+            PreviousAbility.sprite = BlueSprite;
         }
     }
 
