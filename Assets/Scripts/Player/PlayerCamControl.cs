@@ -26,7 +26,7 @@ public class PlayerCamControl : MonoBehaviour
     private float yOffset = 1.0f;
 
     //Camera restraint variables
-    [SerializeField] private float minVertAngle = 0f;
+    [SerializeField] private float minVertAngle = -20f;
     [SerializeField] private float maxVertAngle = 90f;
 
     // Use this for initialization
@@ -49,7 +49,7 @@ public class PlayerCamControl : MonoBehaviour
         yAxis += -InputManager.GetAxis(PlayerAxis.CameraVertical, player) * Time.deltaTime * sensitivity;
         
         cameraHorizAngle += xAxis;
-        if(cameraVertAngle + yAxis > minVertAngle && cameraVertAngle + yAxis < maxVertAngle)
+        if(cameraVertAngle + yAxis > -20f && cameraVertAngle + yAxis < maxVertAngle)
             cameraVertAngle += yAxis;
 
         switch (activecam)

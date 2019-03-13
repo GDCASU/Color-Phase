@@ -75,9 +75,9 @@ public class ButtonToggle : MonoBehaviour
                 {
                     // color.transform.Translate(Vector3.down * 0.07f);
                     offset = offset + 0.04f;
-                    if (offset > 0.64f)
+                    if (offset > 0.24f)
                     {
-                        offset = 0.64f;
+                        offset = 0.24f;
                     }
                     onButton = 4;
                 }
@@ -96,7 +96,7 @@ public class ButtonToggle : MonoBehaviour
         // Animate and detect state of the hold down buttons
         if (holdState == true)
         {
-            state = offset > 0.60f;
+            state = offset > 0.20f;
 
             if (offset > 0.0f)
             {
