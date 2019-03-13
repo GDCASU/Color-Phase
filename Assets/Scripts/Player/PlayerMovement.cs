@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 using PlayerInput;
 
+
 public class PlayerMovement : MonoBehaviour
 {
     public GameObject cam;
@@ -19,13 +20,15 @@ public class PlayerMovement : MonoBehaviour
     private static readonly float axisModifier = Mathf.Sqrt(2) / 2;
 
     #region Jump Parm
-    private bool grounded = true;
-    private bool jumpHeld = false;
-    bool stuck = false;
-    bool detached = false;
+    public bool grounded = true;
+    public bool jumpHeld = false;
+    public bool stuck = false;
+    public bool detached = false;
     private int hasJumped = 0;
     private int jumps = 1;
-    private int jumpsAvailable = 0;
+    public int jumpsAvailable = 0;
+    private bool cooldown = false;
+    float cooldownTime = 0.1f;
 
     [Header("Jump Info")]
     public float hangTime = 1f;
@@ -65,7 +68,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-       
         Move();
         Animations();
         // At the end of each frame we set grounded to false so that
@@ -93,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
             grounded = true;
             resetJumpInfo();
         }
-        if(!Box.Holding) Stick(collision);
+        if (!Box.Holding) Stick(collision);
     }
 
     void OnCollisionStay(Collision collision)
@@ -139,10 +141,13 @@ public class PlayerMovement : MonoBehaviour
             setGroundInfo();
         }
 
+
         #region Jump  
         // Handle a jump input
-        if (InputManager.GetButtonDown(PlayerButton.Jump, player) && jumpsAvailable > 0 && hasJumped<2)
+        if (InputManager.GetButtonDown(PlayerButton.Jump, player) && jumpsAvailable > 0 && hasJumped < 2 && !cooldown)
         {
+            cooldown = true;
+            StartCoroutine(endCooldown());
             jumpsAvailable--;
             animator.SetTrigger("Jump");
             rb.velocity = new Vector3(rb.velocity.x, jumpStrength / (grounded ? 1 : 1.5f), rb.velocity.z);
@@ -152,7 +157,7 @@ public class PlayerMovement : MonoBehaviour
 
             setGroundInfo();
         }
-        else if(!grounded)
+        if (!grounded)
         {
             if (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime)
                 jumpHeld = false;
@@ -221,7 +226,6 @@ public class PlayerMovement : MonoBehaviour
             runSpeed = 18 * yellowRunForceMultiplyer;
         }
     }
-    
     /// <summary>
     /// This rotates the player according to
     /// the camera position and player input
@@ -271,22 +275,36 @@ public class PlayerMovement : MonoBehaviour
         detached = false;
         hasJumped = 0;
     }
+    IEnumerator endCooldown()
+    {
+        yield return new WaitForSeconds(cooldownTime);
+        cooldown = false;
+    }
 
     private void HandleColors(GameColor previous, GameColor next)
     {
         if (previous == GameColor.Red && detached == false)
         {
-            if(stuck) transform.LookAt(transform.position-transform.forward);
+            if (stuck)
+            {
+                transform.LookAt(transform.position - transform.forward);
+            }
             detach();
         }
         if (previous == GameColor.Blue && jumpsAvailable > 0)
         {
+
             jumpsAvailable--;
+           
         }
         if (next == GameColor.Blue)
         {
-            jumpsAvailable++;
+            if(hasJumped==1)
+            {
+                jumpsAvailable++;
+            }
             jumps = 2;
+            
         }
         else
         {
@@ -309,23 +327,26 @@ public class PlayerMovement : MonoBehaviour
             
             transform.LookAt(new Vector3(transform.position.x - dir.x, transform.position.y, transform.position.z - dir.z));
         }
+
     }
-    private void checkDetatch(Collision collision) {
+    private void checkDetatch(Collision collision)
+    {
         Vector3 dir = collision.contacts[0].normal;
         if(InputManager.GetButtonDown(PlayerButton.Jump, player) && !detached )
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-            rb.velocity = new Vector3(dir.x * 10, 1.5f*jumpStrength, dir.z *10);
-            detached = true;
+            rb.velocity = new Vector3(dir.x * 10, 1.5f * jumpStrength, dir.z * 10);
             animator.SetTrigger("Jump");
 
             transform.LookAt(new Vector3(transform.position.x + dir.x, transform.position.y, transform.position.z+ dir.z));
         }
     }
 
-    private void detach() {
+    private void detach()
+    {
         detached = true;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         animator.SetBool("Detach",true);
     }
+
 }
