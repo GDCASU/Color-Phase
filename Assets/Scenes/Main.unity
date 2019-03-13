@@ -9035,8 +9035,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 382b23052ba706841b3bc22f7e02b088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PalletCurrentPrefab: {fileID: 0}
-  PalletBackupPrefab: {fileID: 0}
   storedColor: 0
 --- !u!114 &429062130 stripped
 MonoBehaviour:
@@ -14711,11 +14709,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.0632523, y: 0.0041620214, z: 0.054229684}
   m_Center: {x: 0.002503435, y: 9.326019e-11, z: 0.026645746}
---- !u!1 &844316303 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1296060440708466, guid: 92c73d6923e87c148b8d12606fe303df,
-    type: 2}
-  m_PrefabInternal: {fileID: 1575572585}
 --- !u!1 &846817353
 GameObject:
   m_ObjectHideFlags: 0
@@ -18433,7 +18426,7 @@ Prefab:
         type: 2}
       propertyPath: crossHair
       value: 
-      objectReference: {fileID: 844316303}
+      objectReference: {fileID: 0}
     - target: {fileID: 114770889072979504, guid: 9d490a65e71b1144a83381737f1f6438,
         type: 2}
       propertyPath: control

@@ -62,6 +62,12 @@ public class UI : MonoBehaviour
             tempColor.a = 1;
             PreviousAbility.color = tempColor;
         }
+        else
+        {
+            var tempColor = PreviousAbility.color;
+            tempColor.a = 0;
+            PreviousAbility.color = tempColor;
+        }
 
         Green();
     }
@@ -103,7 +109,7 @@ public class UI : MonoBehaviour
     public void Red()
     {
 
-        if (playerMovement.stuck)
+        if (playerMovement.stuck && !playerMovement.detached)
         {
             AbilityCoolDown.fillAmount = 1;
         }

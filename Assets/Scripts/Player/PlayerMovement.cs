@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public bool grounded = true;
     public bool jumpHeld = false;
     public bool stuck = false;
-    bool detached = false;
+    public bool detached = false;
     private int hasJumped = 0;
     private int jumps = 1;
     public int jumpsAvailable = 0;
@@ -271,7 +271,9 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void resetJumpInfo() {
-        jumpsAvailable = jumps;        
+        jumpsAvailable = jumps;
+        stuck = false;
+        detached = false;
         hasJumped = 0;
     }
     IEnumerator endCooldown()
@@ -284,7 +286,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (previous == GameColor.Red && detached == false)
         {
-            if(stuck) transform.LookAt(transform.position-transform.forward);
+            if (stuck)
+            {
+                transform.LookAt(transform.position - transform.forward);
+            }
             detach();
         }
         if (previous == GameColor.Blue && jumpsAvailable > 0)
@@ -295,11 +300,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (next == GameColor.Blue)
         {
-            if(hasJumped==2)
-            {
-
-            }
-            else
+            if(hasJumped==1)
             {
                 jumpsAvailable++;
             }
@@ -342,10 +343,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void detach() {
-        stuck = false;
+    private void detach()
+    {
         detached = true;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         animator.SetBool("Detach",true);
     }
+
 }
