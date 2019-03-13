@@ -128,9 +128,6 @@ public class PlayerMovement : MonoBehaviour
         xAxis += InputManager.GetAxis(PlayerAxis.MoveHorizontal, player);
         zAxis += InputManager.GetAxis(PlayerAxis.MoveVertical, player);
 
-        xAxis *= axisModifier;
-        zAxis *= axisModifier;
-
         // If the player falls off of the map then set the player on the last ledge
         if (transform.position.y < minimumY)
         {
@@ -172,10 +169,12 @@ public class PlayerMovement : MonoBehaviour
         #endregion
 
         // Calculate force from input, angle, and speed
-        var direction = new Vector2(xAxis, zAxis).normalized;
+        var inp = new Vector2(xAxis, zAxis);
+        var direction = inp.normalized;
         var forward = cam.transform.forward; forward.y = 0;
         var right = cam.transform.right; right.y = 0;
         force = forward.normalized * direction.y * runSpeed + right.normalized * direction.x * runSpeed;
+        force *= Mathf.Clamp(inp.magnitude,0,1);
         force.y = 0;
 
         // Apply ground friction
