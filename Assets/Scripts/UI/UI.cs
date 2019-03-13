@@ -11,6 +11,8 @@ public class UI : MonoBehaviour
     public Image PreviousAbility;
     public Image Grapple;
     public Image GrappleCooldown;
+    public Dictionary<GameColor, Sprite> SpriteColors;
+    public Dictionary<GameColor, Sprite> SpriteAbilityColors;
     public Sprite GreenAbilitySprite;
     public Sprite RedAbilitySprite;
     public Sprite YellowAbilitySprite;
@@ -21,7 +23,9 @@ public class UI : MonoBehaviour
     public Sprite BlueSprite;
     private InputPlayer inputPlayer;
     private ColorState playerColor;
-    private PlayerMovement playerMoevement;
+    private PlayerMovement playerMovement;
+    private bool hasQuickswap=false;
+    private QuickSwap quickSwap;
 
     public GameColor storedColor;
 
@@ -29,8 +33,31 @@ public class UI : MonoBehaviour
 
     void Awake()
     {
+        SpriteColors = new Dictionary<GameColor, Sprite>
+        {
+            {GameColor.Red, RedSprite},
+            {GameColor.Green, GreenSprite },
+            {GameColor.Blue, BlueSprite },
+            {GameColor.Yellow, YellowSprite },
+        };
+        SpriteAbilityColors = new Dictionary<GameColor, Sprite>
+        {
+            {GameColor.Red, RedAbilitySprite},
+            {GameColor.Green, GreenAbilitySprite },
+            {GameColor.Blue, BlueAbilitySprite },
+            {GameColor.Yellow, YellowAbilitySprite },
+        };
+        if(gameObject.transform.parent.transform.parent.GetComponentInChildren<QuickSwap>().isActiveAndEnabled)
+        {
+            hasQuickswap = true;
+            quickSwap = gameObject.transform.parent.transform.parent.GetComponentInChildren<QuickSwap>();
+            var tempColor=PreviousAbility.color;
+            tempColor.a = 1;
+            PreviousAbility.color = tempColor;
+        }
+
         playerColor = gameObject.transform.parent.transform.parent.GetComponentInChildren<ColorState>();
-        playerMoevement = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerMovement>();
+        playerMovement = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerMovement>();
     }
 
         // Use this for initialization
@@ -38,47 +65,45 @@ public class UI : MonoBehaviour
     {
         Green();
     }
-	
 
-	void Update ()
+
+    void Update()
     {
-        if (InputManager.GetButtonDown(PlayerButton.Swap, inputPlayer))
+        if(hasQuickswap)
         {
-            GameColor temp = storedColor;
-            storedColor = playerColor.currentColor;
-            playerColor.currentColor = temp;
+            storedColor = quickSwap.storedColor;
+            previousColor();
         }
+        Ability.sprite = SpriteAbilityColors[playerColor.currentColor];
+        currentColor();
 
-        previousColor();
-
-        if (playerColor.currentColor == GameColor.Green)
+    }
+    public void currentColor()
+    {
+        switch (playerColor.currentColor)
         {
-            Green();
+            case GameColor.Red:
+                Red();
+                break;
+            case GameColor.Yellow:
+                Yellow();
+                break;
+            case GameColor.Blue:
+                Blue();
+                break;
+            default:
+                Green();
+                break;
         }
-        else if (playerColor.currentColor == GameColor.Red)
-        {
-            Red();          
-        }
-        else if (playerColor.currentColor == GameColor.Yellow)
-        {
-            Yellow();
-        }
-        else if (playerColor.currentColor == GameColor.Blue)
-        {
-            Blue();
-        }
-
     }
     public void Green()
     {
-        Ability.sprite = GreenAbilitySprite;
         AbilityCoolDown.fillAmount = 0;
     }
     public void Red()
     {
-        Ability.sprite = RedAbilitySprite;
 
-        if (playerMoevement.stuck)
+        if (playerMovement.stuck)
         {
             AbilityCoolDown.fillAmount = 1;
         }
@@ -89,8 +114,7 @@ public class UI : MonoBehaviour
     }
     public void Yellow()
     {
-        Ability.sprite = YellowAbilitySprite;
-        if(playerMoevement.grounded==false && playerMoevement.jumpHeld==false)
+        if(playerMovement.grounded==false && playerMovement.jumpHeld==false)
         {
             AbilityCoolDown.fillAmount = 1;
         }
@@ -101,13 +125,12 @@ public class UI : MonoBehaviour
     }
     public void Blue()
     {
-        Ability.sprite = BlueAbilitySprite;
 
-        if (playerMoevement.jumpsAvailable == 1)
+        if (playerMovement.jumpsAvailable == 1)
         {
             AbilityCoolDown.fillAmount = (float).5;
         }
-        else if (playerMoevement.jumpsAvailable == 0)
+        else if (playerMovement.jumpsAvailable == 0)
         {
             AbilityCoolDown.fillAmount = 1;
         }
@@ -118,23 +141,6 @@ public class UI : MonoBehaviour
     }
     public void previousColor()
     {
-        if(storedColor==GameColor.Green)
-        {
-            PreviousAbility.sprite = GreenSprite;
-        }
-        if (storedColor == GameColor.Red)
-        {
-            PreviousAbility.sprite = RedSprite;
-        }
-        if (storedColor == GameColor.Yellow)
-        {
-            PreviousAbility.sprite = YellowSprite;
-        }
-        if (storedColor == GameColor.Blue)
-        {
-            PreviousAbility.sprite = BlueSprite;
-        }
+        PreviousAbility.sprite = SpriteColors[storedColor];
     }
-
-
 }

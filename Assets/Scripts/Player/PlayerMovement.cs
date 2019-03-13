@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
             grounded = true;
             resetJumpInfo();
         }
-        if(!Box.Holding) Stick(collision);
+        if (!Box.Holding) Stick(collision);
     }
 
     void OnCollisionStay(Collision collision)
@@ -336,7 +336,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             rb.velocity = new Vector3(dir.x * 10, 1.5f * jumpStrength, dir.z * 10);
-            stuck = false;
             animator.SetTrigger("Jump");
 
             transform.LookAt(new Vector3(transform.position.x + dir.x, transform.position.y, transform.position.z+ dir.z));
@@ -344,6 +343,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void detach() {
+        stuck = false;
         detached = true;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         animator.SetBool("Detach",true);

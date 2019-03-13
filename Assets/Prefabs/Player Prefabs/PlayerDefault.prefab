@@ -209,6 +209,7 @@ GameObject:
   - component: {fileID: 54422078584172318}
   - component: {fileID: 136100543912059420}
   - component: {fileID: 114623592063700904}
+  - component: {fileID: 114062072132348850}
   - component: {fileID: 114730380888645552}
   - component: {fileID: 114025998283158406}
   - component: {fileID: 114251365184923260}
@@ -1058,6 +1059,20 @@ MonoBehaviour:
   colorToSet: 3
   updateColor: 0
   currentcolor: 3
+--- !u!114 &114062072132348850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1524871330306302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 382b23052ba706841b3bc22f7e02b088, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PalletCurrentPrefab: {fileID: 0}
+  PalletBackupPrefab: {fileID: 0}
+  storedColor: 0
 --- !u!114 &114159012723459318
 MonoBehaviour:
   m_ObjectHideFlags: 1
