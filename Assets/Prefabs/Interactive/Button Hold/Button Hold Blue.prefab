@@ -72,7 +72,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058349553100532}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: -0.4, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 4736420971336216}
@@ -98,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1792146233053554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40.58253, y: 18.000004, z: 94.14061}
+  m_LocalPosition: {x: 2.6516805, y: 18.001928, z: -16.475449}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4090685076877918}
@@ -342,4 +342,6 @@ MonoBehaviour:
   colorValue: 2
   holdState: 1
   onOnly: 0
+  countdownTime: 0
+  buttonTimer: {fileID: 0}
   buttonTrigger: {fileID: 8300000, guid: 0f6fd002a054f7e45b24dff225aafd3b, type: 3}
