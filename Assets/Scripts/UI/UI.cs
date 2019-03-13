@@ -47,15 +47,6 @@ public class UI : MonoBehaviour
             {GameColor.Blue, BlueAbilitySprite },
             {GameColor.Yellow, YellowAbilitySprite },
         };
-        if(gameObject.transform.parent.transform.parent.GetComponentInChildren<QuickSwap>().isActiveAndEnabled)
-        {
-            hasQuickswap = true;
-            quickSwap = gameObject.transform.parent.transform.parent.GetComponentInChildren<QuickSwap>();
-            var tempColor=PreviousAbility.color;
-            tempColor.a = 1;
-            PreviousAbility.color = tempColor;
-        }
-
         playerColor = gameObject.transform.parent.transform.parent.GetComponentInChildren<ColorState>();
         playerMovement = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerMovement>();
     }
@@ -63,6 +54,15 @@ public class UI : MonoBehaviour
         // Use this for initialization
         void Start ()
     {
+        if (gameObject.transform.parent.transform.parent.GetComponentInChildren<QuickSwap>().isActiveAndEnabled)
+        {
+            hasQuickswap = true;
+            quickSwap = gameObject.transform.parent.transform.parent.GetComponentInChildren<QuickSwap>();
+            var tempColor = PreviousAbility.color;
+            tempColor.a = 1;
+            PreviousAbility.color = tempColor;
+        }
+
         Green();
     }
 
