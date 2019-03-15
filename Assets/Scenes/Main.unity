@@ -864,29 +864,6 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9b2e5bfc07001e4c8442a7bb10147a5, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &43836620 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1524871330306302, guid: 92c73d6923e87c148b8d12606fe303df,
-    type: 2}
-  m_PrefabInternal: {fileID: 1575572585}
---- !u!114 &43836622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 43836620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 978eb54c65b65dc418a9c83258ff1342, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hookRange: 50
-  grappleSpeed: 1
-  pullPlayerSpeed: 1
-  pullObjectSpeed: 1
-  pushObjectSpeed: 20000
-  swingSpeed: 200
-  swingStrafeSpeed: 200
 --- !u!4 &43866518 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4092131108141420, guid: f4b4926f35d213e4da3c9c18e26833b8,
@@ -6927,6 +6904,9 @@ MonoBehaviour:
   colorValue: 0
   holdState: 0
   onOnly: 0
+  countdownTime: 0
+  buttonTimer: {fileID: 0}
+  buttonTrigger: {fileID: 0}
 --- !u!65 &352707315
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9055,8 +9035,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 382b23052ba706841b3bc22f7e02b088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PalletCurrentPrefab: {fileID: 0}
-  PalletBackupPrefab: {fileID: 0}
   storedColor: 0
 --- !u!114 &429062130 stripped
 MonoBehaviour:
@@ -14731,11 +14709,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.0632523, y: 0.0041620214, z: 0.054229684}
   m_Center: {x: 0.002503435, y: 9.326019e-11, z: 0.026645746}
---- !u!1 &844316303 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1296060440708466, guid: 92c73d6923e87c148b8d12606fe303df,
-    type: 2}
-  m_PrefabInternal: {fileID: 1575572585}
 --- !u!1 &846817353
 GameObject:
   m_ObjectHideFlags: 0
@@ -18453,7 +18426,7 @@ Prefab:
         type: 2}
       propertyPath: crossHair
       value: 
-      objectReference: {fileID: 844316303}
+      objectReference: {fileID: 0}
     - target: {fileID: 114770889072979504, guid: 9d490a65e71b1144a83381737f1f6438,
         type: 2}
       propertyPath: control
@@ -19074,6 +19047,9 @@ MonoBehaviour:
   colorValue: 0
   holdState: 0
   onOnly: 0
+  countdownTime: 0
+  buttonTimer: {fileID: 0}
+  buttonTrigger: {fileID: 0}
 --- !u!65 &1054557625
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29413,16 +29389,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114730380888645552, guid: 92c73d6923e87c148b8d12606fe303df,
-        type: 2}
-      propertyPath: maxVertAngle
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 114730380888645552, guid: 92c73d6923e87c148b8d12606fe303df,
-        type: 2}
-      propertyPath: minVertAngle
-      value: -50
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92c73d6923e87c148b8d12606fe303df, type: 2}
   m_IsPrefabAsset: 0
@@ -36994,6 +36960,9 @@ MonoBehaviour:
   colorValue: 0
   holdState: 0
   onOnly: 1
+  countdownTime: 0
+  buttonTimer: {fileID: 0}
+  buttonTrigger: {fileID: 0}
 --- !u!65 &2094862588
 BoxCollider:
   m_ObjectHideFlags: 0
