@@ -7,6 +7,8 @@ public class Teleport : MonoBehaviour
     public GameObject teleporter;
     public GameColor colorValue = GameColor.Red;
     public static double timer;
+    public AudioClip teleporting;
+    AudioSource audioSource;
 
     //Stop must be initialized as false on the first teleporter and true on the second.
     //public bool stop; // WHY? - stop is not used in the script.
@@ -15,6 +17,7 @@ public class Teleport : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         timer = 0;
     }
 
@@ -39,6 +42,9 @@ public class Teleport : MonoBehaviour
                 //this operates on the same logic as ColorChangeTrigger
                 if (other.GetComponent<ColorState>().currentColor == colorValue || neutralColor == true)
                 {
+
+                    audioSource.PlayOneShot(teleporting, 1.0F);
+
                     //starts a countdown timer at 0.5 seconds
                     timer = 0.5;
 

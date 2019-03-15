@@ -12,13 +12,29 @@ public class ButtonToggle : MonoBehaviour
     // Used for animated button
     public bool holdState = false;
     public bool onOnly = false;
+
+
+    public float countdownTime = 0; // anything larger than 0 will do a countdown then toggle the state off - 0 ignores the timer and will not toggle off
+    private float timeCounter = 0;
+
+    public AudioClip buttonTimer;
+
+
+    public AudioClip buttonTrigger;
+    AudioSource audioSource;
+    private bool stateChangeMemory;
+    
     private float offset = 0.0f;
     private Vector3 startPosition;
 
     private int onButton = 0;
 
+    
+
     void Start()
     {
+        stateChangeMemory = state;
+        audioSource = GetComponent<AudioSource>();
         GetComponent<MeshRenderer>().material = state ? on : off;
         startPosition = transform.position;
     }
@@ -36,6 +52,11 @@ public class ButtonToggle : MonoBehaviour
                     {
                         state = !state;
                         GetComponent<MeshRenderer>().material = state ? on : off;
+                        if (countdownTime > 0)
+                        {
+                            audioSource.Stop();
+                            timeCounter = countdownTime;
+                        }
                     }
                 }
             }
@@ -54,9 +75,9 @@ public class ButtonToggle : MonoBehaviour
                 {
                     // color.transform.Translate(Vector3.down * 0.07f);
                     offset = offset + 0.04f;
-                    if (offset > 0.64f)
+                    if (offset > 0.24f)
                     {
-                        offset = 0.64f;
+                        offset = 0.24f;
                     }
                     onButton = 4;
                 }
@@ -67,10 +88,15 @@ public class ButtonToggle : MonoBehaviour
 
     private void Update()
     {
+        if (stateChangeMemory != state)
+        {
+            audioSource.PlayOneShot(buttonTrigger, 1.0F);
+            stateChangeMemory = state;
+        }
         // Animate and detect state of the hold down buttons
         if (holdState == true)
         {
-            state = offset > 0.60f;
+            state = offset > 0.20f;
 
             if (offset > 0.0f)
             {
@@ -87,6 +113,28 @@ public class ButtonToggle : MonoBehaviour
 
             transform.position = new Vector3(startPosition.x, startPosition.y, startPosition.z);
             transform.Translate(Vector3.back * offset);
+        } else
+        {
+            if (timeCounter > 0) {
+                timeCounter = timeCounter - Time.deltaTime;
+
+                //audioSource.clip = buttonTimer;
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.clip = buttonTimer;
+                    audioSource.Play();
+                }
+
+                //audioSource.PlayOneShot(buttonTimer, 1.0F);
+
+                if (timeCounter < 0)
+                {
+                    audioSource.Stop();
+                    GetComponent<MeshRenderer>().material = off;
+                    timeCounter = 0;
+                    state = false;
+                }
+            }
         }
     }
 }
