@@ -21,6 +21,9 @@ public class Spin : MonoBehaviour
             case 2:
                 transform.Rotate(Vector3.up * Time.deltaTime * speed);
                 break;
+            case 3: 
+                transform.Rotate(transform.forward * Time.deltaTime * speed);
+                break;
         }
     }
 }
