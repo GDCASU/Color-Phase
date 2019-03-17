@@ -5,11 +5,12 @@ OcclusionCullingSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_OcclusionBakeSettings:
-    smallestOccluder: 5
+    smallestOccluder: 1
     smallestHole: 0.25
     backfaceThreshold: 100
-  m_SceneGUID: 00000000000000000000000000000000
-  m_OcclusionCullingData: {fileID: 0}
+  m_SceneGUID: 65c89b83263926d4fa37640e748ee2a5
+  m_OcclusionCullingData: {fileID: 36300000, guid: 856ebd25f9364564aaf5d51178596e56,
+    type: 2}
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
@@ -90,7 +91,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 112000060, guid: 5edf84bcd222ba7478214cbc7bcaa07c,
+  m_LightingDataAsset: {fileID: 112000100, guid: 72de0edb58fdaea4d9f09544dcbe0efe,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -1354,11 +1355,6 @@ Prefab:
     - target: {fileID: 1126842697976884, guid: bd59f35ba5879bd4094b6de42d7acb1e, type: 2}
       propertyPath: m_Name
       value: RoundPortal Red (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 114481079818209568, guid: bd59f35ba5879bd4094b6de42d7acb1e,
-        type: 2}
-      propertyPath: sceneName
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd59f35ba5879bd4094b6de42d7acb1e, type: 2}
