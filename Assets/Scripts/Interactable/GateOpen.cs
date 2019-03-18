@@ -114,6 +114,14 @@ public class GateOpen : MonoBehaviour
                 }
             }
         }
+        if (gateOffset < 0)
+        {
+            gateOffset = 0;
+        }
+        if (gateOffset > range)
+        {
+            gateOffset = range;
+        }
         transform.position = new Vector3(startPosition.x, startPosition.y, startPosition.z);
         transform.Translate(Vector3.forward * gateOffset);
     }

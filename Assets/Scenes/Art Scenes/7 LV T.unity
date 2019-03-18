@@ -5,11 +5,12 @@ OcclusionCullingSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_OcclusionBakeSettings:
-    smallestOccluder: 5
+    smallestOccluder: 1
     smallestHole: 0.25
     backfaceThreshold: 100
-  m_SceneGUID: 00000000000000000000000000000000
-  m_OcclusionCullingData: {fileID: 0}
+  m_SceneGUID: ffd3d19139cf0b4469a23e391336f406
+  m_OcclusionCullingData: {fileID: 36300000, guid: f9d0c56e28bbad04c9af7c3d063330c5,
+    type: 2}
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
@@ -90,7 +91,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 112000060, guid: 5edf84bcd222ba7478214cbc7bcaa07c,
+  m_LightingDataAsset: {fileID: 112000058, guid: 414587a8402171b4c840c6a4a8fc335a,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -1805,6 +1806,16 @@ Prefab:
       propertyPath: buttonToggleScript.Array.data[0]
       value: 
       objectReference: {fileID: 952926998}
+    - target: {fileID: 114166772709683624, guid: 51e96e3151790024aacf74e9b8a212ae,
+        type: 2}
+      propertyPath: speed
+      value: 0.175
+      objectReference: {fileID: 0}
+    - target: {fileID: 114166772709683624, guid: 51e96e3151790024aacf74e9b8a212ae,
+        type: 2}
+      propertyPath: range
+      value: 7.975
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51e96e3151790024aacf74e9b8a212ae, type: 2}
   m_IsPrefabAsset: 0
