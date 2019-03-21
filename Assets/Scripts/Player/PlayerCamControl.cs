@@ -17,7 +17,16 @@ public class PlayerCamControl : MonoBehaviour
     public string camHorizAxis = "Mouse X";
     public string camVertAxis = "Mouse Y";
 
+    [Header("Wall Prevention")]
+    [SerializeField] private float sphereCastRadius = 2f;
+    [SerializeField] private float radiusChangeRate = 0.25f;
+    private float originalRadius;
+    [SerializeField] private float castExtension = 3f; //This is an extension of the raycast maxDistance
+    [SerializeField] private float distToWall = 1f; //This helps create more distance to the wall
+    [SerializeField] private string layerMaskName = "PermamentWall"; //This is the string name of the layermask for the script to detect
+    private int layerMask;
 
+    [Header("Misc")]
     private KeyCode orbitCamInput = KeyCode.Mouse2;
     private float cameraHorizAngle = 0;
     private float cameraVertAngle = 0;
@@ -36,6 +45,35 @@ public class PlayerCamControl : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cameraHorizAngle = cams[0].transform.rotation.eulerAngles.y;
         cameraVertAngle = 0;
+
+        originalRadius = radius;
+        layerMask = ~LayerMask.NameToLayer(layerMaskName);
+    }
+
+    private void Update()
+    {
+        RaycastHit hit;
+        Vector3 direction =  cams[0].transform.position - this.transform.position;
+
+        //if (Physics.SphereCast(this.transform.position, sphereCastRadius, direction, out hit, Mathf.Abs(radius) + castExtension, layerMask))
+        if (Physics.Raycast(this.transform.position, direction, out hit, Mathf.Abs(radius) + castExtension, layerMask))
+        {
+            Debug.Log("is touching");
+            //Debug.Log("Distance: " + hit.distance);
+
+            if(Mathf.Abs(radius) > hit.distance - distToWall)
+            {
+                radius += radiusChangeRate;
+            }
+        }
+        else if (radius > originalRadius)
+        {
+            radius -= radiusChangeRate;
+        }
+        else if (radius < originalRadius)
+        {
+            radius = originalRadius;
+        }
     }
 
     void LateUpdate()
