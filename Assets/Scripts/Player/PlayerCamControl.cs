@@ -21,6 +21,7 @@ public class PlayerCamControl : MonoBehaviour
     [SerializeField] private float sphereCastRadius = 2f;
     [SerializeField] private float radiusChangeRate = 0.25f;
     private float originalRadius;
+    [SerializeField] private float minRadius = 0f;
     [SerializeField] private float castExtension = 3f; //This is an extension of the raycast maxDistance
     [SerializeField] private float distToWall = 1f; //This helps create more distance to the wall
     [SerializeField] private string layerMaskName = "PermamentWall"; //This is the string name of the layermask for the script to detect
@@ -61,7 +62,8 @@ public class PlayerCamControl : MonoBehaviour
             Debug.Log("is touching");
             //Debug.Log("Distance: " + hit.distance);
 
-            if(Mathf.Abs(radius) > hit.distance - distToWall)
+            //If the radius is more than the casted distance to the wall - the small wall buffer
+            if(Mathf.Abs(radius) > hit.distance - distToWall && radius + radiusChangeRate < 0)
             {
                 radius += radiusChangeRate;
             }
