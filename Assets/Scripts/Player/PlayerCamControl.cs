@@ -24,8 +24,7 @@ public class PlayerCamControl : MonoBehaviour
     [SerializeField] private float minRadius = 0f;
     [SerializeField] private float castExtension = 3f; //This is an extension of the raycast maxDistance
     [SerializeField] private float distToWall = 1f; //This helps create more distance to the wall
-    [SerializeField] private string layerMaskName = "PermamentWall"; //This is the string name of the layermask for the script to detect
-    private int layerMask;
+    [SerializeField] private List<string> ignoreTags; //This is the string name of the layermask for the script to detect
 
     [Header("Misc")]
     private KeyCode orbitCamInput = KeyCode.Mouse2;
@@ -48,7 +47,6 @@ public class PlayerCamControl : MonoBehaviour
         cameraVertAngle = 0;
 
         originalRadius = radius;
-        layerMask = ~LayerMask.NameToLayer(layerMaskName);
     }
 
     private void Update()
@@ -57,15 +55,21 @@ public class PlayerCamControl : MonoBehaviour
         Vector3 direction =  cams[0].transform.position - this.transform.position;
 
         //if (Physics.SphereCast(this.transform.position, sphereCastRadius, direction, out hit, Mathf.Abs(radius) + castExtension, layerMask))
-        if (Physics.Raycast(this.transform.position, direction, out hit, Mathf.Abs(radius) + castExtension, layerMask))
+        if (Physics.Raycast(this.transform.position, direction, out hit, Mathf.Abs(radius) + castExtension))
         {
-            Debug.Log("is touching");
+            //Debug.Log("is touching");
             //Debug.Log("Distance: " + hit.distance);
+            //Debug.Log("Name: " + hit.transform.gameObject.name + "\nTag: " + hit.transform.gameObject.tag);
 
-            //If the radius is more than the casted distance to the wall - the small wall buffer
-            if(Mathf.Abs(radius) > hit.distance - distToWall && radius + radiusChangeRate < 0)
+            if (!ignoreTags.Contains(hit.transform.gameObject.tag))
             {
-                radius += radiusChangeRate;
+                Debug.Log("Sensing object Name: " + hit.transform.gameObject.name + "\nTag: " + hit.transform.gameObject.tag);
+
+                //If the radius is more than the casted distance to the wall - the small wall buffer
+                if (Mathf.Abs(radius) > hit.distance - distToWall && radius + radiusChangeRate < 0)
+                {
+                    radius += radiusChangeRate;
+                }
             }
         }
         else if (radius > originalRadius)

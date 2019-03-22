@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.55831075, g: 0.69821054, b: 0.9408288, a: 1}
+  m_IndirectSpecularColor: {r: 0.55830944, g: 0.69820845, b: 0.94082594, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -29357,6 +29357,16 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1906286229}
     m_Modifications:
+    - target: {fileID: 114730380888645552, guid: 92c73d6923e87c148b8d12606fe303df,
+        type: 2}
+      propertyPath: ignoreTags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114730380888645552, guid: 92c73d6923e87c148b8d12606fe303df,
+        type: 2}
+      propertyPath: ignoreLayer.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4169075078251942, guid: 92c73d6923e87c148b8d12606fe303df, type: 2}
       propertyPath: m_LocalPosition.x
       value: -10.35477
@@ -29389,7 +29399,21 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 224847534327158188, guid: 92c73d6923e87c148b8d12606fe303df,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114730380888645552, guid: 92c73d6923e87c148b8d12606fe303df,
+        type: 2}
+      propertyPath: ignoreTags.Array.data[0]
+      value: Player
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 135202737648468498, guid: 92c73d6923e87c148b8d12606fe303df, type: 2}
+    - {fileID: 114159012723459318, guid: 92c73d6923e87c148b8d12606fe303df, type: 2}
+    - {fileID: 135414234420751804, guid: 92c73d6923e87c148b8d12606fe303df, type: 2}
+    - {fileID: 114837578976449036, guid: 92c73d6923e87c148b8d12606fe303df, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 92c73d6923e87c148b8d12606fe303df, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1575965020
