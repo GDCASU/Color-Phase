@@ -111,12 +111,15 @@ public class Grapple : MonoBehaviour
         return vP.x>0 && vP.x<1 && vP.y>0 &&vP.y <1;
     }
     public void LateUpdate () {
-        var t = GrappleTarget.targets.Where(x=> (x.neutral==true || x.targetColor==state.currentColor) 
+        var t = GrappleTarget.targets.Where(x=> (x.neutral==true || (x.PushPull && (state.currentColor == GameColor.Red || state.currentColor == GameColor.Green)) || x.targetColor==state.currentColor) 
                                             && Vector3.Distance(x.transform.position,transform.position) <= hookRange 
                                             && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0
                                             && OnScreen(x.transform.position))
-            .OrderBy (p => Vector3.Distance(p.transform.position,transform.position)*Vector2.Distance(Camera.main.WorldToScreenPoint(p.transform.position), Vector2.zero))
+            .OrderBy (p => Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f,0.5f)))
             .FirstOrDefault();
+
+        // ADD THIS BACK TO ORDER QUERY LATER FOR SMOOTHING OVER DISTANCE
+        //Vector3.Distance(p.transform.position,transform.position)+100*V
 
         RaycastHit r;
         if (t != null && Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange) && r.transform == t.transform) {
