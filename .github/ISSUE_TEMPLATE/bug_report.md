@@ -7,6 +7,7 @@ assignees: ''
 
 ---
 
+**Make sure you are on the updated version from MASTER**
 *required
 
 ***Describe the bug**
