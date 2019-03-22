@@ -150,14 +150,15 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(endCooldown());
             jumpsAvailable--;
             animator.SetTrigger("Jump");
-            rb.velocity = new Vector3(rb.velocity.x, jumpStrength / (grounded ? 1 : 1.5f), rb.velocity.z);
+            rb.velocity = new Vector3(rb.velocity.x, jumpStrength / (grounded ? 1 : 1.1f), rb.velocity.z);
+            rb.velocity /=  frictionCoefficient;
             jumpHeld = true;
             hasJumped++;
             grounded = false;
 
             setGroundInfo();
         }
-        if (!grounded)
+        else if (!grounded)
         {
             if (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime)
                 jumpHeld = false;
@@ -183,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
         force.y = 0;
 
         // Apply ground friction
-        rb.velocity /= ((grounded) ? frictionCoefficient : 1);
+        rb.velocity /= ((grounded&&!jumpHeld) ? frictionCoefficient : 1);
 
         // check if we are going faster then the cap, if not we don't add our foce (other things can still push the player faster)
         if (Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)) < moveSpeedCap)
@@ -211,7 +212,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (next != GameColor.Yellow)
         {
-            jumpStrength = 21f;
+            jumpStrength = 19f;
             rb.mass = 10;
             fallSpeedCap = 20;
             fallCoefficent = 1.05f;
@@ -219,7 +220,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            jumpStrength = 21f * (yellowJumpHeightPercent/100);
+            jumpStrength = 19f * (yellowJumpHeightPercent/100);
             rb.mass = 10 * yellowMassMultiplier;
             fallSpeedCap = 20 * yellowFallCapMultiplier;
             fallCoefficent = yellowFallCoefficent;

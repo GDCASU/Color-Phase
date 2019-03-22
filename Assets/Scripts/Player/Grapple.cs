@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using PlayerInput;
+using System.Linq;
+using System.Collections;
 
 // Author: Nick Arnieri
 // Date: 11/2/2018
@@ -24,6 +26,9 @@ public class Grapple : MonoBehaviour
     public float swingSpeed = 200f;
     public float swingStrafeSpeed = 200f;
 
+    [Header("UI")]
+    public GameObject reticle;
+
     // Grapple hook states
     private float ropeLength;
     private bool isGrappled;
@@ -33,11 +38,13 @@ public class Grapple : MonoBehaviour
     // Object to use in calcualtions
     private Collider col;
     private Rigidbody rb;
+    private ColorState state;
     private Transform hookAnchor;
     private Transform grappleAnchor;
     private LineRenderer line;
     private RaycastHit hit;
-
+    
+    private GameObject target;
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -46,18 +53,16 @@ public class Grapple : MonoBehaviour
         line.enabled = false;
         hookAnchor = new GameObject().transform;
         grappleAnchor = new GameObject().transform;
+        state = GetComponent<ColorState>();
     }
 
     void Update()
     {
         if (InputManager.GetButtonDown(PlayerButton.Grapple))
         {
-            if (Physics.Raycast(gameObject.transform.position, Camera.main.transform.forward, out hit, hookRange))
+            if (target != null)
             {
-                if (hit.collider)
-                {
-                    enableGrapple();
-                }
+                enableGrapple();
             }
         }
 
@@ -100,6 +105,38 @@ public class Grapple : MonoBehaviour
         {
             disableGrapple();
         }
+    }
+    private bool OnScreen(Vector3 worldPos){
+        var vP = Camera.main.WorldToViewportPoint(worldPos);
+        return vP.x>0 && vP.x<1 && vP.y>0 &&vP.y <1;
+    }
+    public void LateUpdate () {
+        var t = GrappleTarget.targets.Where(x=> (x.neutral==true || x.targetColor==state.currentColor) 
+                                            && Vector3.Distance(x.transform.position,transform.position) <= hookRange 
+                                            && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0
+                                            && OnScreen(x.transform.position))
+            .OrderBy (p => Vector3.Distance(p.transform.position,transform.position)*Vector2.Distance(Camera.main.WorldToScreenPoint(p.transform.position), Vector2.zero))
+            .FirstOrDefault();
+            
+
+        if(t != null) {
+            RaycastHit r;
+            if(Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange)) {
+                if(r.transform == t.transform) hit = r;
+                target = t.gameObject;
+            }
+        }
+        else {
+            target = null;
+        }
+
+        if(target != null) {
+            reticle.SetActive(true);
+            reticle.transform.position = Camera.main.WorldToScreenPoint( target.transform.position );
+        }
+        else 
+            reticle.SetActive(false);
+
     }
 
     void FixedUpdate()
