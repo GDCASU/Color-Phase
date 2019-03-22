@@ -58,7 +58,7 @@ public class Grapple : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.GetButtonDown(PlayerButton.Grapple))
+        if (InputManager.GetButtonDown(PlayerButton.Grapple) && !Box.Holding)
         {
             if (target != null)
             {
@@ -117,20 +117,19 @@ public class Grapple : MonoBehaviour
                                             && OnScreen(x.transform.position))
             .OrderBy (p => Vector3.Distance(p.transform.position,transform.position)*Vector2.Distance(Camera.main.WorldToScreenPoint(p.transform.position), Vector2.zero))
             .FirstOrDefault();
-            
 
-        if(t != null) {
-            RaycastHit r;
-            if(Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange)) {
-                if(r.transform == t.transform) hit = r;
-                target = t.gameObject;
-            }
+        RaycastHit r;
+        if (t != null && Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange) && r.transform == t.transform) {
+            hit = r;
+            target = t.gameObject;
         }
-        else {
+        else
+        {
             target = null;
+            hit = new RaycastHit();
         }
 
-        if(target != null) {
+        if (target != null) {
             reticle.SetActive(true);
             reticle.transform.position = Camera.main.WorldToScreenPoint( target.transform.position );
         }
@@ -182,12 +181,26 @@ public class Grapple : MonoBehaviour
         {
             hookAnchor.position = Vector3.MoveTowards(hookAnchor.position, transform.position, pullObjectSpeed);
             hit.transform.position = Vector3.MoveTowards(hit.transform.position, transform.position, pullObjectSpeed);
+            float x = Mathf.Pow((hit.transform.position.x - gameObject.transform.position.x), 2);
+            float y = Mathf.Pow((hit.transform.position.y - gameObject.transform.position.y), 2);
+            float z = Mathf.Pow((hit.transform.position.z - gameObject.transform.position.z), 2);
+            print(x + " object x");
+            print(y + " object y");
+            print(z + " object z");
+
+            if (Mathf.Sqrt(x + y + z) <= 2f)
+            {
+                print("sup");
+                disableGrapple();
+                return;
+            }
         }
     }
 
     // Pull the player towards the object the grapple collided with
     private void GrapplePullPlayer()
     {
+
         transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
     }
 
