@@ -189,6 +189,15 @@ public class Grapple : MonoBehaviour
     private void GrapplePullPlayer()
     {
         transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
+        float x = Mathf.Pow((hit.transform.position.x - gameObject.transform.position.x), 2);
+        float y = Mathf.Pow((hit.transform.position.y - gameObject.transform.position.y), 2);
+        float z = Mathf.Pow((hit.transform.position.z - gameObject.transform.position.z), 2);
+
+        if (Mathf.Sqrt(x + y + z) <= 2f)
+        {
+            disableGrapple();
+            rb.velocity = Vector3.zero;
+        }
     }
 
     // When the grapple collides with an object it pushes it forwards
