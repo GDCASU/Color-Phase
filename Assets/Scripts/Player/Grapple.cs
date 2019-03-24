@@ -29,6 +29,9 @@ public class Grapple : MonoBehaviour
     [Header("UI")]
     public GameObject reticle;
 
+    [Header("Body")]
+    public Transform hand;
+
     // Grapple hook states
     private float ropeLength;
     private bool isGrappled;
@@ -87,8 +90,8 @@ public class Grapple : MonoBehaviour
                     break;
             }
 
-            line.SetPosition(0, col.transform.position);
-            line.SetPosition(1, hookAnchor.transform.position);
+            //line.SetPosition(0, col.transform.position);
+            //line.SetPosition(1, hookAnchor.transform.position);
         }
         // Handles the initial grapple movement towards the object it collided with
         else if (canGrapple)
@@ -97,8 +100,8 @@ public class Grapple : MonoBehaviour
             if (grappleAnchor.position == hookAnchor.position)
                 isGrappled = true;
 
-            line.SetPosition(0, col.transform.position);
-            line.SetPosition(1, grappleAnchor.transform.position);
+            //line.SetPosition(0, col.transform.position);
+            //line.SetPosition(1, grappleAnchor.transform.position);
         }
 
         if (InputManager.GetButtonUp(PlayerButton.Grapple))
@@ -132,6 +135,12 @@ public class Grapple : MonoBehaviour
                 target = null;
                 hit = new RaycastHit();
             }
+        }
+        else {
+            var f = target.transform.position; f.y = transform.position.y;
+            transform.LookAt(f);
+            hand.position = target.transform.position ;
+            hand.parent.position = (target.transform.position + transform.position)/2; // midpoint
         }
 
         RaycastHit rh;
