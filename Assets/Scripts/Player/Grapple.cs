@@ -111,28 +111,31 @@ public class Grapple : MonoBehaviour
         return vP.x>0 && vP.x<1 && vP.y>0 &&vP.y <1;
     }
     public void LateUpdate () {
-        var t = GrappleTarget.targets.Where(x=> (x.neutral==true || (x.PushPull && (state.currentColor == GameColor.Red || state.currentColor == GameColor.Green)) || x.targetColor==state.currentColor) 
-                                            && Vector3.Distance(x.transform.position,transform.position) <= hookRange 
-                                            && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0
-                                            && OnScreen(x.transform.position))
-            .OrderBy (p => Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f,0.5f)))
-            .FirstOrDefault();
+        if(!isGrappled && !canGrapple) {
+            var t = GrappleTarget.targets.Where(x=> (x.neutral==true || (x.PushPull && (state.currentColor == GameColor.Red || state.currentColor == GameColor.Green)) || x.targetColor==state.currentColor) 
+                                                && Vector3.Distance(x.transform.position,transform.position) <= hookRange 
+                                                && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0
+                                                && OnScreen(x.transform.position))
+                .OrderBy (p => Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f,0.5f)))
+                .FirstOrDefault();
 
-        // ADD THIS BACK TO ORDER QUERY LATER FOR SMOOTHING OVER DISTANCE
-        //Vector3.Distance(p.transform.position,transform.position)+100*V
+            // ADD THIS BACK TO ORDER QUERY LATER FOR SMOOTHING OVER DISTANCE
+            //Vector3.Distance(p.transform.position,transform.position)+100*V
 
-        RaycastHit r;
-        if (t != null && Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange) && r.transform == t.transform) {
-            hit = r;
-            target = t.gameObject;
+            RaycastHit r;
+            if (t != null && Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange) && r.transform == t.transform) {
+                hit = r;
+                target = t.gameObject;
+            }
+            else
+            {
+                target = null;
+                hit = new RaycastHit();
+            }
         }
-        else
-        {
-            target = null;
-            hit = new RaycastHit();
-        }
 
-        if (target != null) {
+        RaycastHit rh;
+        if (target != null && Physics.Raycast(Camera.main.transform.position, target.transform.position - Camera.main.transform.position, out rh, hookRange) && rh.transform == target.transform) {
             reticle.SetActive(true);
             reticle.transform.position = Camera.main.WorldToScreenPoint( target.transform.position );
         }
@@ -184,16 +187,9 @@ public class Grapple : MonoBehaviour
         {
             hookAnchor.position = Vector3.MoveTowards(hookAnchor.position, transform.position, pullObjectSpeed);
             hit.transform.position = Vector3.MoveTowards(hit.transform.position, transform.position, pullObjectSpeed);
-            float x = Mathf.Pow((hit.transform.position.x - gameObject.transform.position.x), 2);
-            float y = Mathf.Pow((hit.transform.position.y - gameObject.transform.position.y), 2);
-            float z = Mathf.Pow((hit.transform.position.z - gameObject.transform.position.z), 2);
-            print(x + " object x");
-            print(y + " object y");
-            print(z + " object z");
 
-            if (Mathf.Sqrt(x + y + z) <= 2f)
+            if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
             {
-                print("sup");
                 disableGrapple();
                 return;
             }
@@ -205,11 +201,8 @@ public class Grapple : MonoBehaviour
     {
 
         transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
-        float x = Mathf.Pow((hit.transform.position.x - gameObject.transform.position.x), 2);
-        float y = Mathf.Pow((hit.transform.position.y - gameObject.transform.position.y), 2);
-        float z = Mathf.Pow((hit.transform.position.z - gameObject.transform.position.z), 2);
 
-        if (Mathf.Sqrt(x + y + z) <= 2f)
+        if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
         {
             disableGrapple();
             rb.velocity = Vector3.zero;
