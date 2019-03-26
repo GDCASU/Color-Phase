@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33726458980672614}
   - component: {fileID: 23557357409384132}
   - component: {fileID: 114044885108437508}
-  - component: {fileID: 64813681435331314}
+  - component: {fileID: 65853810890444474}
   m_Layer: 25
   m_Name: Red Barrier
   m_TagString: Untagged
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 33351272876609820}
   - component: {fileID: 23317753329945414}
   - component: {fileID: 64146447190966204}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Red Barrier 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1512981789353812}
   m_LocalRotation: {x: -0.49991274, y: 0.50008726, z: 0.49991274, w: 0.50008726}
-  m_LocalPosition: {x: 12.5, y: 18, z: -6}
+  m_LocalPosition: {x: -3.5, y: 18, z: -14}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
   - {fileID: 4748154921289408}
@@ -68,9 +68,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1393645652203526}
-  m_LocalRotation: {x: 0.7069834, y: -0, z: -0, w: 0.70723015}
-  m_LocalPosition: {x: 0, y: 0, z: 0.021}
-  m_LocalScale: {x: 2.4000008, y: 2.1, z: 0.0010000004}
+  m_LocalRotation: {x: 0.7069835, y: -0, z: -0, w: 0.7072301}
+  m_LocalPosition: {x: 0, y: 0, z: 0.021000003}
+  m_LocalScale: {x: 2.4000025, y: 2.0999994, z: 0.0010000012}
   m_Children: []
   m_Father: {fileID: 4300494912889894}
   m_RootOrder: 0
@@ -173,8 +173,8 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300002, guid: 3668d3a768965e9408e3385428c737b9, type: 3}
---- !u!64 &64813681435331314
-MeshCollider:
+--- !u!65 &65853810890444474
+BoxCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -182,11 +182,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300000, guid: aa85553c3000f044ea1be1db71cbcb78, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.02, y: 0.019999998, z: 0.02000125}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114044885108437508
 MonoBehaviour:
   m_ObjectHideFlags: 1

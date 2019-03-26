@@ -330,13 +330,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+    [SerializeField]
+    private float wallJumpStrength = 10;
+    private float wallJumpHeightStrength = 1.8f;
     private void checkDetatch(Collision collision)
     {
         Vector3 dir = collision.contacts[0].normal;
         if(InputManager.GetButtonDown(PlayerButton.Jump, player) && !detached )
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-            rb.velocity = new Vector3(dir.x * 10, 1.5f * jumpStrength, dir.z * 10);
+            rb.velocity = new Vector3(dir.x * wallJumpStrength, wallJumpHeightStrength * jumpStrength, dir.z * wallJumpStrength);
             animator.SetTrigger("Jump");
 
             transform.LookAt(new Vector3(transform.position.x + dir.x, transform.position.y, transform.position.z+ dir.z));
