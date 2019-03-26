@@ -105,6 +105,10 @@ public class Grapple : MonoBehaviour
         if (InputManager.GetButtonUp(PlayerButton.Grapple))
         {
             disableGrapple();
+            if (Box.Holding == true)
+            {
+                GetComponentInChildren<Box>().DropBox();
+            }
         }
     }
     private bool OnScreen(Vector3 worldPos){
@@ -188,10 +192,14 @@ public class Grapple : MonoBehaviour
         {
             hookAnchor.position = Vector3.MoveTowards(hookAnchor.position, transform.position, pullObjectSpeed);
             hit.transform.position = Vector3.MoveTowards(hit.transform.position, transform.position, pullObjectSpeed);
-
             if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
             {
+                if (target.tag == "Box")
+                {
+                    target.GetComponent<Box>().GrabBox();
+                }
                 disableGrapple();
+                
                 return;
             }
         }
