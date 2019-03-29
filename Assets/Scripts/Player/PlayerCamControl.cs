@@ -19,12 +19,18 @@ public class PlayerCamControl : MonoBehaviour
 
     [Header("Wall Prevention")]
     [SerializeField] private float sphereCastRadius = 2f;
-    [SerializeField] private float radiusChangeRate = 0.25f;
+    [SerializeField] private float radiusChangeRate = 0.75f;
     private float originalRadius;
     [SerializeField] private float minRadius = 0f;
     [SerializeField] private float castExtension = 3f; //This is an extension of the raycast maxDistance
     [SerializeField] private float distToWall = 1f; //This helps create more distance to the wall
-    [SerializeField] private List<string> ignoreTags; //This is the string name of the layermask for the script to detect
+    /*
+     * ignoreLayer is the variable that stores which layer masks to ignore.
+     * So, checking a layer within the inspector will mean that the camera radius
+     * will not shorten if that layer is read.
+     */
+    [SerializeField] private LayerMask ignoreLayer;
+    private LayerMask invertedLayerMask;
 
     [Header("Misc")]
     private KeyCode orbitCamInput = KeyCode.Mouse2;
@@ -47,39 +53,7 @@ public class PlayerCamControl : MonoBehaviour
         cameraVertAngle = 0;
 
         originalRadius = radius;
-    }
-
-    private void Update()
-    {
-        RaycastHit hit;
-        Vector3 direction =  cams[0].transform.position - this.transform.position;
-
-        //if (Physics.SphereCast(this.transform.position, sphereCastRadius, direction, out hit, Mathf.Abs(radius) + castExtension, layerMask))
-        if (Physics.Raycast(this.transform.position, direction, out hit, Mathf.Abs(radius) + castExtension))
-        {
-            //Debug.Log("is touching");
-            //Debug.Log("Distance: " + hit.distance);
-            //Debug.Log("Name: " + hit.transform.gameObject.name + "\nTag: " + hit.transform.gameObject.tag);
-
-            if (!ignoreTags.Contains(hit.transform.gameObject.tag))
-            {
-                Debug.Log("Sensing object Name: " + hit.transform.gameObject.name + "\nTag: " + hit.transform.gameObject.tag);
-
-                //If the radius is more than the casted distance to the wall - the small wall buffer
-                if (Mathf.Abs(radius) > hit.distance - distToWall && radius + radiusChangeRate < 0)
-                {
-                    radius += radiusChangeRate;
-                }
-            }
-        }
-        else if (radius > originalRadius)
-        {
-            radius -= radiusChangeRate;
-        }
-        else if (radius < originalRadius)
-        {
-            radius = originalRadius;
-        }
+        invertedLayerMask = ~ignoreLayer;
     }
 
     void LateUpdate()
@@ -108,6 +82,31 @@ public class PlayerCamControl : MonoBehaviour
                 break;
             case 3:
                 break;
+        }
+
+        RaycastHit hit;
+        Vector3 direction = cams[0].transform.position - this.transform.position;
+
+        //if (Physics.SphereCast(this.transform.position, sphereCastRadius, direction, out hit, Mathf.Abs(radius) + castExtension, invertedLayerMask))
+        if (Physics.Raycast(this.transform.position, direction, out hit, Mathf.Abs(radius) + castExtension, invertedLayerMask))
+        {
+            //Debug.Log("is touching");
+            //Debug.Log("Distance: " + hit.distance);
+            Debug.Log("Sensing object Name: " + hit.transform.gameObject.name + "\nLayer: " + hit.transform.gameObject.layer);
+
+            //If the radius is more than the casted distance to the wall - the small wall buffer
+            if (Mathf.Abs(radius) > hit.distance - distToWall && radius + radiusChangeRate < 0)
+            {
+                radius += radiusChangeRate;
+            }
+        }
+        else if (radius > originalRadius)
+        {
+            radius -= radiusChangeRate;
+        }
+        else if (radius < originalRadius)
+        {
+            radius = originalRadius;
         }
     }
 
