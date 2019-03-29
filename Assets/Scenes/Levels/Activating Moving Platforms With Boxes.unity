@@ -129,7 +129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &98345952
 AudioListener:
   m_ObjectHideFlags: 0
@@ -497,7 +497,17 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4160474787869596, guid: 345baa1516a3a244294514d3768a3970, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114700327472178860, guid: 345baa1516a3a244294514d3768a3970,
+        type: 2}
+      propertyPath: onHand
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114523217068114708, guid: 345baa1516a3a244294514d3768a3970,
+        type: 2}
+      propertyPath: updateColor
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 345baa1516a3a244294514d3768a3970, type: 2}
@@ -577,7 +587,7 @@ Transform:
   m_Children:
   - {fileID: 1598143535}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -89.98, y: 90, z: 0}
 --- !u!1 &590963727
 GameObject:
@@ -701,7 +711,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4633116941220910, guid: 5f2741af9c785a145813d7f29a102895, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f2741af9c785a145813d7f29a102895, type: 2}
@@ -1454,11 +1464,21 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4160474787869596, guid: 345baa1516a3a244294514d3768a3970, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1299066514512774, guid: 345baa1516a3a244294514d3768a3970, type: 2}
       propertyPath: m_Name
       value: Box (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114523217068114708, guid: 345baa1516a3a244294514d3768a3970,
+        type: 2}
+      propertyPath: updateColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114523217068114708, guid: 345baa1516a3a244294514d3768a3970,
+        type: 2}
+      propertyPath: colorToSet
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 345baa1516a3a244294514d3768a3970, type: 2}
