@@ -58,7 +58,7 @@ public class Grapple : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.GetButtonDown(PlayerButton.Grapple))
+        if (InputManager.GetButtonDown(PlayerButton.Grapple) && !Box.Holding)
         {
             if (target != null)
             {
@@ -111,26 +111,31 @@ public class Grapple : MonoBehaviour
         return vP.x>0 && vP.x<1 && vP.y>0 &&vP.y <1;
     }
     public void LateUpdate () {
-        var t = GrappleTarget.targets.Where(x=> (x.neutral==true || x.targetColor==state.currentColor) 
-                                            && Vector3.Distance(x.transform.position,transform.position) <= hookRange 
-                                            && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0
-                                            && OnScreen(x.transform.position))
-            .OrderBy (p => Vector3.Distance(p.transform.position,transform.position)*Vector2.Distance(Camera.main.WorldToScreenPoint(p.transform.position), Vector2.zero))
-            .FirstOrDefault();
-            
+        if(!isGrappled && !canGrapple) {
+            var t = GrappleTarget.targets.Where(x=> (x.neutral==true || (x.PushPull && (state.currentColor == GameColor.Red || state.currentColor == GameColor.Green)) || x.targetColor==state.currentColor) 
+                                                && Vector3.Distance(x.transform.position,transform.position) <= hookRange 
+                                                && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0
+                                                && OnScreen(x.transform.position))
+                .OrderBy (p => Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f,0.5f)))
+                .FirstOrDefault();
 
-        if(t != null) {
+            // ADD THIS BACK TO ORDER QUERY LATER FOR SMOOTHING OVER DISTANCE
+            //Vector3.Distance(p.transform.position,transform.position)+100*V
+
             RaycastHit r;
-            if(Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange)) {
-                if(r.transform == t.transform) hit = r;
+            if (t != null && Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange) && r.transform == t.transform) {
+                hit = r;
                 target = t.gameObject;
             }
-        }
-        else {
-            target = null;
+            else
+            {
+                target = null;
+                hit = new RaycastHit();
+            }
         }
 
-        if(target != null) {
+        RaycastHit rh;
+        if (target != null && Physics.Raycast(Camera.main.transform.position, target.transform.position - Camera.main.transform.position, out rh, hookRange) && rh.transform == target.transform) {
             reticle.SetActive(true);
             reticle.transform.position = Camera.main.WorldToScreenPoint( target.transform.position );
         }
@@ -182,13 +187,26 @@ public class Grapple : MonoBehaviour
         {
             hookAnchor.position = Vector3.MoveTowards(hookAnchor.position, transform.position, pullObjectSpeed);
             hit.transform.position = Vector3.MoveTowards(hit.transform.position, transform.position, pullObjectSpeed);
+
+            if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
+            {
+                disableGrapple();
+                return;
+            }
         }
     }
 
     // Pull the player towards the object the grapple collided with
     private void GrapplePullPlayer()
     {
+
         transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
+
+        if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
+        {
+            disableGrapple();
+            rb.velocity = Vector3.zero;
+        }
     }
 
     // When the grapple collides with an object it pushes it forwards

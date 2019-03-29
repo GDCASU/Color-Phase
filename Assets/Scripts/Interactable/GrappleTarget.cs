@@ -5,6 +5,7 @@ using UnityEngine;
 public class GrappleTarget : MonoBehaviour {
     public static List<GrappleTarget> targets = new List<GrappleTarget>(); 
     public bool neutral;
+    public bool PushPull;
     public GameColor targetColor;
 	public void Start () {
         targets.Add(this);

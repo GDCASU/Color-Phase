@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 64810197284714266}
   - component: {fileID: 114877343703841806}
   - component: {fileID: 114589720410886134}
+  - component: {fileID: 114359633717886530}
   m_Layer: 2
   m_Name: Paint Bucket Paint L2
   m_TagString: Untagged
@@ -103,7 +104,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1641404141142142}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.410232, y: 18.000004, z: -5.179737}
+  m_LocalPosition: {x: 3.2356873, y: 18, z: 5.8945007}
   m_LocalScale: {x: 0.7, y: 0.65, z: 0.7}
   m_Children:
   - {fileID: 4065155265478474}
@@ -320,6 +321,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 100
   axis: 0
+--- !u!114 &114359633717886530
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1543758113271760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42de208d9ae794447985742cf2644967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114589720410886134
 MonoBehaviour:
   m_ObjectHideFlags: 1
