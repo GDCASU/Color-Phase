@@ -13,9 +13,8 @@ public class VectorSin : MonoBehaviour {
         st = transform.position;
     }
     private float t;
-	void Update () {
+	void FixedUpdate () {
         t+=Time.deltaTime;
-		//rb.MovePosition(Mathf.Sin(t*speed)*axis+st);
         transform.position = Mathf.Sin(t*speed)*axis+st;
 	}
 }
