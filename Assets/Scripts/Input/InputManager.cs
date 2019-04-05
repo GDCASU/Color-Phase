@@ -49,10 +49,10 @@ namespace PlayerInput
     {
         Jump,
         Swap,
-
+        PickUp,
+        Grapple,
         UI_Submit,     // UI Button
         UI_Cancel,     // UI Button
-
         None,
     };
 }
