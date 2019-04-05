@@ -135,12 +135,19 @@ public class Grapple : MonoBehaviour
                 target = null;
                 hit = new RaycastHit();
             }
+
+            hand.localScale = new Vector3(1,1,1);
         }
         else {
-            var f = target.transform.position; f.y = transform.position.y;
+            var a = (canGrapple && !isGrappled) ? grappleAnchor : target.transform;
+            var f = a.position; f.y = transform.position.y;
             transform.LookAt(f);
-            hand.position = target.transform.position ;
-            hand.parent.position = (target.transform.position + transform.position)/2; // midpoint
+            hand.parent.parent.localPosition = new Vector3(-1.83f, 0.25f, 0.13f);
+            hand.parent.parent.localRotation = Quaternion.Euler(137.291f, -37.63199f, 43.62099f);
+            hand.parent.localRotation =  Quaternion.Euler(19.962f, 28.783f, 31.961f);
+            hand.position = a.position ;
+            hand.parent.position = (a.position + hand.parent.parent.position)/2; // midpoint
+            hand.localScale = new Vector3(3,3,3);
         }
 
         RaycastHit rh;
