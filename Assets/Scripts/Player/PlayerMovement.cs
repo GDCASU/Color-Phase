@@ -298,7 +298,7 @@ public class PlayerMovement : MonoBehaviour
             jumpsAvailable--;
            
         }
-        if (next == GameColor.Blue)
+        if (hasJumped == 1 || (hasJumped == 0 && !grounded))
         {
             if(hasJumped==1)
             {
