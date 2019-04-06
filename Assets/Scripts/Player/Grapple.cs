@@ -34,7 +34,7 @@ public class Grapple : MonoBehaviour
     private bool isGrappled;
     private bool canGrapple;
     private bool swinging;
-    private bool reset;
+    private bool resetSwing;
     private bool grounded;
 
     // Object to use in calcualtions
@@ -54,7 +54,7 @@ public class Grapple : MonoBehaviour
 
     void Awake()
     {
-        reset = true;
+        resetSwing = true;
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         line = gameObject.AddComponent<LineRenderer>();
@@ -165,55 +165,62 @@ public class Grapple : MonoBehaviour
             disableGrapple();
             if (s)
             {
-                reset = true;
+                resetSwing = true;
                 rb.velocity *= 1.5f;
             }
         }
-        print(reset);
-        // Only let player add force if they are below a certain point in relation to the hook anchor point
+        print(resetSwing);
+        // This method is only called once the rope has shortedned to a length where the player does not touch the ground
         if (swinging && !grounded)
         {
+            // Dissables playermovement and set the transform of the palyer to be based from the transform of the camera
             rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - 1, rb.velocity.z);
             GetComponentInParent<PlayerMovement>().enabled = false;
             transform.forward = gameObject.transform.parent.GetComponentInChildren<Camera>().transform.forward;
-            Vector3 player = transform.forward;
-            Vector3 rope = hookAnchor.position - transform.position;
-            Vector3.OrthoNormalize(ref rope, ref player);
-
+            // Gets the swinging direction by getting the cross product from the rope vector and the players transform
             Vector3 swingZDirection = Vector3.Cross(v, transform.right);
             Vector3 swingXDirection = Vector3.Cross(v, transform.forward);
-
+            // Gets the input to see if the force applied will be forward or backwards
             float z = InputManager.GetAxis(PlayerAxis.MoveVertical);
             float x = InputManager.GetAxis(PlayerAxis.MoveHorizontal);
 
+            // Notes about the swing: The player can only swing upwards until it hits the max height and can only 
+            // swing upwards again after resetting by getting to the middle/bottom of the arch, the player will always be
+            // allowed to add force if the player is going down and facing towards the other side of the arch
 
+            // Checks if the player is at the bottom of the arch swing to reset the ability to swing upwards 
             if (transform.position.y < (hookAnchor.position.y - (ropeLength * .99)))
             {
-                reset = true;
-            }   
+                resetSwing = true;
+            }
+            // Checks if the player is going downwards on the swing
             else if (rb.velocity.y < 0)
             {
+                // Checks if the player is looking towards the oposite side of the arch and pressing forwards
                 if (InputManager.GetAxis(PlayerAxis.MoveVertical) == 1 && Vector3.Angle(transform.forward, v) > 90f)
                 {
-                    print("onlyy on forwad");
+                    // Applies a force
                     applySwingForce(swingZDirection, swingXDirection,z,x);
                 }
+                // Prevents the player from swinging upward if its velocity is downwards 
                 else
                 {
-                    reset = false;
+                    resetSwing = false;
                 }
             }
+            // Checks if the player is within the allowed swinging range of the arch
             if ((transform.position.y < (hookAnchor.position.y - (ropeLength * .15))))
             {
-                if (reset)
+                if (resetSwing)
                 {
-                    print("bad force");
+                    // Applies a force
                     applySwingForce(swingZDirection, swingXDirection, z, x);
                 }
             }
+            // Blocks the ability to swing upwards again until the player resets
             else
             {
-                reset = false;
+                resetSwing = false;
             }
         }
         else
