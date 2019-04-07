@@ -63,6 +63,10 @@ public class Grapple : MonoBehaviour
         grappleAnchor = new GameObject().transform;
         state = GetComponent<ColorState>();
     }
+    public void Start()
+    {
+        state.onSwap += switchColors;
+    }
     private bool OnScreen(Vector3 worldPos)
     {
         var vP = Camera.main.WorldToViewportPoint(worldPos);
@@ -316,5 +320,9 @@ public class Grapple : MonoBehaviour
     {
         rb.AddForce(swingZDirection * z * swingSpeed);
         rb.AddForce(swingXDirection * -x * swingStrafeSpeed);
+    }
+    public void switchColors(GameColor a, GameColor b )
+    {
+        disableGrapple();
     }
 }
