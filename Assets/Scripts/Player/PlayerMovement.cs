@@ -58,6 +58,10 @@ public class PlayerMovement : MonoBehaviour
     #endregion
     private void Start()
     {
+        if(GetComponent<ColorState>().currentColor==GameColor.Blue)
+        {
+            jumps = 2;
+        }
         GetComponent<ColorState>().onSwap += HandleColors;
         player = GetComponent<IInputPlayer>();
         rb = GetComponent<Rigidbody>();
