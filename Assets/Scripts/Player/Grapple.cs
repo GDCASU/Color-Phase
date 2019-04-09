@@ -1,3 +1,4 @@
+
 ﻿using UnityEngine;
 using PlayerInput;
 using System.Linq;
@@ -167,6 +168,11 @@ public class Grapple : MonoBehaviour
         {
             var s = swinging;
             disableGrapple();
+
+            if (Box.Holding == true)
+            {
+                GetComponentInChildren<Box>().DropBox();
+             }   
             if (s)
             {
                 resetSwing = true;
@@ -258,10 +264,14 @@ public class Grapple : MonoBehaviour
         {
             hookAnchor.position = Vector3.MoveTowards(hookAnchor.position, transform.position, pullObjectSpeed);
             hit.transform.position = Vector3.MoveTowards(hit.transform.position, transform.position, pullObjectSpeed);
-
             if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
             {
+                if (target.tag == "Box")
+                {
+                    target.GetComponent<Box>().GrabBox();
+                }
                 disableGrapple();
+                
                 return;
             }
         }
@@ -316,6 +326,7 @@ public class Grapple : MonoBehaviour
             ropeLength -= .15f;
         }
     }
+
     public void applySwingForce( Vector3 swingZDirection, Vector3 swingXDirection, float z, float x)
     {
         rb.AddForce(swingZDirection * z * swingSpeed);
@@ -326,3 +337,4 @@ public class Grapple : MonoBehaviour
         disableGrapple();
     }
 }
+
