@@ -72,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        print(jumpsAvailable);
         Move();
         Animations();
         // At the end of each frame we set grounded to false so that
@@ -304,10 +305,8 @@ public class PlayerMovement : MonoBehaviour
         }
         if (next == GameColor.Blue)
         {
-            if(hasJumped == 1 || (hasJumped == 0 && !grounded))
-            {
                 jumpsAvailable++;
-            }
+
             jumps = 2;
             
         }
