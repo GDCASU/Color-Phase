@@ -58,6 +58,10 @@ public class PlayerMovement : MonoBehaviour
     #endregion
     private void Start()
     {
+        if(GetComponent<ColorState>().currentColor==GameColor.Blue)
+        {
+            jumps = 2;
+        }
         GetComponent<ColorState>().onSwap += HandleColors;
         player = GetComponent<IInputPlayer>();
         rb = GetComponent<Rigidbody>();
@@ -103,7 +107,11 @@ public class PlayerMovement : MonoBehaviour
         if (Vector3.Dot(collision.contacts[0].normal, Vector3.up) > slopeSize)
         {
             grounded = true;
-            if(rb.velocity.y <= 0) resetJumpInfo();
+            if(rb.velocity.y <= 0) {
+                resetJumpInfo();
+                // Update the last on ledge position of the player
+                if(collision.transform.GetComponent<Platform>()==null) ledgeMemory = transform.position;
+            }
         }
         if(stuck) checkDetatch(collision);
     }
@@ -133,8 +141,11 @@ public class PlayerMovement : MonoBehaviour
         // If the player falls off of the map then set the player on the last ledge
         if (transform.position.y < minimumY)
         {
-            rb.velocity = new Vector3(0, 1, 0);
+            var f = ledgeMemory - transform.position; f.y = 0;
+            f.Normalize(); f.y = 20;
+            rb.velocity = f;
             transform.position = ledgeMemory;
+            resetJumpInfo();
         }
         if (grounded)
         {
@@ -260,11 +271,9 @@ public class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// This sets the info on last position and direction for when the player is in the air
+    /// This sets the info on last direction for when the player is in the air
     /// </summary>
     private void setGroundInfo() {
-        // Update the last on ledge position of the player
-        ledgeMemory = transform.position;
         // Store the previous force for jump momentum 
         xAxisOld = xAxis;
         zAxisOld = zAxis;
@@ -300,7 +309,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (next == GameColor.Blue)
         {
-            if(hasJumped==1)
+            if(hasJumped == 1 || (hasJumped == 0 && !grounded))
             {
                 jumpsAvailable++;
             }
