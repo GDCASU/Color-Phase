@@ -342,10 +342,6 @@ GameObject:
   - component: {fileID: 124755311138868172}
   - component: {fileID: 54834644840772904}
   - component: {fileID: 114982708972030296}
-  - component: {fileID: 135202737648468498}
-  - component: {fileID: 114159012723459318}
-  - component: {fileID: 135414234420751804}
-  - component: {fileID: 114837578976449036}
   - component: {fileID: 81481631386489534}
   m_Layer: 0
   m_Name: Player 1 Camera
@@ -1060,23 +1056,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   storedColor: 0
---- !u!114 &114159012723459318
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1675303218584470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d6a15034cc83e4da8d67e15a051a01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camControl: {fileID: 114730380888645552}
-  layerMaskName: PermamentWall
-  distToWall: 0.1
-  radiusReductionRate: 0.1
-  radiusIncreaseRate: 0.1
-  smallestRadius: 0
 --- !u!114 &114194432998871028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1408,6 +1387,14 @@ MonoBehaviour:
   sensitivity: 160
   camHorizAxis: Mouse X
   camVertAxis: Mouse Y
+  sphereCastRadius: 2
+  radiusChangeRate: 0.75
+  minRadius: 0
+  castExtension: 3
+  distToWall: 1
+  ignoreLayer:
+    serializedVersion: 2
+    m_Bits: 15728640
   radius: -2.5
   minVertAngle: -50
   maxVertAngle: 80
@@ -1463,23 +1450,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eeaea7693a9433459710d83358fe392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114837578976449036
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1675303218584470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d6a15034cc83e4da8d67e15a051a01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camControl: {fileID: 114730380888645552}
-  layerMaskName: PermamentWall
-  distToWall: 0.1
-  radiusReductionRate: 0.1
-  radiusIncreaseRate: 0.1
-  smallestRadius: 0
 --- !u!114 &114982708972030296
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1515,30 +1485,6 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1675303218584470}
   m_Enabled: 1
---- !u!135 &135202737648468498
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1675303218584470}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135414234420751804
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1675303218584470}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &136100543912059420
 CapsuleCollider:
   m_ObjectHideFlags: 1
