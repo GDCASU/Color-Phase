@@ -54,16 +54,7 @@ public class Box : MonoBehaviour
         //drop the box when you stop holding left click or whatever button
         if (InputManager.GetButtonUp(PlayerInput.PlayerButton.PickUp) && onHand)
         {
-            Rigidbody box = gameObject.GetComponent<Rigidbody>();
-
-            gameObject.transform.parent = null;
-            box.useGravity = true;
-            box.constraints = RigidbodyConstraints.None;
-            onHand = false;
-            Holding = false;
-            hitbox.SetActive(false);
-            hitbox.transform.parent = gameObject.transform;
-            hitbox.layer = 0;
+            DropBox();
         }
 
         //pick up the box in front of the player when the button is pressed and held
@@ -75,24 +66,41 @@ public class Box : MonoBehaviour
             {
                 if (hit.collider.gameObject == gameObject)
                 {
-                    Rigidbody box = gameObject.GetComponent<Rigidbody>();
-
-                    //set box in front of player while they're holding it
-                    gameObject.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) + player.transform.forward;
-                    gameObject.transform.rotation = player.transform.rotation;
-                    gameObject.transform.parent = player.transform;
-                    box.useGravity = false;
-                    box.constraints = RigidbodyConstraints.FreezeAll;
-                    onHand = true;
-                    Holding = true;
-                    //same thing for its hitbox
-                    hitbox.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) + player.transform.forward;
-                    hitbox.transform.rotation = player.transform.rotation;
-                    hitbox.transform.parent = player.transform;
-                    hitbox.SetActive(true);
-                    hitbox.layer = gameObject.layer;
+                    GrabBox(); 
                 }
             }
         }        
+    }
+    public void GrabBox()
+    {
+        Rigidbody box = gameObject.GetComponent<Rigidbody>();
+
+        //set box in front of player while they're holding it
+        gameObject.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) + player.transform.forward;
+        gameObject.transform.rotation = player.transform.rotation;
+        gameObject.transform.parent = player.transform;
+        box.useGravity = false;
+        box.constraints = RigidbodyConstraints.FreezeAll;
+        onHand = true;
+        Holding = true;
+        //same thing for its hitbox
+        hitbox.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) + player.transform.forward;
+        hitbox.transform.rotation = player.transform.rotation;
+        hitbox.transform.parent = player.transform;
+        hitbox.SetActive(true);
+        hitbox.layer = gameObject.layer;
+    }
+    public void DropBox()
+    {
+        Rigidbody box = gameObject.GetComponent<Rigidbody>();
+
+        gameObject.transform.parent = null;
+        box.useGravity = true;
+        box.constraints = RigidbodyConstraints.None;
+        onHand = false;
+        Holding = false;
+        hitbox.SetActive(false);
+        hitbox.transform.parent = gameObject.transform;
+        hitbox.layer = 0;
     }
 }
