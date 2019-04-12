@@ -596,7 +596,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1605622675145520}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.36, y: 18, z: -23.28}
+  m_LocalPosition: {x: -10.35477, y: 0.061, z: -11.26605}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4215920851088580}
@@ -1093,9 +1093,10 @@ MonoBehaviour:
   pullPlayerSpeed: 1
   pullObjectSpeed: 1
   pushObjectSpeed: 20000
-  swingSpeed: 200
-  swingStrafeSpeed: 200
+  swingSpeed: 50
+  swingStrafeSpeed: 10
   reticle: {fileID: 1741805319584092}
+  handTransform: {fileID: 4959815269869062}
 --- !u!114 &114251365184923260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1343,6 +1344,7 @@ MonoBehaviour:
   yellowFallCapMultiplier: 2
   yellowFallCoefficent: 1.25
   yellowRunForceMultiplyer: 8
+  wallJumpStrength: 10
 --- !u!114 &114652093043208670
 MonoBehaviour:
   m_ObjectHideFlags: 1

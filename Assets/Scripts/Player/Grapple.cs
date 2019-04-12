@@ -30,6 +30,8 @@ public class Grapple : MonoBehaviour
     [Header("UI")]
     public GameObject reticle;
 
+    public Transform handTransform;
+
     // Grapple hook states
     private float ropeLength;
     private bool isGrappled;
@@ -52,7 +54,7 @@ public class Grapple : MonoBehaviour
 
     private GameObject target;
     private float swingXDirection;
-
+    private Animator animator;
     void Awake()
     {
         resetSwing = true;
@@ -63,6 +65,7 @@ public class Grapple : MonoBehaviour
         hookAnchor = new GameObject().transform;
         grappleAnchor = new GameObject().transform;
         state = GetComponent<ColorState>();
+        animator = GetComponent<Animator>();
     }
     public void Start()
     {
@@ -88,8 +91,8 @@ public class Grapple : MonoBehaviour
                 .FirstOrDefault();                                                                                              // Take the first of these
             // ADD THIS BACK TO ORDER QUERY LATER FOR SMOOTHING OVER DISTANCE
             //Vector3.Distance(p.transform.position,transform.position)+100*V
-            
-            var dir = Vector3.Normalize(t.transform.position - transform.position);
+
+            var dir = (t != null) ? Vector3.Normalize(t.transform.position - transform.position) : Vector3.zero;
             if (t != null && Physics.Raycast(transform.position + dir, dir, out r, hookRange) && r.transform == t.transform)
             {
                 hit = r;
@@ -101,13 +104,16 @@ public class Grapple : MonoBehaviour
             }
         }
 
-        if (target != null && (isGrappled || canGrapple || (target != null && r.transform == target.transform) ))
+        if (target != null && (isGrappled || canGrapple || (target != null && r.transform == target.transform))
+            && Vector3.Dot(target.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0)
         {
             reticle.SetActive(true);
             reticle.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
         }
         else
             reticle.SetActive(false);
+
+        UpdateAnimations();
     }
     
 
@@ -132,9 +138,8 @@ public class Grapple : MonoBehaviour
         // Handles when grapple is at the object it collided with and does actions based on color
         if (isGrappled)
         {
-            GameColor color = col.GetComponent<ColorState>().currentColor;
-            swinging = color == GameColor.Red;
-            switch (color)
+            swinging = state.currentColor == GameColor.Red;
+            switch (state.currentColor)
             {
                 case GameColor.Yellow:
                     GrapplePullObject();
@@ -149,19 +154,15 @@ public class Grapple : MonoBehaviour
                     GrappleSwing();
                     break;
             }
-
-            line.SetPosition(0, col.transform.position);
-            line.SetPosition(1, hookAnchor.transform.position);
         }
         // Handles the initial grapple movement towards the object it collided with
         else if (canGrapple)
         {
             grappleAnchor.position = Vector3.MoveTowards(grappleAnchor.position, hookAnchor.position, grappleSpeed);
-            if (grappleAnchor.position == hookAnchor.position)
+            if (grappleAnchor.position == hookAnchor.position) {
                 isGrappled = true;
-
-            line.SetPosition(0, col.transform.position);
-            line.SetPosition(1, grappleAnchor.transform.position);
+                if(state.currentColor == GameColor.Red) animator.SetTrigger("StartGrappleSwing");
+            }
         }
 
         if (InputManager.GetButtonUp(PlayerButton.Grapple))
@@ -334,6 +335,22 @@ public class Grapple : MonoBehaviour
     public void switchColors(GameColor a, GameColor b )
     {
         disableGrapple();
+    }
+
+    public void UpdateAnimations() {
+        animator.SetBool("GrappleSwing",swinging);
+
+        // Line render in late update makes it smoother
+        if(isGrappled){
+            line.SetPosition(0, handTransform.position);
+            line.SetPosition(1, hookAnchor.transform.position);
+            Debug.Log("setLine");
+        }
+        else if (canGrapple)
+        {
+            line.SetPosition(0, handTransform.position);
+            line.SetPosition(1, grappleAnchor.transform.position);
+        }
     }
 }
 
