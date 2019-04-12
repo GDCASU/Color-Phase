@@ -11,7 +11,7 @@ public class Platform : MonoBehaviour {
     }
     void OnCollisionExit(Collision c){
         var r = c.rigidbody;
-        if(r!=null){
+        if(r!=null && r.transform.parent == this.transform){
             r.transform.parent = null;
         }
     }
