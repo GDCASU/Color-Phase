@@ -262,17 +262,22 @@ public class Grapple : MonoBehaviour
     {
         if (hit.rigidbody)
         {
-            hookAnchor.position = Vector3.MoveTowards(hookAnchor.position, transform.position, pullObjectSpeed);
-            hit.transform.position = Vector3.MoveTowards(hit.transform.position, transform.position, pullObjectSpeed);
+           
+            RaycastHit rh;
             if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
             {
-                if (target.tag == "Box")
+                if (target.tag == "Box" && Vector3.Angle(transform.forward,hookAnchor.position)>30f && target.tag == "Box" && Vector3.Angle(transform.forward, hookAnchor.position) <150f)
                 {
                     target.GetComponent<Box>().GrabBox();
                 }
                 disableGrapple();
                 
                 return;
+            }
+            else
+            {
+                hookAnchor.position = Vector3.MoveTowards(hookAnchor.position, transform.position, pullObjectSpeed);
+                hit.transform.position = Vector3.MoveTowards(hit.transform.position, transform.position, pullObjectSpeed);
             }
         }
     }
