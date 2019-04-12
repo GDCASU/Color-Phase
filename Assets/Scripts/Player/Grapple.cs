@@ -199,13 +199,36 @@ public class Grapple : MonoBehaviour
     // Pull the player towards the object the grapple collided with
     private void GrapplePullPlayer()
     {
-
-        transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
-
-        if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
+        if (Vector3.Distance(hit.transform.position, transform.position) >= 2f)
         {
+            transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
+        }
+        else
+        {
+            //Debug.Log(Vector3.Distance(hit.transform.position, transform.position));
             disableGrapple();
             rb.velocity = Vector3.zero;
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        disableGrapple();
+        Vector3 hey = new Vector3(0, 0, 0);
+        foreach (ContactPoint contact in collision.contacts)
+        {
+            hey = contact.point;
+            //if (hey.y > transform.position.y)
+            {
+                Debug.Log(contact.point.y + " " + transform.position.y + " ");
+            }
+        }
+        Debug.Log(!collision.gameObject.GetComponent<Rigidbody>() + " " + canGrapple + " " + (hey.y > transform.position.y));
+        if (!collision.gameObject.GetComponent<Rigidbody>() && canGrapple && hey.y > transform.position.y)
+        {
+            Vector3 actualTarget = new Vector3(hookAnchor.position.x, transform.position.y, hookAnchor.position.z);
+            Debug.Log("hey");
+            transform.position = Vector3.MoveTowards(transform.position, actualTarget, pullPlayerSpeed);
         }
     }
 
