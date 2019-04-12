@@ -211,9 +211,8 @@ public class Grapple : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    /*private void OnCollisionStay(Collision collision)
     {
-        disableGrapple();
         Vector3 hey = new Vector3(0, 0, 0);
         foreach (ContactPoint contact in collision.contacts)
         {
@@ -226,11 +225,12 @@ public class Grapple : MonoBehaviour
         Debug.Log(!collision.gameObject.GetComponent<Rigidbody>() + " " + canGrapple + " " + (hey.y > transform.position.y));
         if (!collision.gameObject.GetComponent<Rigidbody>() && canGrapple && hey.y > transform.position.y)
         {
+            disableGrapple();
             Vector3 actualTarget = new Vector3(hookAnchor.position.x, transform.position.y, hookAnchor.position.z);
             Debug.Log("hey");
             transform.position = Vector3.MoveTowards(transform.position, actualTarget, pullPlayerSpeed);
         }
-    }
+    }*/
 
     // When the grapple collides with an object it pushes it forwards
     private void GrapplePushObject()
