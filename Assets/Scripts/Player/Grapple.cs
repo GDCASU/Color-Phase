@@ -1,4 +1,4 @@
-
+﻿
 ﻿using UnityEngine;
 using PlayerInput;
 using System.Linq;
@@ -75,20 +75,22 @@ public class Grapple : MonoBehaviour
     }
     public void LateUpdate()
     {
+        RaycastHit r = new RaycastHit();
         if (!isGrappled && !canGrapple)
         {
-            var t = GrappleTarget.targets.Where(x => (x.neutral == true || (x.PushPull && (state.currentColor == GameColor.Red || state.currentColor == GameColor.Green)) || x.targetColor == state.currentColor)
-                                                && Vector3.Distance(x.transform.position, transform.position) <= hookRange
-                                                && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0
-                                                && OnScreen(x.transform.position))
-                .OrderBy(p => Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f, 0.5f)))
-                .FirstOrDefault();
-
+            // This LINQ query filters for valid targets and then sorts by distance
+            var t = GrappleTarget.targets
+                .Where(x => (x.neutral == true || (x.PushPull && state.canGrappleBox) || x.targetColor == state.currentColor)   // Is it a valid target
+                    && Vector3.Distance(x.transform.position, transform.position) <= hookRange                                  // Is the target in range
+                    && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0   // Is the target in front of the camera (filter out targets behind our view)
+                    && OnScreen(x.transform.position))                                                                          // Is the target in screenspace
+                .OrderBy(p => Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f, 0.5f)))// Now order the targets by how close they are to the center of the screen
+                .FirstOrDefault();                                                                                              // Take the first of these
             // ADD THIS BACK TO ORDER QUERY LATER FOR SMOOTHING OVER DISTANCE
             //Vector3.Distance(p.transform.position,transform.position)+100*V
-
-            RaycastHit r;
-            if (t != null && Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange) && r.transform == t.transform)
+            
+            var dir = Vector3.Normalize(t.transform.position - transform.position);
+            if (t != null && Physics.Raycast(transform.position + dir, dir, out r, hookRange) && r.transform == t.transform)
             {
                 hit = r;
                 target = t.gameObject;
@@ -96,20 +98,18 @@ public class Grapple : MonoBehaviour
             else
             {
                 target = null;
-                hit = new RaycastHit();
             }
         }
 
-        RaycastHit rh;
-        if (target != null && Physics.Raycast(Camera.main.transform.position, target.transform.position - Camera.main.transform.position, out rh, hookRange) && rh.transform == target.transform)
+        if (target != null && (isGrappled || canGrapple || (target != null && r.transform == target.transform) ))
         {
             reticle.SetActive(true);
             reticle.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
         }
         else
             reticle.SetActive(false);
-
     }
+    
 
     void FixedUpdate()
     {
