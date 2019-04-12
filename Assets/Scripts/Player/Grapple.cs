@@ -179,7 +179,6 @@ public class Grapple : MonoBehaviour
                 rb.velocity *= 1.5f;
             }
         }
-        print(resetSwing);
         // This method is only called once the rope has shortedned to a length where the player does not touch the ground
         if (swinging && !grounded)
         {
