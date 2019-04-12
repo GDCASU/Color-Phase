@@ -76,7 +76,7 @@ public class Box : MonoBehaviour
         Rigidbody box = gameObject.GetComponent<Rigidbody>();
 
         //set box in front of player while they're holding it
-        gameObject.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) + player.transform.forward;
+        gameObject.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1.1f, player.transform.position.z) + player.transform.forward;
         gameObject.transform.rotation = player.transform.rotation;
         gameObject.transform.parent = player.transform;
         box.useGravity = false;
@@ -84,7 +84,7 @@ public class Box : MonoBehaviour
         onHand = true;
         Holding = true;
         //same thing for its hitbox
-        hitbox.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) + player.transform.forward;
+        hitbox.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1.1f, player.transform.position.z) + player.transform.forward;
         hitbox.transform.rotation = player.transform.rotation;
         hitbox.transform.parent = player.transform;
         hitbox.SetActive(true);
