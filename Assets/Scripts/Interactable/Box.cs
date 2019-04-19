@@ -89,6 +89,22 @@ public class Box : MonoBehaviour
         hitbox.transform.parent = player.transform;
         hitbox.SetActive(true);
         hitbox.layer = gameObject.layer;
+
+        // activate playerArm
+        PlayerArmController.singleton.enabled=true;
+        PlayerArmController.singleton.rUpperArm.position = new Vector3(-1.27f, 0.4f, 0.24f);
+        PlayerArmController.singleton.rUpperArm.rotation = new Vector3(154.739f, -49.37799f, 21.28299f);
+        PlayerArmController.singleton.rArm.position = new Vector3(-0.4598275f,-1.380015f,-0.27012f);
+        PlayerArmController.singleton.rArm.rotation =  new Vector3(-9.030001f, 33.907f, 38.972f);
+        PlayerArmController.singleton.rHand.position = new Vector3(-0.28f, -0.04f, 0.12f);
+        PlayerArmController.singleton.rHand.rotation = new Vector3(61.819f, 0.719f, 3.061f);
+
+        PlayerArmController.singleton.lUpperArm.position = new Vector3(-1.34f, 0.1f, 0.01f);
+        PlayerArmController.singleton.lUpperArm.rotation = new Vector3(33.077f, 3.048f, 33.993f);
+        PlayerArmController.singleton.lArm.position = new Vector3(-0.55f,-1.16f,0.62f);
+        PlayerArmController.singleton.lArm.rotation =  new Vector3(10.502f,21.617f, 67.705f);
+        PlayerArmController.singleton.lHand.position = new Vector3(-0.5f, -0.25f,0.04f);
+        PlayerArmController.singleton.lHand.rotation = new Vector3(-4.147f, 45.201f, -0.522f);
     }
     public void DropBox()
     {
@@ -102,5 +118,8 @@ public class Box : MonoBehaviour
         hitbox.SetActive(false);
         hitbox.transform.parent = gameObject.transform;
         hitbox.layer = 0;
+
+        
+        PlayerArmController.singleton.enabled=false;
     }
 }
