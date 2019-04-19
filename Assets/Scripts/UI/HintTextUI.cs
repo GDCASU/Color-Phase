@@ -8,18 +8,17 @@ public class HintTextUI : MonoBehaviour
     public static HintTextUI singleton;
     private Text textRender;
 
-    private List<Image> images;
+    public Image image;
     public List<string> helpMessages = new List<string>();
 
     public float textSpeed;
     void Awake()
     {
         textRender = GetComponent<Text>();
-        images = transform.parent.GetComponentsInChildren<Image>().ToList();
         singleton = this;
         var tempColor = Color.white;
         tempColor.a = 0f;
-        foreach(Image i in images) i.color = tempColor;
+        image.color = tempColor;
         transform.parent.gameObject.SetActive(false);
     }
 
@@ -34,12 +33,12 @@ public class HintTextUI : MonoBehaviour
     public int waitBetweenMessages = 200;
     IEnumerator push()
     {
-        while (images[0].color.a < 1)
+        while (image.color.a < 1)
         {
 
-            var temp = images[0].color;
-            temp.a += 0.01f;
-            foreach(Image i in images) i.color = temp;
+            var temp = image.color;
+            temp.a += 0.05f;
+            image.color = temp;
             yield return new WaitForEndOfFrame();
         }
         while (helpMessages.Any())
@@ -57,12 +56,12 @@ public class HintTextUI : MonoBehaviour
                 textRender.text = "";
             }
 
-        while (images[0].color.a > 0)
+        while (image.color.a > 0)
         {
 
-            var temp = images[0].color;
-            temp.a -= 0.01f;
-            foreach(Image i in images) i.color = temp;
+            var temp = image.color;
+            temp.a -= 0.05f;
+            image.color = temp;
             yield return new WaitForEndOfFrame();
         }
 
