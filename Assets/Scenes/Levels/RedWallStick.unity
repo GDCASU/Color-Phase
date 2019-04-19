@@ -215,7 +215,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &392103029 stripped
 GameObject:
@@ -321,7 +321,7 @@ Transform:
   m_LocalScale: {x: 22.235806, y: 1, z: 16.59108}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &821786876 stripped
 GameObject:
@@ -640,6 +640,106 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300004, guid: 4b1633e64fb01df46a5d899367354543, type: 3}
+--- !u!1001 &1423420759
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 59.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 43.75819
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 12.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0.71355623
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.70059794
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1577122434552330, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_Name
+      value: Red Stick wall (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 91.05
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+  m_IsPrefabAsset: 0
+--- !u!1001 &1470098338
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 3.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 44.03836
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0.7089555
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.7052532
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1577122434552330, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_Name
+      value: Red Stick wall (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90.3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &1489060283 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100016, guid: 4b1633e64fb01df46a5d899367354543,
@@ -659,6 +759,106 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300010, guid: 4b1633e64fb01df46a5d899367354543, type: 3}
+--- !u!1001 &1492222199
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 37.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 50.429462
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 31.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0.712026
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.70215315
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1577122434552330, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_Name
+      value: Red Stick wall (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90.8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+  m_IsPrefabAsset: 0
+--- !u!1001 &1500769503
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 30.740847
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 29.14222
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 40.27931
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826867871881248, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d8b96aa91bfc0a048be05165fb940907, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &1609088570 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100006, guid: 4b1633e64fb01df46a5d899367354543,
