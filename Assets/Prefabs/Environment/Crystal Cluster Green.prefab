@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 4460229791497904}
   - component: {fileID: 33952959850846770}
   - component: {fileID: 23547819828781990}
-  - component: {fileID: 65814738660044794}
+  - component: {fileID: 136310396431315774}
   m_Layer: 0
   m_Name: Crystal Cluster Green
   m_TagString: Untagged
@@ -81,7 +81,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1973963737330636}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -79.98905, y: 37.29145, z: -32.530983}
+  m_LocalPosition: {x: -15.994202, y: 26.499996, z: -3.2720695}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children:
   - {fileID: 4029192996936850}
@@ -145,18 +145,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1973963737330636}
   m_Mesh: {fileID: 4300000, guid: 9cc67c9e38bd9a64e8fffc92e79d4b7e, type: 3}
---- !u!65 &65814738660044794
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1973963737330636}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.04893938, y: 0.04691924, z: 1.0233467}
-  m_Center: {x: -0.000995709, y: 0.0015507162, z: 0.038226318}
 --- !u!108 &108936863546457502
 Light:
   m_ObjectHideFlags: 1
@@ -194,6 +182,19 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!136 &136310396431315774
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1973963737330636}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.037984207
+  m_Height: 0.04691926
+  m_Direction: 1
+  m_Center: {x: -0.0009957086, y: 0.0015507176, z: 0.026552863}
 --- !u!215 &215496187537113656
 ReflectionProbe:
   m_ObjectHideFlags: 1
