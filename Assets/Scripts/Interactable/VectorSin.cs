@@ -6,10 +6,10 @@ public class VectorSin : MonoBehaviour {
 
 	public Vector3 axis;
     public float speed;
-    private Rigidbody rb;
+    
     private Vector3 st;
     void Start () { 
-        rb = GetComponent<Rigidbody>(); 
+        
         st = transform.position;
     }
     private float t;
