@@ -22,7 +22,7 @@ public class Box : MonoBehaviour
 
     public void Awake ()
     {
-        color = GetComponent< ColorState >();      
+        color = GetComponent< ColorState >();
     }
     // Use this for initialization
     void Start()
@@ -76,7 +76,7 @@ public class Box : MonoBehaviour
         Rigidbody box = gameObject.GetComponent<Rigidbody>();
 
         //set box in front of player while they're holding it
-        gameObject.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) + player.transform.forward;
+        gameObject.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1.1f, player.transform.position.z) + player.transform.forward;
         gameObject.transform.rotation = player.transform.rotation;
         gameObject.transform.parent = player.transform;
         box.useGravity = false;
@@ -84,7 +84,7 @@ public class Box : MonoBehaviour
         onHand = true;
         Holding = true;
         //same thing for its hitbox
-        hitbox.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) + player.transform.forward;
+        hitbox.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1.1f, player.transform.position.z) + player.transform.forward;
         hitbox.transform.rotation = player.transform.rotation;
         hitbox.transform.parent = player.transform;
         hitbox.SetActive(true);
@@ -96,15 +96,15 @@ public class Box : MonoBehaviour
         PlayerArmController.singleton.rUpperArm.rotation = new Vector3(154.739f, -49.37799f, 21.28299f);
         PlayerArmController.singleton.rArm.position = new Vector3(-0.4598275f,-1.380015f,-0.27012f);
         PlayerArmController.singleton.rArm.rotation =  new Vector3(-9.030001f, 33.907f, 38.972f);
-        PlayerArmController.singleton.rHand.position = new Vector3(-0.28f, -0.04f, 0.12f);
+        PlayerArmController.singleton.rHand.position = new Vector3(-0.28f, -0.5f, 0.12f);
         PlayerArmController.singleton.rHand.rotation = new Vector3(61.819f, 0.719f, 3.061f);
 
-        PlayerArmController.singleton.lUpperArm.position = new Vector3(-1.34f, 0.1f, 0.01f);
+        PlayerArmController.singleton.lUpperArm.position = new Vector3(-1.04f, -0.5f, 0.01f);
         PlayerArmController.singleton.lUpperArm.rotation = new Vector3(33.077f, 3.048f, 33.993f);
-        PlayerArmController.singleton.lArm.position = new Vector3(-0.55f,-1.16f,0.62f);
+        PlayerArmController.singleton.lArm.position = new Vector3(-0.39f, -0.97f, 0.77f);
         PlayerArmController.singleton.lArm.rotation =  new Vector3(10.502f,21.617f, 67.705f);
-        PlayerArmController.singleton.lHand.position = new Vector3(-0.5f, -0.25f,0.04f);
-        PlayerArmController.singleton.lHand.rotation = new Vector3(-4.147f, 45.201f, -0.522f);
+        PlayerArmController.singleton.lHand.position = new Vector3(-0.25f, -0.11f, 0.32f);
+        PlayerArmController.singleton.lHand.rotation = new Vector3(0f, -20f, 20f);
     }
     public void DropBox()
     {
