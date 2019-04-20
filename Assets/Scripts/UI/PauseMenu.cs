@@ -107,9 +107,9 @@ public class PauseMenu : MonoBehaviour
         playerUI.enabled = true;
         HUD.SetActive(true);
     }
-    public void SaveGame()
+    public void MainMenu()
     {
-
+        SceneManager.LoadScene("TitleScreen");
     }
     public void LevelSelect()
     {
