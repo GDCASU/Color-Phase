@@ -1,4 +1,4 @@
-
+﻿
 ﻿using UnityEngine;
 using PlayerInput;
 using System.Linq;
@@ -30,6 +30,8 @@ public class Grapple : MonoBehaviour
     [Header("UI")]
     public GameObject reticle;
 
+    public Transform handTransform;
+
     // Grapple hook states
     private float ropeLength;
     private bool isGrappled;
@@ -52,7 +54,7 @@ public class Grapple : MonoBehaviour
 
     private GameObject target;
     private float swingXDirection;
-
+    private Animator animator;
     void Awake()
     {
         resetSwing = true;
@@ -63,6 +65,7 @@ public class Grapple : MonoBehaviour
         hookAnchor = new GameObject().transform;
         grappleAnchor = new GameObject().transform;
         state = GetComponent<ColorState>();
+        animator = GetComponent<Animator>();
     }
     public void Start()
     {
@@ -75,20 +78,22 @@ public class Grapple : MonoBehaviour
     }
     public void LateUpdate()
     {
+        RaycastHit r = new RaycastHit();
         if (!isGrappled && !canGrapple)
         {
-            var t = GrappleTarget.targets.Where(x => (x.neutral == true || (x.PushPull && (state.currentColor == GameColor.Red || state.currentColor == GameColor.Green)) || x.targetColor == state.currentColor)
-                                                && Vector3.Distance(x.transform.position, transform.position) <= hookRange
-                                                && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0
-                                                && OnScreen(x.transform.position))
-                .OrderBy(p => Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f, 0.5f)))
-                .FirstOrDefault();
-
+            // This LINQ query filters for valid targets and then sorts by distance
+            var t = GrappleTarget.targets
+                .Where(x => (x.neutral == true || (x.PushPull && state.canGrappleBox) || x.targetColor == state.currentColor)   // Is it a valid target
+                    && Vector3.Distance(x.transform.position, transform.position) <= hookRange                                  // Is the target in range
+                    && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0   // Is the target in front of the camera (filter out targets behind our view)
+                    && OnScreen(x.transform.position))                                                                          // Is the target in screenspace
+                .OrderBy(p => Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f, 0.5f)))// Now order the targets by how close they are to the center of the screen
+                .FirstOrDefault();                                                                                              // Take the first of these
             // ADD THIS BACK TO ORDER QUERY LATER FOR SMOOTHING OVER DISTANCE
             //Vector3.Distance(p.transform.position,transform.position)+100*V
 
-            RaycastHit r;
-            if (t != null && Physics.Raycast(transform.position, t.transform.position - transform.position, out r, hookRange) && r.transform == t.transform)
+            var dir = (t != null) ? Vector3.Normalize(t.transform.position - transform.position) : Vector3.zero;
+            if (t != null && Physics.Raycast(transform.position + dir, dir, out r, hookRange) && r.transform == t.transform)
             {
                 hit = r;
                 target = t.gameObject;
@@ -96,12 +101,11 @@ public class Grapple : MonoBehaviour
             else
             {
                 target = null;
-                hit = new RaycastHit();
             }
         }
 
-        RaycastHit rh;
-        if (target != null && Physics.Raycast(Camera.main.transform.position, target.transform.position - Camera.main.transform.position, out rh, hookRange) && rh.transform == target.transform)
+        if (target != null && (isGrappled || canGrapple || (target != null && r.transform == target.transform))
+            && Vector3.Dot(target.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0)
         {
             reticle.SetActive(true);
             reticle.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
@@ -109,7 +113,9 @@ public class Grapple : MonoBehaviour
         else
             reticle.SetActive(false);
 
+        UpdateAnimations();
     }
+    
 
     void FixedUpdate()
     {
@@ -132,9 +138,8 @@ public class Grapple : MonoBehaviour
         // Handles when grapple is at the object it collided with and does actions based on color
         if (isGrappled)
         {
-            GameColor color = col.GetComponent<ColorState>().currentColor;
-            swinging = color == GameColor.Red;
-            switch (color)
+            swinging = state.currentColor == GameColor.Red;
+            switch (state.currentColor)
             {
                 case GameColor.Yellow:
                     GrapplePullObject();
@@ -149,19 +154,15 @@ public class Grapple : MonoBehaviour
                     GrappleSwing();
                     break;
             }
-
-            line.SetPosition(0, col.transform.position);
-            line.SetPosition(1, hookAnchor.transform.position);
         }
         // Handles the initial grapple movement towards the object it collided with
         else if (canGrapple)
         {
             grappleAnchor.position = Vector3.MoveTowards(grappleAnchor.position, hookAnchor.position, grappleSpeed);
-            if (grappleAnchor.position == hookAnchor.position)
+            if (grappleAnchor.position == hookAnchor.position) {
                 isGrappled = true;
-
-            line.SetPosition(0, col.transform.position);
-            line.SetPosition(1, grappleAnchor.transform.position);
+                if(state.currentColor == GameColor.Red) animator.SetTrigger("StartGrappleSwing");
+            }
         }
 
         if (InputManager.GetButtonUp(PlayerButton.Grapple))
@@ -179,7 +180,6 @@ public class Grapple : MonoBehaviour
                 rb.velocity *= 1.5f;
             }
         }
-        print(resetSwing);
         // This method is only called once the rope has shortedned to a length where the player does not touch the ground
         if (swinging && !grounded)
         {
@@ -340,6 +340,22 @@ public class Grapple : MonoBehaviour
     public void switchColors(GameColor a, GameColor b )
     {
         disableGrapple();
+    }
+
+    public void UpdateAnimations() {
+        animator.SetBool("GrappleSwing",swinging);
+
+        // Line render in late update makes it smoother
+        if(isGrappled){
+            line.SetPosition(0, handTransform.position);
+            line.SetPosition(1, hookAnchor.transform.position);
+            Debug.Log("setLine");
+        }
+        else if (canGrapple)
+        {
+            line.SetPosition(0, handTransform.position);
+            line.SetPosition(1, grappleAnchor.transform.position);
+        }
     }
 }
 

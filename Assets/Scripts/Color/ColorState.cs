@@ -19,6 +19,15 @@ public class ColorState : MonoBehaviour {
         {GameColor.Yellow, new Color(0.5490196f, 0.5487493f, 0.2588235f)},
     };
 
+    /// <summary>
+    /// Helper property to know if something is a valid color for grappling boxes
+    /// Mostly exists so that this never needs to be changed in multiple spots
+    /// </summary>
+    public bool canGrappleBox {
+        get {
+            return currentColor == GameColor.Yellow || currentColor == GameColor.Green;
+        }
+    }
     public delegate void colorSwapEvent(GameColor prev, GameColor next);
     public event colorSwapEvent onSwap;
     [SerializeField]
