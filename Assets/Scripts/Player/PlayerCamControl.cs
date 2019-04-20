@@ -22,7 +22,9 @@ public class PlayerCamControl : MonoBehaviour
     private float cameraHorizAngle = 0;
     private float cameraVertAngle = 0;
     private IInputPlayer player;
-    public float radius = -2.5f;
+    public float MaxRadius = 2.5f;
+    public float MinRadius = 0.1f;
+    public float radius = 2.5f;
     private float yOffset = 1.0f;
 
     //Camera restraint variables
@@ -37,7 +39,15 @@ public class PlayerCamControl : MonoBehaviour
         cameraHorizAngle = cams[0].transform.rotation.eulerAngles.y;
         cameraVertAngle = 0;
     }
-
+    void Update () {
+        var layerMask = ~(1 << 20 | 1 << 21 | 1 << 22 | 1 << 23);
+        RaycastHit hit;
+        radius = 999;
+        if( Physics.Linecast( transform.position+ Vector3.up*2, getCamPosition(), out hit, layerMask ) )
+            radius = hit.distance - 0.2f;
+        
+        radius = Mathf.Clamp( radius, MinRadius, MaxRadius );
+    }
     void LateUpdate()
     {        
         // Camera Angle Input
@@ -55,9 +65,7 @@ public class PlayerCamControl : MonoBehaviour
         switch (activecam)
         {
             case 0:
-                cams[0].transform.rotation = Quaternion.Euler(0, cameraHorizAngle, 0);
-                cams[0].transform.Rotate(Vector3.right, cameraVertAngle);
-                cams[0].transform.position = transform.position + Vector3.up * 0.4f + cams[0].transform.forward * radius + Vector3.up*yOffset;
+                cams[0].transform.position = getCamPosition ();
                 break;
             case 1:
                 //edit to look down
@@ -65,6 +73,12 @@ public class PlayerCamControl : MonoBehaviour
             case 3:
                 break;
         }
+    }
+
+    public Vector3 getCamPosition () {
+        cams[0].transform.rotation = Quaternion.Euler(0, cameraHorizAngle, 0);
+        cams[0].transform.Rotate(Vector3.right, cameraVertAngle);
+        return transform.position + Vector3.up * 0.4f - cams[0].transform.forward * radius + Vector3.up*yOffset * (radius/MaxRadius);
     }
 
     public void ChangeCamera(int camNumber)
