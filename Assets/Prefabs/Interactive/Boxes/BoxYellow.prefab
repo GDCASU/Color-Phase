@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 114666961828521756}
   - component: {fileID: 114247913461098836}
   - component: {fileID: 114471751130072862}
+  - component: {fileID: 114982543562432136}
   m_Layer: 23
   m_Name: BoxYellow
   m_TagString: Box
@@ -214,6 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorToSet: 3
   updateColor: 0
+  currentcolor: 0
 --- !u!114 &114471751130072862
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -241,3 +243,17 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8388608
   hitbox: {fileID: 1859385495291980}
+--- !u!114 &114982543562432136
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1174187037250612}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e9edae12aeca54f996c03a1dcd5f9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neutral: 0
+  PushPull: 1
+  targetColor: 0
