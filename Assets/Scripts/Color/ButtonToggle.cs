@@ -41,23 +41,17 @@ public class ButtonToggle : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (holdState == false)
+        if (!holdState && (!state || !onOnly) && (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box")))
         {
-            if (!state || onOnly == false)
+            ColorState color = other.GetComponent<ColorState>();
+            if (color.currentColor == colorValue)
             {
-                if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box"))
+                state = !state;
+                GetComponent<MeshRenderer>().material = state ? on : off;
+                if (countdownTime > 0)
                 {
-                    ColorState color = other.GetComponent<ColorState>();
-                    if (color.currentColor == colorValue)
-                    {
-                        state = !state;
-                        GetComponent<MeshRenderer>().material = state ? on : off;
-                        if (countdownTime > 0)
-                        {
-                            audioSource.Stop();
-                            timeCounter = countdownTime;
-                        }
-                    }
+                    audioSource.Stop();
+                    timeCounter = countdownTime;
                 }
             }
         }
@@ -66,27 +60,24 @@ public class ButtonToggle : MonoBehaviour
     // Used for the hold down button trigger collision
     public void OnTriggerStay(Collider other)
     {
-        if (holdState == true)
+        if ((other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box")) && holdState)
         {
-            if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box"))
+            ColorState color = other.GetComponent<ColorState>();
+            if (color.currentColor == colorValue)
             {
-                ColorState color = other.GetComponent<ColorState>();
-                if (color.currentColor == colorValue)
+                // color.transform.Translate(Vector3.down * 0.07f);
+                offset = offset + 0.04f;
+                if (offset > 0.24f)
                 {
-                    // color.transform.Translate(Vector3.down * 0.07f);
-                    offset = offset + 0.04f;
-                    if (offset > 0.24f)
-                    {
-                        offset = 0.24f;
-                    }
-                    onButton = 4;
+                    offset = 0.24f;
                 }
+                onButton = 4;
             }
         }
     }
 
 
-    private void Update()
+    private void LateUpdate()
     {
         if (stateChangeMemory != state)
         {
@@ -94,16 +85,13 @@ public class ButtonToggle : MonoBehaviour
             stateChangeMemory = state;
         }
         // Animate and detect state of the hold down buttons
-        if (holdState == true)
+        if (holdState)
         {
             state = offset > 0.20f;
 
-            if (offset > 0.0f)
+            if ((offset > 0.0f) && onButton == 0)
             {
-                if (onButton == 0)
-                {
-                    offset = offset - 0.01f;
-                }
+                offset = offset - 0.01f;
             }
 
             if (onButton > 0)
@@ -113,9 +101,11 @@ public class ButtonToggle : MonoBehaviour
 
             transform.position = new Vector3(startPosition.x, startPosition.y, startPosition.z);
             transform.Translate(Vector3.back * offset);
-        } else
+        }
+        else
         {
-            if (timeCounter > 0) {
+            if (timeCounter > 0)
+            {
                 timeCounter = timeCounter - Time.deltaTime;
 
                 //audioSource.clip = buttonTimer;
