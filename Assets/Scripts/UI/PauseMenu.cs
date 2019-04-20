@@ -13,34 +13,51 @@ public class PauseMenu : MonoBehaviour
     PlayerCamControl camControl;
     PlayerMovement playerMovement;
     UnityEditor.EditorBuildSettingsScene scene;
-    UnityEditor.EditorBuildSettingsScene[] scenes; 
+    UnityEditor.EditorBuildSettingsScene[] scenes;
+    public List<GameObject> panels;
     public GameObject pauseMenu;
     public GameObject HUD;
     public GameObject selectLevel;
-    public Button ArrowPrefab;
+    public GameObject UIPrefab;
+    public Button leftArrowPrefab;
+    public Button rightArrowPrefab;
     public Button buttonPrefab;
     private Button button;
     private bool isPaused = false;
-    private bool building = true;
-    private int panels;
+    private int numberOfPanels;
+    public int currentPanel;
     int index;
     int numberOfScenes;
 
     private void Start()
     {
+        panels = new List<GameObject>();
+        currentPanel = 0;
         index = 0;
+        numberOfPanels = 0;
         numberOfScenes = UnityEditor.EditorBuildSettings.scenes.Length;
-        print(numberOfScenes);
-        print(numberOfScenes/10);
-        while (panels <(numberOfScenes/10))
-        {
-
-        }
         scenes = UnityEditor.EditorBuildSettings.scenes;
         player = GetComponent<IInputPlayer>();
         playerUI = GetComponent<UI>();
         camControl = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerCamControl>();
         playerMovement = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerMovement>();
+        while (numberOfPanels <= (numberOfScenes/10))
+        {
+            int temp = 0;
+            if((numberOfScenes % 10) ==0)
+            {
+                numberOfPanels++;
+            }
+            while(temp<10 && index<numberOfScenes)
+            {
+                BuildLevelsUI(temp);
+                temp++;
+                index++;
+            }
+            currentPanel++;
+            numberOfPanels++;
+        }
+        currentPanel = 0;
     }
     private void Update()
     {
@@ -50,36 +67,20 @@ public class PauseMenu : MonoBehaviour
             {
                 Pause();
             }
-            else if(selectLevel.active==true)
+            else if(panels[currentPanel].active== true)
             {
-                selectLevel.SetActive(false);
+                panels[currentPanel].SetActive(false);
                 pauseMenu.SetActive(true);
+                currentPanel = 0;
+
             }
             else
             {
                 ResumeGame();
             }
+            EventSystem.current.SetSelectedGameObject(pauseMenu.transform.GetChild(0).gameObject);
         }
 
-    }
-    public void CreateUI()
-    {
-        if (index <  numberOfScenes && building)
-        {
-            if(index<10)
-            {
-                BuildLevelsUI(index);
-            }
-            else if(index>=10)
-            {
-                BuildLevelsUI(index - 10);
-            }
-            index++;
-        }
-        else
-        {
-            building = false;
-        }
     }
     public void Pause()
     {
@@ -113,16 +114,45 @@ public class PauseMenu : MonoBehaviour
     public void LevelSelect()
     {
         pauseMenu.SetActive(false);
+        panels[currentPanel].SetActive(true);
         selectLevel.SetActive(true);
-        EventSystem.current.SetSelectedGameObject( selectLevel.transform.GetChild(0).gameObject );
+        EventSystem.current.SetSelectedGameObject(panels[currentPanel].transform.GetChild(1).gameObject );
     }
     public void BuildLevelsUI(int passed)
     {
         float xPosition = 160;
         float yPosition = -90;
+        float canvasWidth=UIPrefab.GetComponent<RectTransform>().rect.width;
+        float canvasHeight = UIPrefab.GetComponent<RectTransform>().rect.width;
+
+        if (passed == 0)
+        {
+            GameObject panel = Instantiate(selectLevel, Vector2.zero, Quaternion.identity);
+            panel.transform.parent = UIPrefab.transform;
+            panel.GetComponent<RectTransform>().localScale = Vector3.one;
+            panel.GetComponent<RectTransform>().localPosition = new Vector2(0, 0);
+            panel.GetComponent<RectTransform>().localScale = Vector3.one;
+            panel.GetComponent<RectTransform>().sizeDelta = new Vector2(canvasWidth, canvasHeight);
+            panel.SetActive(false);
+            panels.Add(panel);
+            if ((numberOfScenes - index) > 10)
+            {
+                Button temp = Instantiate(rightArrowPrefab, Vector2.zero, Quaternion.identity);
+                temp.transform.parent = panels[currentPanel].transform;
+                temp.GetComponent<RectTransform>().localPosition = new Vector2(360, 0);
+                temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 90);
+            }
+            if (index >=10)
+            {
+                Button temp = Instantiate(leftArrowPrefab, Vector2.zero, Quaternion.identity);
+                temp.transform.parent = panels[currentPanel].transform;
+                temp.GetComponent<RectTransform>().localPosition = new Vector2(-360, 0);
+                temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 90);
+            }
+        }
         scene = scenes[index];
         button = Instantiate(buttonPrefab, Vector2.zero, Quaternion.identity);
-        button.transform.parent = selectLevel.transform;
+        button.transform.parent = panels[currentPanel].transform;
         if (passed < 5)
         {
             button.GetComponent<RectTransform>().localPosition = new Vector2(-xPosition,180 + (yPosition*passed));
@@ -137,18 +167,27 @@ public class PauseMenu : MonoBehaviour
         string name = scene.path.Substring(scene.path.LastIndexOf('/') + 1);
         name = name.Substring(0, name.Length - 6);
         button.GetComponentInChildren<Text>().text = name;
-        if(passed==0 && (numberOfScenes-index)>10)
-        {
-            Button temp = Instantiate(ArrowPrefab, Vector2.zero, Quaternion.identity);
-            temp.transform.parent = selectLevel.transform;
-            temp.GetComponent<RectTransform>().localPosition = new Vector2(360,0);
-            temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 90, 0);
-        }
-        if(index==9)
-        {
-            building = false;
-        }
 
+    }
+    public void nextLevels()
+    {
+        PauseMenu temp = GameObject.Find("PlayerUI").GetComponent<PauseMenu>();
+        print(temp.currentPanel);
+        print(temp.panels.Count);
+        temp.panels[temp.currentPanel].SetActive(false);
+        temp.currentPanel++;
+        temp.panels[temp.currentPanel].SetActive(true);
+        EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
+    }
+    public void previousLevles()
+    {
+        PauseMenu temp = GameObject.Find("PlayerUI").GetComponent<PauseMenu>();
+        print(temp.currentPanel);
+        print(temp.panels.Count);
+        temp.panels[temp.currentPanel].SetActive(false);
+        temp.currentPanel--;
+        temp.panels[temp.currentPanel].SetActive(true);
+        EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
     }
     public void Settings()
     {
@@ -156,6 +195,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void ExitGame()
     {
-
+        SaveGame();
+        Application.Quit();
     }
 }
