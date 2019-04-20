@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class ButtonProperties : MonoBehaviour
 {
-    public Scene scene;
+    public UnityEditor.EditorBuildSettingsScene scene;
     public bool available;
 	// Use this for initialization
     
-    public void SetScene(Scene passed)
+    public void SetScene(UnityEditor.EditorBuildSettingsScene passed)
     {
         scene = passed;
     }
@@ -19,7 +19,7 @@ public class ButtonProperties : MonoBehaviour
     }
     public void SwitchScene()
     {
-        SceneManager.LoadScene(scene.name);
+        SceneManager.LoadScene(scene.path);
     }
 
 }

@@ -12,23 +12,31 @@ public class PauseMenu : MonoBehaviour
     IInputPlayer player;
     PlayerCamControl camControl;
     PlayerMovement playerMovement;
-    public Scene[] scenes; 
+    UnityEditor.EditorBuildSettingsScene scene;
+    UnityEditor.EditorBuildSettingsScene[] scenes; 
     public GameObject pauseMenu;
     public GameObject HUD;
     public GameObject selectLevel;
-    public GameObject ArrowPrefab;
-    private bool isPaused = false;
-    private bool building = false;
-    int index;
+    public Button ArrowPrefab;
     public Button buttonPrefab;
-    Button button;
-    int numerOfScenes;
-    Scene scene;
+    private Button button;
+    private bool isPaused = false;
+    private bool building = true;
+    private int panels;
+    int index;
+    int numberOfScenes;
 
     private void Start()
     {
-        numerOfScenes= SceneManager.sceneCount;
         index = 0;
+        numberOfScenes = UnityEditor.EditorBuildSettings.scenes.Length;
+        print(numberOfScenes);
+        print(numberOfScenes/10);
+        while (panels <(numberOfScenes/10))
+        {
+
+        }
+        scenes = UnityEditor.EditorBuildSettings.scenes;
         player = GetComponent<IInputPlayer>();
         playerUI = GetComponent<UI>();
         camControl = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerCamControl>();
@@ -54,11 +62,18 @@ public class PauseMenu : MonoBehaviour
         }
 
     }
-    public void FixedUpdate()
+    public void CreateUI()
     {
-        if (index < 10 && index <  numerOfScenes && building==true)
+        if (index <  numberOfScenes && building)
         {
-            BuildLevelsUI();
+            if(index<10)
+            {
+                BuildLevelsUI(index);
+            }
+            else if(index>=10)
+            {
+                BuildLevelsUI(index - 10);
+            }
             index++;
         }
         else
@@ -71,16 +86,19 @@ public class PauseMenu : MonoBehaviour
         isPaused = true;
         camControl.enabled = false;
         playerMovement.enabled = false;
+        Time.timeScale = 0;
         playerUI.enabled = false;
         HUD.SetActive(false);
         pauseMenu.SetActive(true);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        
     }
     public void ResumeGame()
     {
         isPaused = false;
         pauseMenu.SetActive(false);
+        Time.timeScale = 1;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         camControl.enabled = true;
@@ -96,28 +114,40 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         selectLevel.SetActive(true);
-        building = true;
-
-        
+        EventSystem.current.SetSelectedGameObject( selectLevel.transform.GetChild(0).gameObject );
     }
-    public void BuildLevelsUI()
+    public void BuildLevelsUI(int passed)
     {
         float xPosition = 160;
         float yPosition = -90;
-        scene = SceneManager.GetSceneAt(index);
+        scene = scenes[index];
         button = Instantiate(buttonPrefab, Vector2.zero, Quaternion.identity);
         button.transform.parent = selectLevel.transform;
-        if (index < 5)
+        if (passed < 5)
         {
-            button.GetComponent<RectTransform>().localPosition = new Vector2(-xPosition,180- (yPosition*index));
+            button.GetComponent<RectTransform>().localPosition = new Vector2(-xPosition,180 + (yPosition*passed));
         }
         else
         {
-            button.GetComponent<RectTransform>().localPosition = new Vector2(xPosition, 180 - (yPosition * index-5));
+            button.GetComponent<RectTransform>().localPosition = new Vector2(xPosition, 180 + (yPosition * (passed-5)));
         }
-        button.GetComponent<RectTransform>().localScale =Vector3.one;
+        button.GetComponent<RectTransform>().localScale =Vector3.one;  
         button.GetComponent<ButtonProperties>().SetScene(scene);
-        button.GetComponentInChildren<Text>().text = scene.name;
+
+        string name = scene.path.Substring(scene.path.LastIndexOf('/') + 1);
+        name = name.Substring(0, name.Length - 6);
+        button.GetComponentInChildren<Text>().text = name;
+        if(passed==0 && (numberOfScenes-index)>10)
+        {
+            Button temp = Instantiate(ArrowPrefab, Vector2.zero, Quaternion.identity);
+            temp.transform.parent = selectLevel.transform;
+            temp.GetComponent<RectTransform>().localPosition = new Vector2(360,0);
+            temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 90, 0);
+        }
+        if(index==9)
+        {
+            building = false;
+        }
 
     }
     public void Settings()

@@ -1587,7 +1587,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1149884122688524}
   HUD: {fileID: 1471410163440238}
-  buttonPrefab: {fileID: 1669109937628884, guid: ecc412b0df1df674abeca052d1e2724f,
+  selectLevel: {fileID: 1246471427548790}
+  ArrowPrefab: {fileID: 0}
+  buttonPrefab: {fileID: 114973216871786812, guid: ecc412b0df1df674abeca052d1e2724f,
     type: 2}
 --- !u!114 &114251365184923260
 MonoBehaviour:
@@ -1645,8 +1647,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalAxis: 4
   m_VerticalAxis: 5
-  m_SubmitButton: 2
-  m_CancelButton: 3
+  m_SubmitButton: 4
+  m_CancelButton: 5
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
