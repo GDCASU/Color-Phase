@@ -150,6 +150,7 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
         {
             setGroundInfo();
+            if(rb.velocity.y <=0) jumpHeld = false;
         }
 
 
