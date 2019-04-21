@@ -45,8 +45,8 @@ public class ScifiDoorwayLarge : MonoBehaviour {
             move = 1.8f;
         }
 
-        doorLeft.transform.localPosition = doorPos + new Vector3(move, 0, 0) - transform.localPosition;
-        doorRight.transform.localPosition = doorPos + new Vector3(-move, 0, 0) - transform.localPosition;
+        doorLeft.transform.localPosition = doorPos + new Vector3(move, 0, 0);
+        doorRight.transform.localPosition = doorPos + new Vector3(-move, 0, 0);
         
     }
 
