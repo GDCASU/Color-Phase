@@ -26,6 +26,10 @@ public class PlayerCamControl : MonoBehaviour
     public float MinRadius = 0.1f;
     public float radius = 2.5f;
     private float yOffset = 1.0f;
+    private Vector3 hitNormal;
+    private Vector3 nextHitNormal;
+    private Vector3 lastHitNormal;
+    private float ticker=0;
 
     //Camera restraint variables
     [SerializeField] private float minVertAngle = -20f;
@@ -44,10 +48,25 @@ public class PlayerCamControl : MonoBehaviour
         var layerMask = ~(1 << 20 | 1 << 21 | 1 << 22 | 1 << 23 | 1 << 25 | 1 << 26 | 1 << 27 | 1 << 28);
         RaycastHit hit;
         radius = 999;
-        if( Physics.Linecast( transform.position+ Vector3.up*2, getCamPosition(), out hit, layerMask, QueryTriggerInteraction.Ignore ) )
+        if( Physics.Linecast( transform.position+ Vector3.up*2, getCamPosition(), out hit, layerMask, QueryTriggerInteraction.Ignore ) ) {
             radius = hit.distance - 0.2f;
-        
+            if(nextHitNormal != hit.normal) {
+                lastHitNormal = hitNormal;
+                ticker = 0;
+            }
+            nextHitNormal = hit.normal;
+        }
+        else {
+            nextHitNormal = Vector3.zero;
+            ticker = 0;
+        }
+
+        hitNormal = Vector3.Lerp(lastHitNormal,nextHitNormal,ticker);
+        ticker += 0.1f;
+        ticker = Mathf.Clamp( ticker, 0, 1);
         radius = Mathf.Clamp( radius, MinRadius, MaxRadius );
+
+        Debug.Log(ticker);
     }
     void LateUpdate()
     {        
@@ -79,7 +98,7 @@ public class PlayerCamControl : MonoBehaviour
     public Vector3 getCamPosition () {
         cams[0].transform.rotation = Quaternion.Euler(0, cameraHorizAngle, 0);
         cams[0].transform.Rotate(Vector3.right, cameraVertAngle);
-        return transform.position + Vector3.up * 0.4f - cams[0].transform.forward * radius + Vector3.up*yOffset * (radius/MaxRadius);
+        return transform.position + Vector3.up * 0.4f - cams[0].transform.forward * radius + Vector3.up*yOffset * (radius/MaxRadius) + hitNormal*0.15f;
     }
 
     public void ChangeCamera(int camNumber)
