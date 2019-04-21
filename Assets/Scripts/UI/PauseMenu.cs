@@ -17,6 +17,7 @@ public class PauseMenu : MonoBehaviour
     public List<GameObject> panels;
     public GameObject pauseMenu;
     public GameObject HUD;
+    public GameObject settings;
     public GameObject selectLevel;
     public GameObject UIPrefab;
     public Button leftArrowPrefab;
@@ -31,6 +32,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
+        settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<AudioSource>().volume;
         panels = new List<GameObject>();
         currentPanel = 0;
         index = 0;
@@ -109,7 +111,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void MainMenu()
     {
-        SceneManager.LoadScene("TitleScreen");
+        SceneManager.LoadScene("Title");
     }
     public void LevelSelect()
     {
@@ -117,6 +119,16 @@ public class PauseMenu : MonoBehaviour
         panels[currentPanel].SetActive(true);
         selectLevel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(panels[currentPanel].transform.GetChild(1).gameObject );
+    }
+    public void Settings()
+    {
+        pauseMenu.SetActive(false);
+        settings.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(settings.transform.GetChild(0).gameObject);
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
     }
     public void BuildLevelsUI(int passed)
     {
@@ -189,12 +201,12 @@ public class PauseMenu : MonoBehaviour
         temp.panels[temp.currentPanel].SetActive(true);
         EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
     }
-    public void Settings()
+    public void SetVolume(float passed)
+    {
+        GameObject.Find("Managers").GetComponent<AudioSource>().volume = passed;
+    }
+    public void RemapControl()
     {
 
-    }
-    public void ExitGame()
-    {
-        Application.Quit();
     }
 }
