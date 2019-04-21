@@ -53,6 +53,7 @@ namespace PlayerInput
         Grapple,
         UI_Submit,     // UI Button
         UI_Cancel,     // UI Button
+        Pause,
         None,
     };
 }
