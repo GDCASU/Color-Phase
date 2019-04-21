@@ -40,10 +40,11 @@ public class PlayerCamControl : MonoBehaviour
         cameraVertAngle = 0;
     }
     void Update () {
-        var layerMask = ~(1 << 20 | 1 << 21 | 1 << 22 | 1 << 23);
+        // layer mask for color and color ignore laeyrs (interact and barrier)
+        var layerMask = ~(1 << 20 | 1 << 21 | 1 << 22 | 1 << 23 | 1 << 25 | 1 << 26 | 1 << 27 | 1 << 28);
         RaycastHit hit;
         radius = 999;
-        if( Physics.Linecast( transform.position+ Vector3.up*2, getCamPosition(), out hit, layerMask ) )
+        if( Physics.Linecast( transform.position+ Vector3.up*2, getCamPosition(), out hit, layerMask, QueryTriggerInteraction.Ignore ) )
             radius = hit.distance - 0.2f;
         
         radius = Mathf.Clamp( radius, MinRadius, MaxRadius );
