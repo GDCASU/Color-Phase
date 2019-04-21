@@ -110,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
             if(rb.velocity.y <= 0) {
                 resetJumpInfo();
                 // Update the last on ledge position of the player
-                if(collision.transform.GetComponent<Platform>()==null) ledgeMemory = transform.position;
+                if(collision.transform.GetComponent<Platform>()==null && collision.transform.tag != "NoRespawn") ledgeMemory = transform.position;
             }
         }
         if(stuck) checkDetatch(collision);

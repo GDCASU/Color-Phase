@@ -20,7 +20,7 @@ public class ScifiDoorwayLarge : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        doorPos = doorLeft.transform.position;
+        doorPos = doorLeft.transform.localPosition;
         move = 0f;
     }
 

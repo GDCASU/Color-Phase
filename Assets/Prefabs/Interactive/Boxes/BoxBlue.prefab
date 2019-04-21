@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 114655971914613008}
   - component: {fileID: 114732943928377208}
   - component: {fileID: 114385297027795326}
+  - component: {fileID: 114489127250608696}
   m_Layer: 22
   m_Name: BoxBlue
   m_TagString: Box
@@ -212,6 +213,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eeaea7693a9433459710d83358fe392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114489127250608696
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1807572264183202}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e9edae12aeca54f996c03a1dcd5f9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neutral: 0
+  PushPull: 1
+  targetColor: 0
 --- !u!114 &114655971914613008
 MonoBehaviour:
   m_ObjectHideFlags: 1
