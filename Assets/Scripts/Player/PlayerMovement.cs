@@ -100,6 +100,8 @@ public class PlayerMovement : MonoBehaviour
             resetJumpInfo();
         }
         if (!Box.Holding) Stick(collision);
+
+        if(Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0.9f) jumpHeld = false;
     }
 
     void OnCollisionStay(Collision collision)

@@ -93,13 +93,14 @@ public class Grapple : MonoBehaviour
             //Vector3.Distance(p.transform.position,transform.position)+100*V
 
             var dir = (t != null) ? Vector3.Normalize(t.transform.position - transform.position) : Vector3.zero;
-            if (t != null && Physics.Raycast(transform.position + dir, dir, out r, hookRange) && r.transform == t.transform)
+            if (t != null && Physics.Raycast(transform.position + dir/5+Vector3.up/2, dir, out r, hookRange) && r.transform == t.transform)
             {
                 hit = r;
                 target = t.gameObject;
             }
             else
             {
+                if(r.transform != null) Debug.Log(r.transform.name);
                 target = null;
             }
         }
