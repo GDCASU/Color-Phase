@@ -113,7 +113,7 @@ public class Grapple : MonoBehaviour
                 target = null;
         }
         else {
-            if(state.canGrappleBox) {
+            if(state.canGrappleBox || (canGrapple && !isGrappled)) {
                 var a = (canGrapple && !isGrappled) ? grappleAnchor : hit.transform;
                 var f = a.position; f.y = transform.position.y;
                 transform.LookAt(f);
@@ -185,6 +185,7 @@ public class Grapple : MonoBehaviour
             if (grappleAnchor.position == hookAnchor.position) {
                 isGrappled = true;
                 if(state.currentColor == GameColor.Red) animator.SetTrigger("StartGrappleSwing");
+                if(state.currentColor == GameColor.Blue) animator.SetTrigger("StartGrappleHook");
             }
         }
 
@@ -365,7 +366,9 @@ public class Grapple : MonoBehaviour
 
     public void UpdateAnimations() {
         animator.SetBool("GrappleSwing",swinging);
-        if(swinging){
+        animator.SetBool("GrappleHook",isGrappled && state.currentColor == GameColor.Blue);
+
+        if(swinging || (isGrappled && state.currentColor == GameColor.Blue)){
             // Force direction
             transform.LookAt(target.transform);
             transform.Rotate(new Vector3 (1, 0, 0), 45,Space.Self);

@@ -51,7 +51,8 @@
             {
                 // sample the texture
                 //float4 col = _Color + float4(1,1,1,1)*cos(_Time*5) * 0.1;
-                float4 col = _Color + float4(1,1,1,1)*cos(i.uv.x*10+_Time*6) * 0.1;
+                float4 col = _Color + float4(0.4,0.4,0.4,-2)*cos(i.uv.x*10+_Time*6) * 0.1;
+                col.a -= 0.2;
                 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
