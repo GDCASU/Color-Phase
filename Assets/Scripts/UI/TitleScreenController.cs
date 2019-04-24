@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using System.Linq;
 public class TitleScreenController : MonoBehaviour
 {
     IInputPlayer player;
@@ -39,10 +39,10 @@ public class TitleScreenController : MonoBehaviour
         keyboardCodes = new List<string>();
         xboxCodes = new List<string>();
         currentPanel = 0;
-        index = 0;
+        index = 1;
         numberOfPanels = 0;
-        numberOfScenes = UnityEditor.EditorBuildSettings.scenes.Length;
-        scenes = UnityEditor.EditorBuildSettings.scenes;
+        scenes = UnityEditor.EditorBuildSettings.scenes.Where(s => s.enabled).ToArray();
+        numberOfScenes = scenes.Length;
         player = GetComponent<IInputPlayer>();
         keyboardCodes.Add("W");
         keyboardCodes.Add("S");
@@ -74,21 +74,22 @@ public class TitleScreenController : MonoBehaviour
     public void StartGame ()
     {
         var latest = GameManager.latestUnlocked;
-        SceneManager.LoadScene( (latest >= GameManager.totalLevels || latest < 1) ? 1 : GameManager.latestUnlocked);
+        //SceneManager.LoadScene( (latest >= GameManager.totalLevels || latest < 1) ? 1 : GameManager.latestUnlocked);
+        SceneManager.LoadScene( 1 ); // START ON THE FIRST LEVEL FOR DEMO BUILD
     }
 
     private void Update()
     {
         if (InputManager.GetButtonDown(PlayerInput.PlayerButton.Pause, player))
         {
-            if (panels[currentPanel].active == true)
+            if (panels[currentPanel].activeInHierarchy)
             {
                 panels[currentPanel].SetActive(false);
                 main.SetActive(true);
                 currentPanel = 0;
 
             }
-            else if (settings.active == true)
+            else if (settings.activeInHierarchy)
             {
                 settings.SetActive(false);
                 main.SetActive(true);

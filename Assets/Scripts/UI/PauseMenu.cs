@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using System;
+using System.Linq;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
@@ -41,10 +42,10 @@ public class PauseMenu : MonoBehaviour
         keyboardCodes = new List<string>();
         xboxCodes = new List<string>();
         currentPanel = 0;
-        index = 0;
+        index = 1;
         numberOfPanels = 0;
-        numberOfScenes = UnityEditor.EditorBuildSettings.scenes.Length;
-        scenes = UnityEditor.EditorBuildSettings.scenes;
+        scenes = UnityEditor.EditorBuildSettings.scenes.Where(s => s.enabled).ToArray();
+        numberOfScenes = scenes.Length;
         player = GetComponent<IInputPlayer>();
         playerUI = GetComponent<UI>();
         camControl = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerCamControl>();
@@ -80,18 +81,18 @@ public class PauseMenu : MonoBehaviour
     {
         if (InputManager.GetButtonDown(PlayerInput.PlayerButton.Pause, player))
         {
-            if (!isPaused && pauseMenu.active==false)
+            if (!isPaused && !pauseMenu.activeInHierarchy)
             {
                 Pause();
             }
-            else if(panels[currentPanel].active== true)
+            else if(panels[currentPanel].activeInHierarchy)
             {
                 panels[currentPanel].SetActive(false);
                 pauseMenu.SetActive(true);
                 currentPanel = 0;
 
             }
-            else if(settings.active==true)
+            else if(settings.activeInHierarchy)
             {
                 settings.SetActive(false);
                 pauseMenu.SetActive(true);
