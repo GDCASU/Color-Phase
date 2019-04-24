@@ -180,14 +180,8 @@ public class Grapple : MonoBehaviour
                 resetSwing = true;
                 rb.velocity *= 1.5f;
             }
-            if(!GetComponentInParent<PlayerMovement>().enabled)
-            {
-                GetComponentInParent<PlayerMovement>().enabled = true;
-            }
-            if(!rb.useGravity)
-            {
+                GetComponent<PlayerMovement>().enabled = true;
                 rb.useGravity = true;
-            }
         }
         // This method is only called once the rope has shortedned to a length where the player does not touch the ground
         if (swinging && !grounded)
@@ -289,7 +283,7 @@ public class Grapple : MonoBehaviour
     // Pull the player towards the object the grapple collided with
     private void GrapplePullPlayer()
     {
-        GetComponentInParent<PlayerMovement>().enabled = false;
+        GetComponent<PlayerMovement>().enabled = false;
         rb.useGravity = false;
         transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
 

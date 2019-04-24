@@ -22,7 +22,7 @@ public class KeyboardRemap : MonoBehaviour
             {
                 foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode)))
                 {
-                    if (Input.GetKey(vKey))
+                    if (Input.GetKeyDown(vKey))
                     {
                         SetButton(vKey);
                         remaping = false;
@@ -72,12 +72,16 @@ public class KeyboardRemap : MonoBehaviour
             temp = GameObject.Find("TitleUI").GetComponentInChildren<TitleScreenController>().keyboardCodes;
             player = GameObject.Find("Player Character").GetComponent<IInputPlayer>();
         }
-        for(int x=0;x<temp.Count;x++)
+        foreach (string key in temp)
         {
-            if (passed.ToString() == temp[x])
+            if (passed.ToString() == key)
             {
                 return;
             }
+        }
+        for (int x=0;x<temp.Count;x++)
+        {
+            
         }
         GameObject.Find("Managers").GetComponent<InputManager>().RemapKeyboardButton(action,passed,player);
         temp.Remove(keyName);
