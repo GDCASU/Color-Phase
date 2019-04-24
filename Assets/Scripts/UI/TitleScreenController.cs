@@ -2,32 +2,201 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class TitleScreenController : MonoBehaviour {
+public class TitleScreenController : MonoBehaviour
+{
+    IInputPlayer player;
+    UnityEditor.EditorBuildSettingsScene scene;
+    UnityEditor.EditorBuildSettingsScene[] scenes;
+    public List<GameObject> panels;
+    public List<string> keyboardCodes;
+    public List<string> xboxCodes;
+    public GameObject main;
+    public GameObject settings;
+    public GameObject selectLevel;
+    public Button leftArrowPrefab;
+    public Button rightArrowPrefab;
+    public Button buttonPrefab;
+    private Button button;
+    public Button xboxPrefab;
+    public Button keyboardPrefab;
+    private int numberOfPanels;
+    public int currentPanel;
+    int index;
+    int numberOfScenes;
+    public static GameObject titleScreenCanvas;
 
-	public static GameObject titleScreenCanvas;
-
-    public void Awake() {
+    public void Awake()
+    {
         titleScreenCanvas = this.gameObject;
     }
+    private void Start()
+    {
+        settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<AudioSource>().volume;
+        panels = new List<GameObject>();
+        keyboardCodes = new List<string>();
+        xboxCodes = new List<string>();
+        currentPanel = 0;
+        index = 0;
+        numberOfPanels = 0;
+        numberOfScenes = UnityEditor.EditorBuildSettings.scenes.Length;
+        scenes = UnityEditor.EditorBuildSettings.scenes;
+        player = GetComponent<IInputPlayer>();
+        keyboardCodes.Add("W");
+        keyboardCodes.Add("S");
+        keyboardCodes.Add("D");
+        keyboardCodes.Add("A ");
+        while (numberOfPanels <= (numberOfScenes / 10))
+        {
+            int temp = 0;
+            if ((numberOfScenes % 10) == 0)
+            {
+                numberOfPanels++;
+            }
+            while (temp < 10 && index < numberOfScenes)
+            {
+                BuildLevelsUI(temp);
+                temp++;
+                index++;
+            }
+            currentPanel++;
+            numberOfPanels++;
+        }
+        for (int x = 0; x < 4; x++)
+        {
+            BuildSettingsUI(x);
+        }
+        currentPanel = 0;
+    }
 
-    public void StartGame () {
+    public void StartGame ()
+    {
         var latest = GameManager.latestUnlocked;
         SceneManager.LoadScene( (latest >= GameManager.totalLevels || latest < 1) ? 1 : GameManager.latestUnlocked);
     }
 
-    public void LevelSelect () {
-        var latest = GameManager.latestUnlocked;
-        // let the player scrole between scenes between 1 and latest or total
+    private void Update()
+    {
+        if (InputManager.GetButtonDown(PlayerInput.PlayerButton.Pause, player))
+        {
+            if (panels[currentPanel].active == true)
+            {
+                panels[currentPanel].SetActive(false);
+                main.SetActive(true);
+                currentPanel = 0;
+
+            }
+            else if (settings.active == true)
+            {
+                settings.SetActive(false);
+                main.SetActive(true);
+            }
+            EventSystem.current.SetSelectedGameObject(main.transform.GetChild(0).gameObject);
+        }
     }
 
-    public void Settings () {
-
+    public void LevelSelect ()
+    {
+        //var latest = GameManager.latestUnlocked;
+        main.SetActive(false);
+        panels[currentPanel].SetActive(true);
+        selectLevel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(panels[currentPanel].transform.GetChild(1).gameObject);
     }
 
-    public void ExitGame () {
+    public void Settings ()
+    {
+        main.SetActive(false);
+        settings.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(settings.transform.GetChild(0).gameObject);
+    }
+
+    public void ExitGame ()
+    {
         // any extra logic can go here
         // a fade would be nice
         Application.Quit();
+    }
+    public void SetVolume(float passed)
+    {
+        GameObject.Find("Managers").GetComponent<AudioSource>().volume = passed;
+    }
+    public void BuildLevelsUI(int passed)
+    {
+        float xPosition = 160;
+        float yPosition = -90;
+        float canvasWidth = titleScreenCanvas.GetComponent<RectTransform>().rect.width;
+        float canvasHeight = titleScreenCanvas.GetComponent<RectTransform>().rect.width;
+
+        if (passed == 0)
+        {
+            GameObject panel = Instantiate(selectLevel, Vector2.zero, Quaternion.identity);
+            panel.transform.parent = titleScreenCanvas.transform;
+            panel.GetComponent<RectTransform>().localScale = Vector3.one;
+            panel.GetComponent<RectTransform>().localPosition = new Vector2(0, 0);
+            panel.GetComponent<RectTransform>().localScale = Vector3.one;
+            panel.GetComponent<RectTransform>().sizeDelta = new Vector2(canvasWidth, canvasHeight);
+            panel.SetActive(false);
+            panels.Add(panel);
+            if ((numberOfScenes - index) > 10)
+            {
+                Button temp = Instantiate(rightArrowPrefab, Vector2.zero, Quaternion.identity);
+                temp.transform.parent = panels[currentPanel].transform;
+                temp.GetComponent<RectTransform>().localPosition = new Vector2(360, 0);
+                temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 180);
+            }
+            if (index >= 10)
+            {
+                Button temp = Instantiate(leftArrowPrefab, Vector2.zero, Quaternion.identity);
+                temp.transform.parent = panels[currentPanel].transform;
+                temp.GetComponent<RectTransform>().localPosition = new Vector2(-360, 0);
+                temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 0);
+            }
+        }
+        scene = scenes[index];
+        button = Instantiate(buttonPrefab, Vector2.zero, Quaternion.identity);
+        button.transform.parent = panels[currentPanel].transform;
+        if (passed < 5)
+        {
+            button.GetComponent<RectTransform>().localPosition = new Vector2(-xPosition, 180 + (yPosition * passed));
+        }
+        else
+        {
+            button.GetComponent<RectTransform>().localPosition = new Vector2(xPosition, 180 + (yPosition * (passed - 5)));
+        }
+        button.GetComponent<RectTransform>().localScale = Vector3.one;
+        button.GetComponent<ButtonProperties>().SetScene(scene);
+
+        string name = scene.path.Substring(scene.path.LastIndexOf('/') + 1);
+        name = name.Substring(0, name.Length - 6);
+        button.GetComponentInChildren<Text>().text = name;
+
+    }
+    public void BuildSettingsUI(int passed)
+    {
+        float yPosition = -90;
+
+        Button keyboard = Instantiate(keyboardPrefab, Vector2.zero, Quaternion.identity);
+        keyboard.transform.parent = settings.transform;
+        keyboard.GetComponent<RectTransform>().localPosition = new Vector2(0, 90 + (yPosition * passed));
+        keyboard.GetComponent<RectTransform>().localScale = Vector3.one;
+        keyboard.GetComponent<KeyboardRemap>().InitiateButton(passed);
+        string key = keyboard.GetComponent<KeyboardRemap>().keyName;
+        keyboard.GetComponentInChildren<Text>().text = key;
+        keyboardCodes.Add(key);
+
+
+        Button xbox = Instantiate(xboxPrefab, Vector2.zero, Quaternion.identity);
+        xbox.transform.parent = settings.transform;
+        xbox.GetComponent<RectTransform>().localPosition = new Vector2(275, 90 + (yPosition * passed));
+        xbox.GetComponent<RectTransform>().localScale = Vector3.one;
+        xbox.GetComponent<XboxRemap>().InitiateButton(passed);
+        xbox.interactable = false;
+        string xb = xbox.GetComponent<XboxRemap>().keyName;
+        xbox.GetComponentInChildren<Text>().text = xb;
+        xboxCodes.Add(xb);
+
     }
 }

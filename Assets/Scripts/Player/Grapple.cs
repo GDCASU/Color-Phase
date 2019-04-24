@@ -81,6 +81,7 @@ public class Grapple : MonoBehaviour
         RaycastHit r = new RaycastHit();
         if (!isGrappled && !canGrapple)
         {
+
             // This LINQ query filters for valid targets and then sorts by distance
             var t = GrappleTarget.targets
                 .Where(x => (x.neutral == true || (x.PushPull && state.canGrappleBox) || x.targetColor == state.currentColor)   // Is it a valid target
@@ -180,6 +181,8 @@ public class Grapple : MonoBehaviour
                 resetSwing = true;
                 rb.velocity *= 1.5f;
             }
+                GetComponent<PlayerMovement>().enabled = true;
+                rb.useGravity = true;
         }
         // This method is only called once the rope has shortedned to a length where the player does not touch the ground
         if (swinging && !grounded)
@@ -281,7 +284,8 @@ public class Grapple : MonoBehaviour
     // Pull the player towards the object the grapple collided with
     private void GrapplePullPlayer()
     {
-
+        GetComponent<PlayerMovement>().enabled = false;
+        rb.useGravity = false;
         transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
 
         if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
