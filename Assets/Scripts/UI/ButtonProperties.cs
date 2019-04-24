@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 public class ButtonProperties : MonoBehaviour
 {
     
-    public UnityEditor.EditorBuildSettingsScene scene;
+    public string scene;
     public bool available;
     // Use this for initialization
-    public void SetScene(UnityEditor.EditorBuildSettingsScene passed)
+    public void SetScene(string passed)
     {
         scene = passed;
     }
@@ -19,7 +19,7 @@ public class ButtonProperties : MonoBehaviour
     }
     public void SwitchScene()
     {
-        SceneManager.LoadScene(scene.path);
+        SceneManager.LoadScene(scene);
     }
 
 

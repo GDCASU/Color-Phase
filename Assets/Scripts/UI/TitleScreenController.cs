@@ -8,8 +8,8 @@ using System.Linq;
 public class TitleScreenController : MonoBehaviour
 {
     IInputPlayer player;
-    UnityEditor.EditorBuildSettingsScene scene;
-    UnityEditor.EditorBuildSettingsScene[] scenes;
+    string scene;
+    string[] scenes;
     public List<GameObject> panels;
     public List<string> keyboardCodes;
     public List<string> xboxCodes;
@@ -41,8 +41,9 @@ public class TitleScreenController : MonoBehaviour
         currentPanel = 0;
         index = 1;
         numberOfPanels = 0;
-        scenes = UnityEditor.EditorBuildSettings.scenes.Where(s => s.enabled).ToArray();
-        numberOfScenes = scenes.Length;
+        numberOfScenes = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
+        scenes = new string[numberOfScenes];
+        for(int i = 0; i < numberOfScenes; i++) scenes[i]=UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i);
         player = GetComponent<IInputPlayer>();
         keyboardCodes.Add("W");
         keyboardCodes.Add("S");
@@ -170,7 +171,7 @@ public class TitleScreenController : MonoBehaviour
         button.GetComponent<RectTransform>().localScale = Vector3.one;
         button.GetComponent<ButtonProperties>().SetScene(scene);
 
-        string name = scene.path.Substring(scene.path.LastIndexOf('/') + 1);
+        string name = scene.Substring(scene.LastIndexOf('/') + 1);
         name = name.Substring(0, name.Length - 6);
         button.GetComponentInChildren<Text>().text = name;
 

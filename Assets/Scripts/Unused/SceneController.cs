@@ -46,9 +46,9 @@ public class SceneController : MonoBehaviour
 	{
 		print("~~Scene count: " + SceneManager.sceneCount);
 		print("~~Scene count in build settings: " + SceneManager.sceneCountInBuildSettings);
-		foreach (var scene in EditorBuildSettings.scenes)
-		{
-			print("~~Scene path: " + scene.path);
-		}
+		//foreach (var scene in EditorBuildSettings.scenes)
+		//{
+		//	print("~~Scene path: " + scene.path);
+		//}
 	}
 }
