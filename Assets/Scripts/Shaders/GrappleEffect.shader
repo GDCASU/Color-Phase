@@ -42,7 +42,7 @@
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv = v.uv;
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
@@ -50,7 +50,9 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                float4 col = _Color + cos(_Time) * 0.05;
+                //float4 col = _Color + float4(1,1,1,1)*cos(_Time*5) * 0.1;
+                float4 col = _Color + float4(1,1,1,1)*cos(i.uv.x*10+_Time*6) * 0.1;
+                
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;

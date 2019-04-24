@@ -55,17 +55,27 @@ public class Grapple : MonoBehaviour
     private GameObject target;
     private float swingXDirection;
     private Animator animator;
+    private PlayerArmController arms;
     void Awake()
     {
         resetSwing = true;
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
-        line = gameObject.AddComponent<LineRenderer>();
-        line.enabled = false;
         hookAnchor = new GameObject().transform;
         grappleAnchor = new GameObject().transform;
         state = GetComponent<ColorState>();
         animator = GetComponent<Animator>();
+        arms = GetComponent<PlayerArmController>();
+
+        // set up grapple hook line and effect
+        line = gameObject.AddComponent<LineRenderer>();
+        line.enabled = false;
+        line.materials[0].shader = Shader.Find("Unlit/GrappleEffect");
+        line.materials[0].SetColor("_Color",ColorState.RGBColors[state.currentColor]);
+        line.startWidth = 0.1f;
+        line.endWidth = 0.15f;
+
+        state.onSwap += (GameColor a, GameColor b) => line.materials[0].SetColor("_Color",ColorState.RGBColors[b]);;
     }
     public void Start()
     {
@@ -99,10 +109,21 @@ public class Grapple : MonoBehaviour
                 hit = r;
                 target = t.gameObject;
             }
-            else
-            {
-                if(r.transform != null) Debug.Log(r.transform.name);
+            else 
                 target = null;
+        }
+        else {
+            if(state.canGrappleBox) {
+                var a = (canGrapple && !isGrappled) ? grappleAnchor : hit.transform;
+                var f = a.position; f.y = transform.position.y;
+                transform.LookAt(f);
+                var hand = PlayerArmController.singleton.rHand.transform;
+                hand.parent.parent.localPosition = new Vector3(-1.83f, 0.25f, 0.13f);
+                hand.parent.parent.localRotation = Quaternion.Euler(137.291f, -37.63199f, 43.62099f);
+                hand.parent.localRotation = Quaternion.Euler(19.962f, 28.783f, 31.961f);
+                Vector3 grappleDir = (a.position - hand.parent.parent.position).normalized;
+                hand.parent.position = hand.parent.parent.position + grappleDir * 0.3f; 
+                hand.position = hand.parent.parent.position + grappleDir* 0.5f;
             }
         }
 
@@ -112,9 +133,9 @@ public class Grapple : MonoBehaviour
             reticle.SetActive(true);
             reticle.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
         }
-        else
+        else {
             reticle.SetActive(false);
-
+        }
         UpdateAnimations();
     }
     
@@ -349,7 +370,6 @@ public class Grapple : MonoBehaviour
         if(isGrappled){
             line.SetPosition(0, handTransform.position);
             line.SetPosition(1, hookAnchor.transform.position);
-            Debug.Log("setLine");
         }
         else if (canGrapple)
         {
