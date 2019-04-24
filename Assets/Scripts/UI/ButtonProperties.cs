@@ -8,9 +8,11 @@ public class ButtonProperties : MonoBehaviour
     
     public string scene;
     public bool available;
+    private PauseMenu pauseManager;
     // Use this for initialization
-    public void SetScene(string passed)
+    public void SetScene(string passed, PauseMenu pause = null)
     {
+        pauseManager = pause;
         scene = passed;
     }
     public void MakeAvailable()
@@ -19,6 +21,7 @@ public class ButtonProperties : MonoBehaviour
     }
     public void SwitchScene()
     {
+        if(pauseManager != null) pauseManager.ResumeGame();
         SceneManager.LoadScene(scene);
     }
 

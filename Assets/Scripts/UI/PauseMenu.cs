@@ -196,7 +196,7 @@ public class PauseMenu : MonoBehaviour
             button.GetComponent<RectTransform>().localPosition = new Vector2(xPosition, 180 + (yPosition * (passed-5)));
         }
         button.GetComponent<RectTransform>().localScale =Vector3.one;  
-        button.GetComponent<ButtonProperties>().SetScene(scene);
+        button.GetComponent<ButtonProperties>().SetScene(scene, this);
 
         string name = scene.Substring(scene.LastIndexOf('/') + 1);
         name = name.Substring(0, name.Length - 6);
