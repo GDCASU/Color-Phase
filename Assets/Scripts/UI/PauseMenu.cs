@@ -37,7 +37,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<AudioSource>().volume;
+        settings.GetComponentInChildren<Slider>().value = GameObject.Find("Audio Source").GetComponent<AudioSource>().volume;
         panels = new List<GameObject>();
         keyboardCodes = new List<string>();
         xboxCodes = new List<string>();
@@ -49,8 +49,9 @@ public class PauseMenu : MonoBehaviour
         for(int i = 0; i < numberOfScenes; i++) scenes[i]=UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i);
         player = GetComponent<IInputPlayer>();
         playerUI = GetComponent<UI>();
-        camControl = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerCamControl>();
-        playerMovement = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerMovement>();
+        Debug.Log(PlayerColorController.singleton);
+        camControl = PlayerColorController.singleton.GetComponent<PlayerCamControl>();
+        playerMovement = PlayerColorController.singleton.GetComponent<PlayerMovement>();
         keyboardCodes.Add("W");
         keyboardCodes.Add("S");
         keyboardCodes.Add("D");
@@ -243,7 +244,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void SetVolume(float passed)
     {
-        GameObject.Find("Managers").GetComponent<AudioSource>().volume = passed;
+        GameObject.Find("Audio Source").GetComponent<AudioSource>().volume = passed;
     }
     public void BuildSettingsUI(int passed)
     {

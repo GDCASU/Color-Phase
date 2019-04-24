@@ -41,7 +41,11 @@ public class InputPlayer : MonoBehaviour, IInputPlayer
     [SerializeField]
     private int playerIndex;
 
+    public void Start () {
+        if(InputManager.ControllersConnected > 0) inputMethod = InputManager.InputMethod.XboxController;
+    }
 
+/*
     void Update ()
     {
         // If getting specific player input (in this case, this player)
@@ -52,5 +56,5 @@ public class InputPlayer : MonoBehaviour, IInputPlayer
         if ((f = InputManager.GetAxis(PlayerAxis.CameraHorizontal, this)) != 0) Debug.InputLog("Player " + (PlayerIndex + 1) + " - Camera Horizontal: " + f);
         if ((f = InputManager.GetAxis(PlayerAxis.CameraVertical, this)) != 0) Debug.InputLog("Player " + (PlayerIndex + 1) + " - Camera Vertical: " + f);
         if (InputManager.GetButton(PlayerButton.Jump, this)) Debug.InputLog("Player " + (PlayerIndex + 1) + " - Jump");
-    }
+    } */
 }

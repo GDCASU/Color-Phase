@@ -155,6 +155,7 @@ public class InputManager : MonoBehaviour
 
         // By default, always add a keyboard player
         AddPlayer(InputMethod.Keyboard);
+        if(ControllersConnected > 0) Players[0].GetComponent<IInputPlayer>().InputMethod = InputMethod.XboxController;
 
         Debug.InputLog("InputManager Awake");
     }
@@ -500,7 +501,7 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="button"></param>
     /// <param name="player"></param>
-    public  void RemapXboxButton(PlayerButton button, XboxController.XboxButton xButton, IInputPlayer player)
+    public static void RemapXboxButton(PlayerButton button, XboxController.XboxButton xButton, IInputPlayer player)
     {
         string buttonKey = button.ToString();
         // !!!NOTE!!! - Currently remapping xbox axis is not supported

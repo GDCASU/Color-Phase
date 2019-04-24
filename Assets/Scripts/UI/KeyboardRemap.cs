@@ -64,13 +64,13 @@ public class KeyboardRemap : MonoBehaviour
         if (GameObject.Find("PlayerDefault"))
         {
             temp = GameObject.Find("PlayerDefault").GetComponentInChildren<PauseMenu>().keyboardCodes;
-            player = GameObject.Find("PlayerDefault").GetComponent<IInputPlayer>();
+            player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
 
         }
         else
         {
             temp = GameObject.Find("TitleUI").GetComponentInChildren<TitleScreenController>().keyboardCodes;
-            player = GameObject.Find("Player Character").GetComponent<IInputPlayer>();
+            player = GameObject.Find("Player Character").GetComponentInChildren<IInputPlayer>();
         }
         foreach (string key in temp)
         {
@@ -78,10 +78,6 @@ public class KeyboardRemap : MonoBehaviour
             {
                 return;
             }
-        }
-        for (int x=0;x<temp.Count;x++)
-        {
-            
         }
         GameObject.Find("Managers").GetComponent<InputManager>().RemapKeyboardButton(action,passed,player);
         temp.Remove(keyName);
