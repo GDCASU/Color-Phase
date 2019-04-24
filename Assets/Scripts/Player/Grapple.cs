@@ -55,17 +55,27 @@ public class Grapple : MonoBehaviour
     private GameObject target;
     private float swingXDirection;
     private Animator animator;
+    private PlayerArmController arms;
     void Awake()
     {
         resetSwing = true;
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
-        line = gameObject.AddComponent<LineRenderer>();
-        line.enabled = false;
         hookAnchor = new GameObject().transform;
         grappleAnchor = new GameObject().transform;
         state = GetComponent<ColorState>();
         animator = GetComponent<Animator>();
+        arms = GetComponent<PlayerArmController>();
+
+        // set up grapple hook line and effect
+        line = gameObject.AddComponent<LineRenderer>();
+        line.enabled = false;
+        line.materials[0].shader = Shader.Find("Unlit/GrappleEffect");
+        line.materials[0].SetColor("_Color",ColorState.RGBColors[state.currentColor]);
+        line.startWidth = 0.1f;
+        line.endWidth = 0.15f;
+
+        state.onSwap += (GameColor a, GameColor b) => line.materials[0].SetColor("_Color",ColorState.RGBColors[b]);;
     }
     public void Start()
     {
@@ -81,6 +91,7 @@ public class Grapple : MonoBehaviour
         RaycastHit r = new RaycastHit();
         if (!isGrappled && !canGrapple)
         {
+
             // This LINQ query filters for valid targets and then sorts by distance
             var t = GrappleTarget.targets
                 .Where(x => (x.neutral == true || (x.PushPull && state.canGrappleBox) || x.targetColor == state.currentColor)   // Is it a valid target
@@ -98,10 +109,21 @@ public class Grapple : MonoBehaviour
                 hit = r;
                 target = t.gameObject;
             }
-            else
-            {
-                if(r.transform != null) Debug.Log(r.transform.name);
+            else 
                 target = null;
+        }
+        else {
+            if(state.canGrappleBox || (canGrapple && !isGrappled)) {
+                var a = (canGrapple && !isGrappled) ? grappleAnchor : hit.transform;
+                var f = a.position; f.y = transform.position.y;
+                transform.LookAt(f);
+                var hand = PlayerArmController.singleton.rHand.transform;
+                hand.parent.parent.localPosition = new Vector3(-1.83f, 0.25f, 0.13f);
+                hand.parent.parent.localRotation = Quaternion.Euler(137.291f, -37.63199f, 43.62099f);
+                hand.parent.localRotation = Quaternion.Euler(19.962f, 28.783f, 31.961f);
+                Vector3 grappleDir = (a.position - hand.parent.parent.position).normalized;
+                hand.parent.position = hand.parent.parent.position + grappleDir * 0.3f; 
+                hand.position = hand.parent.parent.position + grappleDir* 0.5f;
             }
         }
 
@@ -111,9 +133,9 @@ public class Grapple : MonoBehaviour
             reticle.SetActive(true);
             reticle.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
         }
-        else
+        else {
             reticle.SetActive(false);
-
+        }
         UpdateAnimations();
     }
     
@@ -163,6 +185,7 @@ public class Grapple : MonoBehaviour
             if (grappleAnchor.position == hookAnchor.position) {
                 isGrappled = true;
                 if(state.currentColor == GameColor.Red) animator.SetTrigger("StartGrappleSwing");
+                if(state.currentColor == GameColor.Blue) animator.SetTrigger("StartGrappleHook");
             }
         }
 
@@ -180,6 +203,8 @@ public class Grapple : MonoBehaviour
                 resetSwing = true;
                 rb.velocity *= 1.5f;
             }
+                GetComponent<PlayerMovement>().enabled = true;
+                rb.useGravity = true;
         }
         // This method is only called once the rope has shortedned to a length where the player does not touch the ground
         if (swinging && !grounded)
@@ -281,7 +306,8 @@ public class Grapple : MonoBehaviour
     // Pull the player towards the object the grapple collided with
     private void GrapplePullPlayer()
     {
-
+        GetComponent<PlayerMovement>().enabled = false;
+        rb.useGravity = false;
         transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
 
         if (Vector3.Distance(hit.transform.position, transform.position) <= 2f)
@@ -340,12 +366,18 @@ public class Grapple : MonoBehaviour
 
     public void UpdateAnimations() {
         animator.SetBool("GrappleSwing",swinging);
+        animator.SetBool("GrappleHook",isGrappled && state.currentColor == GameColor.Blue);
+
+        if(swinging || (isGrappled && state.currentColor == GameColor.Blue)){
+            // Force direction
+            transform.LookAt(target.transform);
+            transform.Rotate(new Vector3 (1, 0, 0), 45,Space.Self);
+        }
 
         // Line render in late update makes it smoother
         if(isGrappled){
             line.SetPosition(0, handTransform.position);
             line.SetPosition(1, hookAnchor.transform.position);
-            Debug.Log("setLine");
         }
         else if (canGrapple)
         {

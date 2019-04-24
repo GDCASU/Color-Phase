@@ -478,7 +478,7 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="key"></param>
     /// <param name="player"></param>
-    public static void RemapKeyboardButton(PlayerButton button, KeyCode key, IInputPlayer player)
+    public void RemapKeyboardButton(PlayerButton button, KeyCode key, IInputPlayer player)
     {
         string buttonKey = button.ToString();
         if (player == null)
@@ -500,7 +500,7 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="button"></param>
     /// <param name="player"></param>
-    public static void RemapXboxButton(PlayerButton button, XboxController.XboxButton xButton, IInputPlayer player)
+    public  void RemapXboxButton(PlayerButton button, XboxController.XboxButton xButton, IInputPlayer player)
     {
         string buttonKey = button.ToString();
         // !!!NOTE!!! - Currently remapping xbox axis is not supported
