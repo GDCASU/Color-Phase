@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4272402395649252}
   - component: {fileID: 33904114581099402}
   - component: {fileID: 23945320994605866}
+  - component: {fileID: 64218171547933296}
   m_Layer: 0
   m_Name: T-Junction
   m_TagString: Untagged
@@ -35,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1684133842485690}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 4.7784586, y: 38.8, z: -0.69679546}
+  m_LocalPosition: {x: 42.002285, y: 6.7262197, z: -26.51756}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
@@ -84,4 +85,18 @@ MeshFilter:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1684133842485690}
+  m_Mesh: {fileID: 4300000, guid: 119a30ac720ad8844bec301749650e70, type: 3}
+--- !u!64 &64218171547933296
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1684133842485690}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 119a30ac720ad8844bec301749650e70, type: 3}
