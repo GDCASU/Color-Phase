@@ -365,6 +365,11 @@ public class Grapple : MonoBehaviour
 
     public void UpdateAnimations() {
         animator.SetBool("GrappleSwing",swinging);
+        if(swinging){
+            // Force direction
+            transform.LookAt(target.transform);
+            transform.Rotate(new Vector3 (1, 0, 0), 45,Space.Self);
+        }
 
         // Line render in late update makes it smoother
         if(isGrappled){
