@@ -15,6 +15,8 @@ public class PauseMenu : MonoBehaviour
     UnityEditor.EditorBuildSettingsScene scene;
     UnityEditor.EditorBuildSettingsScene[] scenes;
     public List<GameObject> panels;
+    public List<string> keyboardCodes;
+    public List<string> xboxCodes;
     public GameObject pauseMenu;
     public GameObject HUD;
     public GameObject settings;
@@ -24,6 +26,8 @@ public class PauseMenu : MonoBehaviour
     public Button rightArrowPrefab;
     public Button buttonPrefab;
     private Button button;
+    public Button xboxPrefab;
+    public Button keyboardPrefab;
     private bool isPaused = false;
     private int numberOfPanels;
     public int currentPanel;
@@ -34,6 +38,8 @@ public class PauseMenu : MonoBehaviour
     {
         settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<AudioSource>().volume;
         panels = new List<GameObject>();
+        keyboardCodes = new List<string>();
+        xboxCodes = new List<string>();
         currentPanel = 0;
         index = 0;
         numberOfPanels = 0;
@@ -43,6 +49,10 @@ public class PauseMenu : MonoBehaviour
         playerUI = GetComponent<UI>();
         camControl = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerCamControl>();
         playerMovement = gameObject.transform.parent.transform.parent.GetComponentInChildren<PlayerMovement>();
+        keyboardCodes.Add("W");
+        keyboardCodes.Add("S");
+        keyboardCodes.Add("D");
+        keyboardCodes.Add("A ");
         while (numberOfPanels <= (numberOfScenes/10))
         {
             int temp = 0;
@@ -59,8 +69,13 @@ public class PauseMenu : MonoBehaviour
             currentPanel++;
             numberOfPanels++;
         }
+        for(int x=0;x<4;x++)
+        {
+            BuildSettingsUI(x);
+        }
         currentPanel = 0;
     }
+    
     private void Update()
     {
         if (InputManager.GetButtonDown(PlayerInput.PlayerButton.Pause, player))
@@ -76,13 +91,17 @@ public class PauseMenu : MonoBehaviour
                 currentPanel = 0;
 
             }
+            else if(settings.active==true)
+            {
+                settings.SetActive(false);
+                pauseMenu.SetActive(true);
+            }
             else
             {
                 ResumeGame();
             }
             EventSystem.current.SetSelectedGameObject(pauseMenu.transform.GetChild(0).gameObject);
         }
-
     }
     public void Pause()
     {
@@ -152,14 +171,14 @@ public class PauseMenu : MonoBehaviour
                 Button temp = Instantiate(rightArrowPrefab, Vector2.zero, Quaternion.identity);
                 temp.transform.parent = panels[currentPanel].transform;
                 temp.GetComponent<RectTransform>().localPosition = new Vector2(360, 0);
-                temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 90);
+                temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 180);
             }
             if (index >=10)
             {
                 Button temp = Instantiate(leftArrowPrefab, Vector2.zero, Quaternion.identity);
                 temp.transform.parent = panels[currentPanel].transform;
                 temp.GetComponent<RectTransform>().localPosition = new Vector2(-360, 0);
-                temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 90);
+                temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 0);
             }
         }
         scene = scenes[index];
@@ -183,30 +202,70 @@ public class PauseMenu : MonoBehaviour
     }
     public void nextLevels()
     {
-        PauseMenu temp = GameObject.Find("PlayerUI").GetComponent<PauseMenu>();
-        print(temp.currentPanel);
-        print(temp.panels.Count);
-        temp.panels[temp.currentPanel].SetActive(false);
-        temp.currentPanel++;
-        temp.panels[temp.currentPanel].SetActive(true);
-        EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
+        if (GameObject.Find("PlayerUI"))
+        {
+            PauseMenu temp = GameObject.Find("PlayerUI").GetComponent<PauseMenu>();
+            temp.panels[temp.currentPanel].SetActive(false);
+            temp.currentPanel++;
+            temp.panels[temp.currentPanel].SetActive(true);
+            EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
+        }
+        else
+        {
+            TitleScreenController temp = GameObject.Find("TitleUI").GetComponent<TitleScreenController>();
+            temp.panels[temp.currentPanel].SetActive(false);
+            temp.currentPanel++;
+            temp.panels[temp.currentPanel].SetActive(true);
+            EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
+        }
+        
     }
     public void previousLevles()
     {
-        PauseMenu temp = GameObject.Find("PlayerUI").GetComponent<PauseMenu>();
-        print(temp.currentPanel);
-        print(temp.panels.Count);
-        temp.panels[temp.currentPanel].SetActive(false);
-        temp.currentPanel--;
-        temp.panels[temp.currentPanel].SetActive(true);
-        EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
+        if (GameObject.Find("PlayerUI"))
+        {
+            PauseMenu temp = GameObject.Find("PlayerUI").GetComponent<PauseMenu>();
+            temp.panels[temp.currentPanel].SetActive(false);
+            temp.currentPanel--;
+            temp.panels[temp.currentPanel].SetActive(true);
+            EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
+        }
+        else
+        {
+            TitleScreenController temp = GameObject.Find("TitleUI").GetComponent<TitleScreenController>();
+            temp.panels[temp.currentPanel].SetActive(false);
+            temp.currentPanel--;
+            temp.panels[temp.currentPanel].SetActive(true);
+            EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
+        }
     }
     public void SetVolume(float passed)
     {
         GameObject.Find("Managers").GetComponent<AudioSource>().volume = passed;
     }
-    public void RemapControl()
+    public void BuildSettingsUI(int passed)
     {
+        float yPosition = -90;
 
+        Button keyboard = Instantiate(keyboardPrefab, Vector2.zero, Quaternion.identity);
+        keyboard.transform.parent = settings.transform;
+        keyboard.GetComponent<RectTransform>().localPosition = new Vector2(0, 90 + (yPosition * passed));
+        keyboard.GetComponent<RectTransform>().localScale = Vector3.one;
+        keyboard.GetComponent<KeyboardRemap>().InitiateButton(passed);
+        string key = keyboard.GetComponent<KeyboardRemap>().keyName;
+        keyboard.GetComponentInChildren<Text>().text = key;
+        keyboardCodes.Add(key);
+
+
+        Button xbox = Instantiate(xboxPrefab, Vector2.zero, Quaternion.identity);
+        xbox.transform.parent = settings.transform;
+        xbox.GetComponent<RectTransform>().localPosition = new Vector2(275, 90 + (yPosition * passed));
+        xbox.GetComponent<RectTransform>().localScale = Vector3.one;
+        xbox.GetComponent<XboxRemap>().InitiateButton(passed);
+        xbox.interactable = false;
+        string xb = xbox.GetComponent<XboxRemap>().keyName;
+        xbox.GetComponentInChildren<Text>().text = xb;
+        xboxCodes.Add(xb);
+      
     }
 }
