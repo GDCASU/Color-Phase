@@ -924,7 +924,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 45122907}
   m_LocalRotation: {x: 0, y: -0.0015291289, z: -0, w: -0.99999887}
-  m_LocalPosition: {x: 0.0017744808, y: 0.055936668, z: -0.043448355}
+  m_LocalPosition: {x: 0.0017744808, y: 0.009, z: -0.043448355}
   m_LocalScale: {x: 0.33237, y: 0.33237, z: 0.33237}
   m_Children: []
   m_Father: {fileID: 470341919}
@@ -994,7 +994,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 45122907}
   serializedVersion: 5
-  lengthInSec: 0.5
+  lengthInSec: 0.3
   simulationSpeed: 1
   stopAction: 0
   looping: 0
@@ -1066,7 +1066,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.7
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -1612,7 +1612,7 @@ ParticleSystem:
     enabled: 1
     type: 8
     angle: 0
-    length: 3.069048
+    length: 2.6824133
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
@@ -2591,7 +2591,7 @@ ParticleSystem:
     orbitalY:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 8.03
+      scalar: 15
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -4709,7 +4709,7 @@ ParticleSystem:
         m_RotationOrder: 4
     maxLights: 20
   TrailModule:
-    enabled: 0
+    enabled: 1
     mode: 0
     ratio: 1
     lifetime:
