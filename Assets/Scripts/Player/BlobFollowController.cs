@@ -21,11 +21,11 @@ public class BlobFollowController : MonoBehaviour {
         t2d.y = 0;
 
         float pDist = Vector3.Distance(p2d, t2d);
-		if(pDist > maxFollow) {
+		if(pDist > maxFollow) 
             rb.AddForce( (p2d - t2d)*20 );
-        } else if(pDist < minFollow) {
-            rb.AddForce( (t2d - p2d)*25 );
-        } else 
+        if(pDist < minFollow) 
+            rb.AddForce( (t2d - p2d).normalized*20 * (1/pDist) );
+        if(pDist < minFollow+1 && pDist > maxFollow -1)
             rb.velocity= new Vector3(rb.velocity.x/2, rb.velocity.y, rb.velocity.z/2);
         
         
@@ -34,7 +34,8 @@ public class BlobFollowController : MonoBehaviour {
         
         float yDist = Mathf.Abs(py+ty);
 		if(yDist > yMax) {
-            rb.AddForce( new Vector3(0, (py - ty) * 5 ,0) );
+            rb.AddForce( new Vector3(0, (py - ty) * 40 ,0) );
         }
+        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y/2f, rb.velocity.z);
 	}
 }
