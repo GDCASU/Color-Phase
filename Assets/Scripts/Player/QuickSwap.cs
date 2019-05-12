@@ -11,12 +11,16 @@ public class QuickSwap : MonoBehaviour {
     private ColorState playerColor;
     private InputPlayer inputPlayer;
     public GameColor storedColor;
+
+    public GameObject follower;
+    private ColorState followerState;
     void Awake () {
         playerColor = GetComponent<ColorState>(); 
         inputPlayer = GetComponent<InputPlayer>();
     }
 	void Start ()
     {
+        followerState = follower.GetComponent<ColorState>();
     }
 	
 	void Update () {
@@ -24,7 +28,7 @@ public class QuickSwap : MonoBehaviour {
             GameColor temp = storedColor; 
             storedColor = playerColor.currentColor;
             playerColor.currentColor = temp;
+            followerState.currentColor = storedColor;
         }
 	}
-
 }
