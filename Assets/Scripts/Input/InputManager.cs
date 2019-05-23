@@ -479,7 +479,7 @@ public class InputManager : MonoBehaviour
     /// <param name="buttonKey"></param>
     /// <param name="key"></param>
     /// <param name="player"></param>
-    public void RemapKeyboardButton(PlayerButton button, KeyCode key, IInputPlayer player)
+    public static void RemapKeyboardButton(PlayerButton button, KeyCode key, IInputPlayer player)
     {
         string buttonKey = button.ToString();
         if (player == null)
