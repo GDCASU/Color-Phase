@@ -30,7 +30,7 @@ public class PauseMenu : MonoBehaviour
     private GameObject canvas;
     public GameObject main;
 
-    [Header("Puse Menu")]
+    [Header("Pause Menu")]
     #region Puse Menu
     UI playerUI;
     PlayerCamControl camControl;
@@ -96,7 +96,7 @@ public class PauseMenu : MonoBehaviour
         }
         for (int x = 0; x < 4; x++)
         {
-            BuildSettingsUI(x);
+            buildControllerRemapUI(x);
         }
         currentPanel = 0;
     }
@@ -267,7 +267,7 @@ public class PauseMenu : MonoBehaviour
         button.GetComponentInChildren<Text>().text = name;
 
     }
-    public void BuildSettingsUI(int passed)
+    public void buildControllerRemapUI(int passed)
     {
         float yPosition = -90;
 
