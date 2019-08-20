@@ -31,7 +31,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject main;
 
     [Header("Pause Menu")]
-    #region Puse Menu
+    #region Pause Menu
     UI playerUI;
     PlayerCamControl camControl;
     PlayerMovement playerMovement;

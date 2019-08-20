@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using UnityEngine.UI;
 
 /* Author:      Zachary Schmalz & Jacob Hann
  * Version:     1.1.2
@@ -73,22 +74,31 @@ public class GameManager : MonoBehaviour
 
     static bool LoadGame () {
         bool loaded = true;
-        FileStream fs = File.Open(Application.persistentDataPath+"/"+saveName, FileMode.Open);
-        try 
+        if (File.Exists(Application.persistentDataPath + "/" + saveName))
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            latestUnlocked = (int)formatter.Deserialize(fs);
-            Debug.Log(latestUnlocked);
+            FileStream fs = File.Open(Application.persistentDataPath + "/" + saveName, FileMode.Open);
+            GameObject.Find("LoadGames").GetComponentInChildren<Text>().text = "Continue";
+            try
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                latestUnlocked = (int)formatter.Deserialize(fs);
+                Debug.Log(latestUnlocked);
+            }
+            catch (SerializationException e)
+            {
+                Debug.Log("Failed to load save. Reason: " + e.Message);
+                loaded = false;
+            }
+            finally
+            {
+                fs.Close();
+            }
         }
-        catch (SerializationException e) 
+        else
         {
-            Debug.Log("Failed to load save. Reason: " + e.Message);
-            loaded = false;
+            GameObject.Find("LoadGames").GetComponentInChildren<Text>().text = "Start";
         }
-        finally 
-        {
-            fs.Close();
-        }
+        
         return loaded;
     }
 }
