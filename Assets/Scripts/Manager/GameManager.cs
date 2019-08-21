@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/" + saveName))
         {
             FileStream fs = File.Open(Application.persistentDataPath + "/" + saveName, FileMode.Open);
-            GameObject.Find("LoadGames").GetComponentInChildren<Text>().text = "Continue";
+            if(SceneManager.GetActiveScene().name=="Title")GameObject.Find("LoadGames").GetComponentInChildren<Text>().text = "Continue";
             try
             {
                 BinaryFormatter formatter = new BinaryFormatter();
