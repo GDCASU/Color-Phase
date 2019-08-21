@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class QuickSwapPickup : MonoBehaviour {
 	public GameColor colorValue;
+    private UI ui;
+    public void Start()
+    {
+        ui = GameObject.Find("PlayerUI").GetComponent<UI>();
+    }
     public void OnTriggerEnter(Collider other)
     {
         if (other.tag.StartsWith("Player")) Destroy(gameObject);
@@ -20,6 +25,12 @@ public class QuickSwapPickup : MonoBehaviour {
             var quickSwapColor = PlayerColorController.singleton.GetComponent<QuickSwap>();
             quickSwapColor.followerState = followerColor;
             quickSwapColor.storedColor = followerColor.currentColor;
+
+            ui.hasQuickswap = true;
+            ui.quickSwap = GameObject.Find("PlayerDefault").GetComponentInChildren<QuickSwap>();
+            var tempColor = ui.PreviousAbility.color;
+            tempColor.a = 1;
+            ui.PreviousAbility.color = tempColor;
         }
         // If for some reason we have levels with multiple of these we'll just set the color
         else {

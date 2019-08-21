@@ -21,11 +21,11 @@ public class UI : MonoBehaviour
     public Sprite RedSprite;
     public Sprite YellowSprite;
     public Sprite BlueSprite;
+    public QuickSwap quickSwap;
+    public bool hasQuickswap = false;
     private InputPlayer inputPlayer;
     private ColorState playerColor;
     private PlayerMovement playerMovement;
-    private bool hasQuickswap=false;
-    private QuickSwap quickSwap;
 
     public GameColor storedColor;
 
@@ -54,15 +54,7 @@ public class UI : MonoBehaviour
         // Use this for initialization
         void Start ()
     {
-        if (gameObject.transform.parent.transform.parent.GetComponentInChildren<QuickSwap>().isActiveAndEnabled)
-        {
-            hasQuickswap = true;
-            quickSwap = gameObject.transform.parent.transform.parent.GetComponentInChildren<QuickSwap>();
-            var tempColor = PreviousAbility.color;
-            tempColor.a = 1;
-            PreviousAbility.color = tempColor;
-        }
-        else
+        if (gameObject.transform.parent.transform.parent.GetComponentInChildren<QuickSwap>()==null)
         {
             var tempColor = PreviousAbility.color;
             tempColor.a = 0;
