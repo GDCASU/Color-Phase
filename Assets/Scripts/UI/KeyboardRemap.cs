@@ -61,17 +61,8 @@ public class KeyboardRemap : MonoBehaviour
     public void SetButton(KeyCode passed)
     {
         List<string> temp=new List<string>();
-        if (GameObject.Find("PlayerDefault"))
-        {
-            temp = GameObject.Find("PlayerDefault").GetComponentInChildren<PauseMenu>().keyboardCodes;
-            player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
-
-        }
-        else
-        {
-            temp = GameObject.Find("TitleUI").GetComponentInChildren<TitleScreenController>().keyboardCodes;
-            player = GameObject.Find("Player Character").GetComponentInChildren<IInputPlayer>();
-        }
+        temp = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().keyboardCodes;
+        player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
         foreach (string key in temp)
         {
             if (passed.ToString() == key)
@@ -79,7 +70,7 @@ public class KeyboardRemap : MonoBehaviour
                 return;
             }
         }
-        GameObject.Find("Managers").GetComponent<InputManager>().RemapKeyboardButton(action,passed,player);
+        InputManager.RemapKeyboardButton(action,passed,player);
         temp.Remove(keyName);
         keyName = passed.ToString();
         temp.Add(keyName);

@@ -19,21 +19,13 @@ public class XboxRemap : MonoBehaviour
         {
             if (xbox.AnyButtonDown)
             {
-               foreach (XboxController.XboxButton key in System.Enum.GetValues(typeof(XboxController.XboxButton)))
-                {
-                    if (InputManager.GetButton(action,player))
-                    {
-                     //   SetButton(vKey);
-                        remaping = false;
-                    }
-                }
+                button = InputManager.GetNextXboxButton();
             }
         }
     }
 
     public void InitiateButton(int passed)
     {
-        //player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
         index = passed;
         switch (index)
         {
