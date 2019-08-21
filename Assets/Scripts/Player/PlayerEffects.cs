@@ -7,6 +7,7 @@ public class PlayerEffects : MonoBehaviour {
 	ColorState color;
     Rigidbody rb;
     PlayerMovement m;
+
 	void Start () {
 		color = GetComponent<ColorState>();
         rb = GetComponent<Rigidbody>();
