@@ -326,7 +326,7 @@ public class PlayerMovement : MonoBehaviour
         if (GetComponent<ColorState>().currentColor == GameColor.Red 
             && !grounded && (!stuck || detached)
             && collision.gameObject.tag=="StickableWall"
-            && Vector3.Dot(dir, -transform.forward) > 0.75)
+            && Vector3.Dot(dir, -transform.forward) > .1)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
             stuck = true;
@@ -343,7 +343,8 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpHeightStrength = 1.8f;
     private void checkDetatch(Collision collision)
     {
-        Vector3 dir = collision.contacts[0].normal;
+        Vector3 dir = collision.contacts[0].normal /*+ cam.transform.forward*/ ;
+        
         if(InputManager.GetButtonDown(PlayerButton.Jump, player) && !detached )
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
