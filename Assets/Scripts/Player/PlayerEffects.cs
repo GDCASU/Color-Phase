@@ -8,12 +8,10 @@ public class PlayerEffects : MonoBehaviour {
     Rigidbody rb;
     PlayerMovement m;
 
-    public ParticleSystem part;
 	void Start () {
 		color = GetComponent<ColorState>();
         rb = GetComponent<Rigidbody>();
         m = GetComponent<PlayerMovement>();
-        color.onSwap += swapParticles;
 	}
     float pY;
     void Update () {
@@ -26,10 +24,4 @@ public class PlayerEffects : MonoBehaviour {
             g.transform.position = c.contacts[0].point+Vector3.up*0.1f;
         }
 	}
-
-    void swapParticles(GameColor current, GameColor next) {
-        part.startColor = ColorState.RGBColors[next];
-        part.Play();
-        part.time = 0;
-    }
 }
