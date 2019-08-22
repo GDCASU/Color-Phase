@@ -22,7 +22,7 @@ public class PlayerCamControl : MonoBehaviour
     private float cameraHorizAngle = 0;
     private float cameraVertAngle = 0;
     private IInputPlayer player;
-    public float MaxRadius = 2.5f;
+    public float MaxRadius = 3.0f;
     public float MinRadius = 0.1f;
     public float radius = 2.5f;
     private float yOffset = 1.0f;
@@ -49,8 +49,10 @@ public class PlayerCamControl : MonoBehaviour
         var layerMask = ~(1 << 20 | 1 << 21 | 1 << 22 | 1 << 23 | 1 << 25 | 1 << 26 | 1 << 27 | 1 << 28);
         RaycastHit hit;
         radius = 999;
+        
         if (Physics.Linecast(transform.position + Vector3.up * 2, getCamPosition(), out hit, layerMask, QueryTriggerInteraction.Ignore))
         {
+            Debug.Log("gameobjectname: " + hit.collider.gameObject);
             radius = hit.distance - 0.2f;
             if (nextHitNormal != hit.normal)
             {
@@ -69,8 +71,6 @@ public class PlayerCamControl : MonoBehaviour
         ticker += 0.1f;
         ticker = Mathf.Clamp(ticker, 0, 1);
         radius = Mathf.Clamp(radius, MinRadius, MaxRadius);
-
-        Debug.Log(ticker);
     }
     void LateUpdate()
     {
@@ -86,24 +86,14 @@ public class PlayerCamControl : MonoBehaviour
         if (cameraVertAngle + yAxis > -20f && cameraVertAngle + yAxis < maxVertAngle)
             cameraVertAngle += yAxis;
 
-        switch (activecam)
-        {
-            case 0:
-                cams[0].transform.position = getCamPosition();
-                break;
-            case 1:
-                //edit to look down
-                break;
-            case 3:
-                break;
-        }
+        cams[0].transform.position = getCamPosition();
     }
 
     public Vector3 getCamPosition()
     {
         cams[0].transform.rotation = Quaternion.Euler(0, cameraHorizAngle, 0);
         cams[0].transform.Rotate(Vector3.right, cameraVertAngle);
-        return transform.position + Vector3.up * 0.4f - cams[0].transform.forward * radius + Vector3.up * yOffset * (radius / MaxRadius) + hitNormal * 0.15f;
+        return transform.position + Vector3.up * 0.4f - cams[0].transform.forward * radius + Vector3.up * yOffset * (radius / MaxRadius) + hitNormal * 0.25f;
     }
 
     public void ChangeCamera(int camNumber)
