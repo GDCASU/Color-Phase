@@ -428,7 +428,7 @@ GameObject:
   - component: {fileID: 114955499211767552}
   - component: {fileID: 114054987844199888}
   - component: {fileID: 114254999193613350}
-  m_Layer: 21
+  m_Layer: 20
   m_Name: Player 1 Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1056,7 +1056,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1605622675145520}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.35477, y: 0.061, z: -11.26605}
+  m_LocalPosition: {x: 4.39, y: 18, z: -23.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4215920851088580}
@@ -1417,7 +1417,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1524871330306302}
   m_LocalRotation: {x: -0, y: 0.0015291289, z: -0, w: -0.99999887}
-  m_LocalPosition: {x: 0.31586266, y: -0.26, z: -0.98650646}
+  m_LocalPosition: {x: 0.31586266, y: -0.06, z: -0.98650646}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4427273291881594}
@@ -1540,9 +1540,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b43e23cc808991418c423a16aadcf9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorToSet: 1
+  colorToSet: 0
   updateColor: 0
-  currentcolor: 1
+  currentcolor: 0
 --- !u!114 &114029480818292106
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2507,7 +2507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1675303218584470}
-  minimumY: -30
+  minimumY: -32
   lookSpeed: 10
   angleToSnap: 2
   grounded: 1
@@ -2658,19 +2658,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c0ffd1f5e017b48b22bc3295dfc6a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlState: 0
-  cams:
-  - {fileID: 1675303218584470}
-  - {fileID: 0}
-  - {fileID: 0}
-  activecam: 0
+  cam: {fileID: 1675303218584470}
   sensitivity: 160
   camHorizAxis: Mouse X
   camVertAxis: Mouse Y
-  MaxRadius: 2.5
+  MaxRadius: 3
   MinRadius: 0.3
   radius: 2.5
-  minVertAngle: -50
+  minVertAngle: -40
   maxVertAngle: 80
 --- !u!114 &114743616441268608
 MonoBehaviour:
@@ -3105,9 +3100,9 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 4029a364043a19944b676d9325cf3ab1, type: 2}
+  - {fileID: 2100000, guid: 313c7344f36a1c343a01bfe59fed8698, type: 2}
   - {fileID: 2100000, guid: 85f03dfaf0dce8547b1fe553d154db8c, type: 2}
-  - {fileID: 2100000, guid: a3a57147f5ce09b46ac612d14fa84bda, type: 2}
+  - {fileID: 2100000, guid: b3b0bdaad8b55114b9277c23a2aca4ae, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3131,7 +3126,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300000, guid: 6fc3f98b4f426d34fbf35d2f34c6ccd7, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 434a93e824dc69c409e361a8e4e00297, type: 3}
   m_Bones:
   - {fileID: 4669504864939820}
   - {fileID: 4296701259321840}

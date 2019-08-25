@@ -5,31 +5,24 @@ using PlayerInput;
 
 public class PlayerCamControl : MonoBehaviour
 {
-    public int controlState = 0;
-
-    //An array of cameras to switch between
-    [Header("Cameras")]
-    public GameObject[] cams = new GameObject[3]; //Third,overhead,side
-    public int activecam = 0;
+    public GameObject cam;
     public float sensitivity = 80.0f;
 
     [Header("Inputs")]
     public string camHorizAxis = "Mouse X";
     public string camVertAxis = "Mouse Y";
-
-
-    private KeyCode orbitCamInput = KeyCode.Mouse2;
     private float cameraHorizAngle = 0;
     private float cameraVertAngle = 0;
     private IInputPlayer player;
     public float MaxRadius = 3.0f;
     public float MinRadius = 0.1f;
     public float radius = 2.5f;
+    
     private float yOffset = 1.0f;
     private Vector3 hitNormal;
     private Vector3 nextHitNormal;
     private Vector3 lastHitNormal;
-    private float ticker = 0;
+    private float ticker = 25f;
 
     //Camera restraint variables
     [SerializeField] private float minVertAngle = -20f;
@@ -40,7 +33,7 @@ public class PlayerCamControl : MonoBehaviour
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        cameraHorizAngle = cams[0].transform.rotation.eulerAngles.y;
+        cameraHorizAngle = cam.transform.rotation.eulerAngles.y;
         cameraVertAngle = 0;
     }
     void Update()
@@ -48,25 +41,27 @@ public class PlayerCamControl : MonoBehaviour
         // layer mask for color and color ignore laeyrs (interact and barrier)
         var layerMask = ~(1 << 20 | 1 << 21 | 1 << 22 | 1 << 23 | 1 << 25 | 1 << 26 | 1 << 27 | 1 << 28);
         RaycastHit hit;
-        radius = 999;
-        
+        radius = MaxRadius+1;
         if (Physics.Linecast(transform.position + Vector3.up * 2, getCamPosition(), out hit, layerMask, QueryTriggerInteraction.Ignore))
         {
-            Debug.Log("gameobjectname: " + hit.collider.gameObject);
             radius = hit.distance - 0.2f;
             if (nextHitNormal != hit.normal)
             {
                 lastHitNormal = hitNormal;
-                ticker = 0;
+                ticker = 0.25f;
             }
             nextHitNormal = hit.normal;
         }
         else
         {
             nextHitNormal = Vector3.zero;
-            ticker = 0;
+            ticker = 0.25f;
         }
 
+        // Ticker is an interpolator for our hit normal
+        // We use this too offset from anything on the xaxis from the camera 
+        // This is not used as part of the testing raycast
+        // Note that we test the position directly out and then offset when *setting* the position only
         hitNormal = Vector3.Lerp(lastHitNormal, nextHitNormal, ticker);
         ticker += 0.1f;
         ticker = Mathf.Clamp(ticker, 0, 1);
@@ -83,19 +78,23 @@ public class PlayerCamControl : MonoBehaviour
         yAxis += -InputManager.GetAxis(PlayerAxis.CameraVertical, player) * Time.deltaTime * sensitivity;
 
         cameraHorizAngle += xAxis;
-        if (cameraVertAngle + yAxis > -20f && cameraVertAngle + yAxis < maxVertAngle)
+        if (cameraVertAngle + yAxis > minVertAngle && cameraVertAngle + yAxis < maxVertAngle)
             cameraVertAngle += yAxis;
 
-        cams[0].transform.position = getCamPosition();
+        // Additional dynamic scaling from interpolated hit normal 
+        cam.transform.position = getCamPosition() + hitNormal * 0.25f;
     }
 
     public Vector3 getCamPosition()
     {
-        cams[0].transform.rotation = Quaternion.Euler(0, cameraHorizAngle, 0);
-        cams[0].transform.Rotate(Vector3.right, cameraVertAngle);
-        return transform.position + Vector3.up * 0.4f - cams[0].transform.forward * radius + Vector3.up * yOffset * (radius / MaxRadius) + hitNormal * 0.25f;
+        cam.transform.rotation = Quaternion.Euler(0, cameraHorizAngle, 0);
+        cam.transform.Rotate(Vector3.right, cameraVertAngle);
+        // Position taken as combination of player location + static height offset + the radius out from player + a dynamic height offset based on the camera zoom + a dynamic height based on camera angle 
+        return transform.position + Vector3.up * 0.4f - cam.transform.forward * (radius + 0.1f) + Vector3.up * yOffset * (radius / MaxRadius) + Vector3.up * -Mathf.Min(0, cameraVertAngle / 100 );
     }
-
+    
+    // Legacy
+    /* 
     public void ChangeCamera(int camNumber)
     {
         if (camNumber == -1)
@@ -118,5 +117,5 @@ public class PlayerCamControl : MonoBehaviour
                 cams[activecam].SetActive(true);
             }
         }
-    }
+    }*/
 }
