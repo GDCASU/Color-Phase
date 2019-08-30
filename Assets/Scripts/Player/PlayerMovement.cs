@@ -188,12 +188,9 @@ public class PlayerMovement : MonoBehaviour
         #endregion
 
         // Calculate force from input, angle, and speed
-        var inp = new Vector2(xAxis, zAxis);
-        var direction = inp.normalized;
-        var forward = cam.transform.forward; forward.y = 0;
-        var right = cam.transform.right; right.y = 0;
-        force = forward.normalized * direction.y * runSpeed + right.normalized * direction.x * runSpeed;
-        force *= Mathf.Clamp(inp.magnitude,0,1);
+        force = getDirFromInput(xAxis, zAxis);
+        force *= runSpeed;
+        force *= Mathf.Clamp(new Vector2(xAxis, zAxis).magnitude,0,1);
         force.y = 0;
 
         // Apply ground friction
@@ -218,6 +215,15 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, temp.y, rb.velocity.z);
         }
         
+    }
+
+    private Vector3 getDirFromInput(float xAxis, float zAxis)
+    {
+        var inp = new Vector2(xAxis, zAxis);
+        var direction = inp.normalized;
+        var forward = cam.transform.forward; forward.y = 0;
+        var right = cam.transform.right; right.y = 0;
+        return forward.normalized * direction.y + right.normalized * direction.x;
     }
 
     //adds properties of yellow when you swap to yellow and returns to original values when you swap to a different color
@@ -323,6 +329,7 @@ public class PlayerMovement : MonoBehaviour
     private void Stick(Collision collision)
     {
         Vector3 dir = collision.contacts[0].normal;
+        
         if (GetComponent<ColorState>().currentColor == GameColor.Red 
             && !grounded && (!stuck || detached)
             && collision.gameObject.tag=="StickableWall"
@@ -344,6 +351,7 @@ public class PlayerMovement : MonoBehaviour
     private void checkDetatch(Collision collision)
     {
         Vector3 dir = collision.contacts[0].normal /*+ cam.transform.forward*/ ;
+        dir +=   getDirFromInput(InputManager.GetAxis(PlayerAxis.MoveHorizontal, player), InputManager.GetAxis(PlayerAxis.MoveVertical, player)) / 2f;
         
         if(InputManager.GetButtonDown(PlayerButton.Jump, player) && !detached )
         {
