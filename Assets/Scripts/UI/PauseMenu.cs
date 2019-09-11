@@ -49,7 +49,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        settings.GetComponentInChildren<Slider>().value = GameObject.Find("Audio Source").GetComponent<AudioSource>().volume;
+        settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<SoundManager>().MasterVolume;
         panels = new List<GameObject>();
         keyboardCodes = new List<string>();
         xboxCodes = new List<string>();
