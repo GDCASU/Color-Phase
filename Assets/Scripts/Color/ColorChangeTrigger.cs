@@ -19,6 +19,14 @@ public class ColorChangeTrigger : MonoBehaviour
                     Destroy(gameObject);
                 }
             }
+            other.GetComponent<PlayerMovement>().runSpeed = other.GetComponent<PlayerMovement>().runSpeed * 5;
+        }
+    }
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.tag.StartsWith("Player"))
+        {
+            other.GetComponent<PlayerMovement>().runSpeed = other.GetComponent<PlayerMovement>().runSpeed / 5;
         }
     }
 }
