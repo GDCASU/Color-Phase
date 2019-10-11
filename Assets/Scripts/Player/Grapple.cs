@@ -314,6 +314,7 @@ public class Grapple : MonoBehaviour
         {
             disableGrapple();
             rb.velocity = Vector3.zero;
+            rb.useGravity = true;
         }
     }
 
