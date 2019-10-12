@@ -27,7 +27,7 @@ public class QuickSwapPickup : MonoBehaviour {
             quickSwapColor.storedColor = followerColor.currentColor;
 
             ui.hasQuickswap = true;
-            ui.quickSwap = GameObject.Find("PlayerDefault").GetComponentInChildren<QuickSwap>();
+            ui.quickSwap = quickSwapColor;
             var tempColor = ui.PreviousAbility.color;
             tempColor.a = 1;
             ui.PreviousAbility.color = tempColor;
