@@ -150,7 +150,8 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0;
         HUD.SetActive(false);
         main.SetActive(true);
-        Cursor.visible = true;
+        
+        if(player!=null && player.InputMethod!=InputManager.InputMethod.XboxController)Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
     }
@@ -286,7 +287,6 @@ public class PauseMenu : MonoBehaviour
         xbox.GetComponent<RectTransform>().localPosition = new Vector2(275, 90 + (yPosition * passed));
         xbox.GetComponent<RectTransform>().localScale = Vector3.one;
         xbox.GetComponent<XboxRemap>().InitiateButton(passed);
-        xbox.interactable = false; // remove once the method is fixed in the XboxRemap Class
         string xb = xbox.GetComponent<XboxRemap>().keyName;
         xbox.GetComponentInChildren<Text>().text = xb;
         xboxCodes.Add(xb);

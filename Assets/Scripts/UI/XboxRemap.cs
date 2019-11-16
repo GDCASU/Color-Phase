@@ -11,16 +11,18 @@ public class XboxRemap : MonoBehaviour
     int index;
     public string keyName;
     bool remaping;
-    XboxController xbox;
 
     public void Update()
     {
         if (remaping)
         {
-            if (xbox.AnyButtonDown)
+            if (InputManager.xboxControllers[0].AnyButtonDown)
             {
-                button = InputManager.GetNextXboxButton();
+                button = InputManager.GetNextXboxButton(player);
+                SetButton(button);
+                remaping = false;
             }
+
         }
     }
 
@@ -47,10 +49,36 @@ public class XboxRemap : MonoBehaviour
         button = GameObject.Find("Managers").GetComponent<InputManager>().buttons[passed].xboxButton;
         keyName = GameObject.Find("Managers").GetComponent<InputManager>().buttons[passed].xboxButton.ToString();
     }
-    //Curently not working
+    public void Remaping()
+    {
+        StartCoroutine(timerRemaping());
+    }
     public void SetButton(XboxController.XboxButton passed)
     {
+        List<string> temp = new List<string>();
+        temp = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().xboxCodes;
+        player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
+        foreach (string xKey in temp)
+        {
+            if (passed.ToString() == xKey)
+            {
+                return;
+            }
+        }
+        InputManager.RemapXboxButton(action, passed, player);
+        temp.Remove(keyName);
+        keyName = passed.ToString();
+        temp.Add(keyName);
+        GetComponentInChildren<Text>().text = keyName;
         GameObject.Find("Managers").GetComponent<InputManager>().buttons[index].xboxButton = passed;
+    }
+    public IEnumerator timerRemaping()
+    {
+        for (int x = 0; x < 10; x++)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        remaping = true;
     }
 }
 
