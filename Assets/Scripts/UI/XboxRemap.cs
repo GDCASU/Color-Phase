@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class XboxRemap : MonoBehaviour
 {
@@ -16,16 +17,14 @@ public class XboxRemap : MonoBehaviour
     {
         if (remaping)
         {
-            if (InputManager.xboxControllers[0].AnyButtonDown)
+            if (InputManager.xboxControllers.FirstOrDefault().AnyButtonDown)
             {
-                button = InputManager.GetNextXboxButton(player);
-                SetButton(button);
+                SetButton(InputManager.GetNextXboxButton(player));
                 remaping = false;
             }
 
         }
     }
-
     public void InitiateButton(int passed)
     {
         index = passed;
@@ -55,8 +54,7 @@ public class XboxRemap : MonoBehaviour
     }
     public void SetButton(XboxController.XboxButton passed)
     {
-        List<string> temp = new List<string>();
-        temp = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().xboxCodes;
+        List<string> temp = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().xboxCodes;
         player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
         foreach (string xKey in temp)
         {
@@ -70,7 +68,6 @@ public class XboxRemap : MonoBehaviour
         keyName = passed.ToString();
         temp.Add(keyName);
         GetComponentInChildren<Text>().text = keyName;
-        GameObject.Find("Managers").GetComponent<InputManager>().buttons[index].xboxButton = passed;
     }
     public IEnumerator timerRemaping()
     {
