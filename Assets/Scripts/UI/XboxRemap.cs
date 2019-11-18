@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class XboxRemap : MonoBehaviour
 {
@@ -11,19 +12,19 @@ public class XboxRemap : MonoBehaviour
     int index;
     public string keyName;
     bool remaping;
-    XboxController xbox;
 
     public void Update()
     {
         if (remaping)
         {
-            if (xbox.AnyButtonDown)
+            if (InputManager.xboxControllers.FirstOrDefault().AnyButtonDown)
             {
-                button = InputManager.GetNextXboxButton();
+                SetButton(InputManager.GetNextXboxButton(player));
+                remaping = false;
             }
+
         }
     }
-
     public void InitiateButton(int passed)
     {
         index = passed;
@@ -47,10 +48,34 @@ public class XboxRemap : MonoBehaviour
         button = GameObject.Find("Managers").GetComponent<InputManager>().buttons[passed].xboxButton;
         keyName = GameObject.Find("Managers").GetComponent<InputManager>().buttons[passed].xboxButton.ToString();
     }
-    //Curently not working
+    public void Remaping()
+    {
+        StartCoroutine(timerRemaping());
+    }
     public void SetButton(XboxController.XboxButton passed)
     {
-        GameObject.Find("Managers").GetComponent<InputManager>().buttons[index].xboxButton = passed;
+        List<string> xboxCodes = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().xboxCodes;
+        player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
+        foreach (string xKey in xboxCodes)
+        {
+            if (passed.ToString() == xKey)
+            {
+                return;
+            }
+        }
+        InputManager.RemapXboxButton(action, passed, player);
+        xboxCodes.Remove(keyName);
+        keyName = passed.ToString();
+        xboxCodes.Add(keyName);
+        GetComponentInChildren<Text>().text = keyName;
+    }
+    public IEnumerator timerRemaping()
+    {
+        for (int x = 0; x < 10; x++)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        remaping = true;
     }
 }
 

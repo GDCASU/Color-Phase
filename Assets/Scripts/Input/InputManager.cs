@@ -107,7 +107,7 @@ public class InputManager : MonoBehaviour
     private static KeyboardController keyboardController;
     private static List<Dictionary<string, KeyCode>> keyboardAxisDictList;
     private static List<Dictionary<string, KeyCode>> keyboardButtonDictList;
-    private static List<XboxController> xboxControllers;
+    public static List<XboxController> xboxControllers;
     private static List<Dictionary<string, XboxController.XboxAxis>> xboxAxisDictList;
     private static List<Dictionary<string, XboxController.XboxButton>> xboxButtonDictList;
 

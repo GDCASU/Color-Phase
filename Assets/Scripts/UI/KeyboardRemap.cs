@@ -6,7 +6,6 @@ using PlayerInput;
 
 public class KeyboardRemap : MonoBehaviour
 {
-    InputPlayer inputPlayer;
     PlayerInput.PlayerButton action;
     KeyCode button;
     IInputPlayer player;
@@ -60,10 +59,9 @@ public class KeyboardRemap : MonoBehaviour
     }
     public void SetButton(KeyCode passed)
     {
-        List<string> temp=new List<string>();
-        temp = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().keyboardCodes;
+        List<string> keyboardCodes = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().keyboardCodes;
         player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
-        foreach (string key in temp)
+        foreach (string key in keyboardCodes)
         {
             if (passed.ToString() == key)
             {
@@ -71,9 +69,9 @@ public class KeyboardRemap : MonoBehaviour
             }
         }
         InputManager.RemapKeyboardButton(action,passed,player);
-        temp.Remove(keyName);
+        keyboardCodes.Remove(keyName);
         keyName = passed.ToString();
-        temp.Add(keyName);
+        keyboardCodes.Add(keyName);
         GetComponentInChildren<Text>().text = keyName;
     }
 
