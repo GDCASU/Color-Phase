@@ -54,9 +54,9 @@ public class XboxRemap : MonoBehaviour
     }
     public void SetButton(XboxController.XboxButton passed)
     {
-        List<string> temp = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().xboxCodes;
+        List<string> xboxCodes = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().xboxCodes;
         player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
-        foreach (string xKey in temp)
+        foreach (string xKey in xboxCodes)
         {
             if (passed.ToString() == xKey)
             {
@@ -64,9 +64,9 @@ public class XboxRemap : MonoBehaviour
             }
         }
         InputManager.RemapXboxButton(action, passed, player);
-        temp.Remove(keyName);
+        xboxCodes.Remove(keyName);
         keyName = passed.ToString();
-        temp.Add(keyName);
+        xboxCodes.Add(keyName);
         GetComponentInChildren<Text>().text = keyName;
     }
     public IEnumerator timerRemaping()
