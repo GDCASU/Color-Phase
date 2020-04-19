@@ -38,21 +38,26 @@ namespace PlayerInput {
 public class InputManager : MonoBehaviour {
      public static Dictionary<PlayerButton, string > playerButtons = new Dictionary <PlayerButton, string> {
         {PlayerButton.Jump, "Jump"},
-        {PlayerButton.Swap,""},
-        {PlayerButton.PickUp,""},
-        {PlayerButton.Grapple,""},
-        {PlayerButton.UI_Submit,""},     // UI Button
-        {PlayerButton.UI_Cancel, ""},   // UI Button
-        {PlayerButton. Pause, ""},
+        {PlayerButton.Swap,"Swap"},
+        {PlayerButton.PickUp,"PickUp"},
+        {PlayerButton.Grapple,"Grapple"},
+        {PlayerButton.UI_Submit,"UISubmit"},     // UI Button
+        {PlayerButton.UI_Cancel, "UICancel"},   // UI Button
+        {PlayerButton. Pause, "Pause"},
     };
 
      public static Dictionary<PlayerAxis, string > playerAxise = new Dictionary <PlayerAxis, string> {
-        {PlayerAxis.MoveHorizontal, ""},
-        {PlayerAxis.MoveVertical, ""},
-        {PlayerAxis.CameraHorizontal, ""},
-        {PlayerAxis.CameraVertical, ""},
-        {PlayerAxis.UI_Horizontal, ""},
-        {PlayerAxis.UI_Vertical, ""},
+        {PlayerAxis.MoveHorizontal, "JoystickX1"},
+        {PlayerAxis.MoveVertical, "JoystickY1"},
+        {PlayerAxis.CameraHorizontal, "JoystickT1"},
+        {PlayerAxis.CameraVertical, "JoystickZ1"},
+        {PlayerAxis.UI_Horizontal, "JoystickX1"},
+        {PlayerAxis.UI_Vertical, "JoystickY1"},
+    };
+
+    public static Dictionary<PlayerAxis, string > mouseAxis = new Dictionary <PlayerAxis, string> {
+        {PlayerAxis.CameraHorizontal, "MouseX"},
+        {PlayerAxis.CameraVertical, "MouseY"},
     };
     public static bool GetButtonDown (PlayerButton button) {
         return Input.GetButtonDown(playerButtons[button]);
@@ -66,7 +71,10 @@ public class InputManager : MonoBehaviour {
         return Input.GetButton(playerButtons[button]);
     }
     public static float GetAxis (PlayerAxis axis) {
-        return Input.GetAxis(playerAxise[axis]);
+        var mouse = mouseAxis.ContainsKey(axis) ? Input.GetAxis(mouseAxis[axis]) : 0;
+        var other = playerAxise.ContainsKey(axis) ? Input.GetAxis(playerAxise[axis]) : 0;
+        
+        return other != 0 ? other : mouse;
     }
 
 }

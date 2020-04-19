@@ -69,12 +69,8 @@ public class PlayerCamControl : MonoBehaviour
     void LateUpdate()
     {
         // Camera Angle Input
-        // THIS IS OBSOLETE AND MUST BE UPDATED WHEN MOUSE IS ADDED TO INPUT MANAGER
-        float xAxis = Input.GetAxis(camHorizAxis) * Time.deltaTime * sensitivity / 2;
-        float yAxis = -Input.GetAxis(camVertAxis) * Time.deltaTime * sensitivity / 2;
-
-        xAxis += InputManager.GetAxis(PlayerAxis.CameraHorizontal) * Time.deltaTime * sensitivity * 2;
-        yAxis += -InputManager.GetAxis(PlayerAxis.CameraVertical) * Time.deltaTime * sensitivity;
+        var xAxis = InputManager.GetAxis(PlayerAxis.CameraHorizontal) * Time.deltaTime * sensitivity * 2;
+        var yAxis = -InputManager.GetAxis(PlayerAxis.CameraVertical) * Time.deltaTime * sensitivity;
 
         cameraHorizAngle += xAxis;
         if (cameraVertAngle + yAxis > minVertAngle && cameraVertAngle + yAxis < maxVertAngle)
