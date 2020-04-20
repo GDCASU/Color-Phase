@@ -7,10 +7,6 @@ public class PlayerCamControl : MonoBehaviour
 {
     public GameObject cam;
     public float sensitivity = 80.0f;
-
-    [Header("Inputs")]
-    public string camHorizAxis = "Mouse X";
-    public string camVertAxis = "Mouse Y";
     private float cameraHorizAngle = 0;
     private float cameraVertAngle = 0;
     public float MaxRadius = 3.0f;
