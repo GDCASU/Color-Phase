@@ -43,7 +43,7 @@ public class InputManager : MonoBehaviour {
         {PlayerButton.Grapple,"Grapple"},
         {PlayerButton.UI_Submit,"UISubmit"},     // UI Button
         {PlayerButton.UI_Cancel, "UICancel"},   // UI Button
-        {PlayerButton. Pause, "Pause"},
+        {PlayerButton.Pause, "Pause"},
     };
 
      public static Dictionary<PlayerAxis, string > joyAxis = new Dictionary <PlayerAxis, string> {

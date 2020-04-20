@@ -236,14 +236,14 @@ public class PauseMenu : MonoBehaviour
             if ((numberOfScenes - index) > 10)
             {
                 Button temp = Instantiate(rightArrowPrefab, Vector2.zero, Quaternion.identity);
-                temp.transform.parent = panels[currentPanel].transform;
+                temp.transform.SetParent(panels[currentPanel].transform);
                 temp.GetComponent<RectTransform>().localPosition = new Vector2(360, 0);
                 temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 180);
             }
             if (index >= 10)
             {
                 Button temp = Instantiate(leftArrowPrefab, Vector2.zero, Quaternion.identity);
-                temp.transform.parent = panels[currentPanel].transform;
+                temp.transform.SetParent(panels[currentPanel].transform);
                 temp.GetComponent<RectTransform>().localPosition = new Vector2(-360, 0);
                 temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 0);
             }
