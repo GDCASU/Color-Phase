@@ -46,7 +46,7 @@ public class InputManager : MonoBehaviour {
         {PlayerButton. Pause, "Pause"},
     };
 
-     public static Dictionary<PlayerAxis, string > playerAxise = new Dictionary <PlayerAxis, string> {
+     public static Dictionary<PlayerAxis, string > joyAxis = new Dictionary <PlayerAxis, string> {
         {PlayerAxis.MoveHorizontal, "JoystickX1"},
         {PlayerAxis.MoveVertical, "JoystickY1"},
         {PlayerAxis.CameraHorizontal, "JoystickT1"},
@@ -56,8 +56,12 @@ public class InputManager : MonoBehaviour {
     };
 
     public static Dictionary<PlayerAxis, string > mouseAxis = new Dictionary <PlayerAxis, string> {
+        {PlayerAxis.MoveHorizontal, "KeyboardX"},
+        {PlayerAxis.MoveVertical, "KeyboardY"},
         {PlayerAxis.CameraHorizontal, "MouseX"},
         {PlayerAxis.CameraVertical, "MouseY"},
+        {PlayerAxis.UI_Horizontal, "KeyboardX"},
+        {PlayerAxis.UI_Vertical, "KeyboardY"},
     };
     public static bool GetButtonDown (PlayerButton button) {
         return Input.GetButtonDown(playerButtons[button]);
@@ -72,7 +76,7 @@ public class InputManager : MonoBehaviour {
     }
     public static float GetAxis (PlayerAxis axis) {
         var mouse = mouseAxis.ContainsKey(axis) ? Input.GetAxis(mouseAxis[axis]) : 0;
-        var other = playerAxise.ContainsKey(axis) ? Input.GetAxis(playerAxise[axis]) : 0;
+        var other = joyAxis.ContainsKey(axis) ? Input.GetAxis(joyAxis[axis]) : 0;
         
         return other != 0 ? other : mouse;
     }
