@@ -50,12 +50,11 @@ public class Grapple : MonoBehaviour
     private RaycastHit hit;
     private Vector3 v;
     private Vector3 minSwing;
-
-
     private GameObject target;
-    private float swingXDirection;
     private Animator animator;
     private PlayerArmController arms;
+    private bool buttonUp = false;
+    private bool buttonDown = false;
     void Awake()
     {
         resetSwing = true;
@@ -85,6 +84,10 @@ public class Grapple : MonoBehaviour
     {
         var vP = Camera.main.WorldToViewportPoint(worldPos);
         return vP.x > 0 && vP.x < 1 && vP.y > 0 && vP.y < 1;
+    }
+    public void Update () {
+        buttonDown |= InputManager.GetButtonDown(PlayerButton.Grapple);
+        buttonUp |= InputManager.GetButtonUp(PlayerButton.Grapple);
     }
     public void LateUpdate()
     {
@@ -150,7 +153,7 @@ public class Grapple : MonoBehaviour
         {
             grounded = true;
         }
-        if (InputManager.GetButtonDown(PlayerButton.Grapple) && !Box.Holding)
+        if (buttonDown && !Box.Holding)
         {
             if (target != null)
             {
@@ -189,7 +192,7 @@ public class Grapple : MonoBehaviour
             }
         }
 
-        if (InputManager.GetButtonUp(PlayerButton.Grapple))
+        if (buttonUp)
         {
             var s = swinging;
             disableGrapple();
@@ -263,6 +266,10 @@ public class Grapple : MonoBehaviour
         {
             GetComponentInParent<PlayerMovement>().enabled = true;
         }
+
+        // reset input cache
+        buttonDown = false;
+        buttonUp = false;
     }
 
     private void enableGrapple()

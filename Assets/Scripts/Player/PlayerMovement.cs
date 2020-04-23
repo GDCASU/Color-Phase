@@ -55,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
     public float yellowFallCoefficent = 1.3f;
     public float yellowRunForceMultiplyer = 1.5f;
     #endregion
+    private bool inputJump = false;
     private void Start()
     {
         if(GetComponent<ColorState>().currentColor==GameColor.Blue)
@@ -66,6 +67,10 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<Collider>();
         GetComponent<ColorState>().onSwap += YellowProperties;
+    }
+
+    private void Update () {
+        inputJump |= InputManager.GetButtonDown(PlayerButton.Jump);
     }
 
     private void FixedUpdate()
@@ -155,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
 
         #region Jump  
         // Handle a jump input
-        if (InputManager.GetButtonDown(PlayerButton.Jump) && jumpsAvailable > 0 && hasJumped < 2 && !cooldown)
+        if (inputJump && jumpsAvailable > 0 && hasJumped < 2 && !cooldown)
         {
             cooldown = true;
             StartCoroutine(endCooldown());
@@ -213,6 +218,8 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, temp.y, rb.velocity.z);
         }
         
+        // reset jump cache
+        inputJump = false;
     }
 
     private Vector3 getDirFromInput(float xAxis, float zAxis)

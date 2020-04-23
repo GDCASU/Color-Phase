@@ -34,8 +34,13 @@ namespace PlayerInput {
 }
 
 
-
 public class InputManager : MonoBehaviour {
+    public enum InputMode {
+        both,
+        controller,
+        keyboard
+    }
+    public static InputMode inputMode = InputMode.both;
      public static Dictionary<PlayerButton, string > playerButtons = new Dictionary <PlayerButton, string> {
         {PlayerButton.Jump, "Jump"},
         {PlayerButton.Swap,"Swap"},
@@ -76,9 +81,9 @@ public class InputManager : MonoBehaviour {
     }
     public static float GetAxis (PlayerAxis axis) {
         var mouse = mouseAxis.ContainsKey(axis) ? Input.GetAxis(mouseAxis[axis]) : 0;
-        var other = joyAxis.ContainsKey(axis) ? Input.GetAxis(joyAxis[axis]) : 0;
+        var controller = joyAxis.ContainsKey(axis) ? Input.GetAxis(joyAxis[axis]) : 0;
         
-        return other != 0 ? other : mouse;
+        return (inputMode == InputMode.both && controller != 0) || inputMode == InputMode.controller ? controller : mouse;
     }
 
 }
