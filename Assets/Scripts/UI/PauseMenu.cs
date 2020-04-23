@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    IInputPlayer player;
     string scene;
     string[] scenes;
     public List<GameObject> panels;
@@ -59,7 +58,7 @@ public class PauseMenu : MonoBehaviour
         numberOfScenes = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
         scenes = new string[numberOfScenes];
         for(int i = 0; i < numberOfScenes; i++) scenes[i]=UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i);
-        player = GetComponent<IInputPlayer>();
+
         keyboardCodes.Add("W");
         keyboardCodes.Add("S");
         keyboardCodes.Add("D");
@@ -103,7 +102,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (InputManager.GetButtonDown(PlayerInput.PlayerButton.Pause, player))
+        if (InputManager.GetButtonDown(PlayerInput.PlayerButton.Pause))
         {
             if (!isPaused && !main.activeInHierarchy)
             {
@@ -151,7 +150,7 @@ public class PauseMenu : MonoBehaviour
         HUD.SetActive(false);
         main.SetActive(true);
         
-        if(player!=null && player.InputMethod!=InputManager.InputMethod.XboxController)Cursor.visible = true;
+        //if(player!=null && player.InputMethod!=InputManager.InputMethod.XboxController) Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
     }
@@ -237,14 +236,14 @@ public class PauseMenu : MonoBehaviour
             if ((numberOfScenes - index) > 10)
             {
                 Button temp = Instantiate(rightArrowPrefab, Vector2.zero, Quaternion.identity);
-                temp.transform.parent = panels[currentPanel].transform;
+                temp.transform.SetParent(panels[currentPanel].transform);
                 temp.GetComponent<RectTransform>().localPosition = new Vector2(360, 0);
                 temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 180);
             }
             if (index >= 10)
             {
                 Button temp = Instantiate(leftArrowPrefab, Vector2.zero, Quaternion.identity);
-                temp.transform.parent = panels[currentPanel].transform;
+                temp.transform.SetParent(panels[currentPanel].transform);
                 temp.GetComponent<RectTransform>().localPosition = new Vector2(-360, 0);
                 temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 0);
             }
@@ -286,7 +285,7 @@ public class PauseMenu : MonoBehaviour
         xbox.transform.parent = settings.transform;
         xbox.GetComponent<RectTransform>().localPosition = new Vector2(275, 90 + (yPosition * passed));
         xbox.GetComponent<RectTransform>().localScale = Vector3.one;
-        xbox.GetComponent<XboxRemap>().InitiateButton(passed);
+        //xbox.GetComponent<XboxRemap>().InitiateButton(passed);
         string xb = xbox.GetComponent<XboxRemap>().keyName;
         xbox.GetComponentInChildren<Text>().text = xb;
         xboxCodes.Add(xb);

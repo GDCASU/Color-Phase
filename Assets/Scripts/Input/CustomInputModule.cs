@@ -372,7 +372,7 @@ public class CustomInputModule : PointerInputModule
         }
 
         // If user pressed key again, always allow event
-        bool allow = (InputManager.GetAxisDown(PlayerAxis.UI_Horizontal) != 0 || InputManager.GetAxisDown(PlayerAxis.UI_Vertical) != 0);
+        bool allow = (InputManager.GetAxis(PlayerAxis.UI_Horizontal) != 0 || InputManager.GetAxis(PlayerAxis.UI_Vertical) != 0);
         bool similarDir = (Vector2.Dot(movement, m_LastMoveVector) > 0);
         if (!allow)
         {

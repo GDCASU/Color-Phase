@@ -7,14 +7,15 @@ using System.Linq;
 public class XboxRemap : MonoBehaviour
 {
     PlayerInput.PlayerButton action;
-    XboxController.XboxButton button;
-    IInputPlayer player;
     int index;
     public string keyName;
     bool remaping;
 
     public void Update()
     {
+
+    }
+    /*
         if (remaping)
         {
             if (InputManager.xboxControllers.FirstOrDefault().AnyButtonDown)
@@ -76,6 +77,6 @@ public class XboxRemap : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         remaping = true;
-    }
+    } */
 }
 

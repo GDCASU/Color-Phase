@@ -7,13 +7,8 @@ public class PlayerCamControl : MonoBehaviour
 {
     public GameObject cam;
     public float sensitivity = 80.0f;
-
-    [Header("Inputs")]
-    public string camHorizAxis = "Mouse X";
-    public string camVertAxis = "Mouse Y";
     private float cameraHorizAngle = 0;
     private float cameraVertAngle = 0;
-    private IInputPlayer player;
     public float MaxRadius = 3.0f;
     public float MinRadius = 0.1f;
     public float radius = 2.5f;
@@ -70,12 +65,8 @@ public class PlayerCamControl : MonoBehaviour
     void LateUpdate()
     {
         // Camera Angle Input
-        // THIS IS OBSOLETE AND MUST BE UPDATED WHEN MOUSE IS ADDED TO INPUT MANAGER
-        float xAxis = Input.GetAxis(camHorizAxis) * Time.deltaTime * sensitivity / 2;
-        float yAxis = -Input.GetAxis(camVertAxis) * Time.deltaTime * sensitivity / 2;
-
-        xAxis += InputManager.GetAxis(PlayerAxis.CameraHorizontal, player) * Time.deltaTime * sensitivity * 2;
-        yAxis += -InputManager.GetAxis(PlayerAxis.CameraVertical, player) * Time.deltaTime * sensitivity;
+        var xAxis = InputManager.GetAxis(PlayerAxis.CameraHorizontal) * Time.deltaTime * sensitivity * 2;
+        var yAxis = -InputManager.GetAxis(PlayerAxis.CameraVertical) * Time.deltaTime * sensitivity;
 
         cameraHorizAngle += xAxis;
         if (cameraVertAngle + yAxis > minVertAngle && cameraVertAngle + yAxis < maxVertAngle)

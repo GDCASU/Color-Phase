@@ -23,7 +23,6 @@ public class UI : MonoBehaviour
     public Sprite BlueSprite;
     public QuickSwap quickSwap;
     public bool hasQuickswap = false;
-    private InputPlayer inputPlayer;
     private ColorState playerColor;
     private PlayerMovement playerMovement;
 

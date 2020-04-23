@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     public float lookSpeed;
     public float angleToSnap;
     private Collider playerCollider;
-    private IInputPlayer player;
     private Rigidbody rb;
     private Vector3 ledgeMemory;
     private Animator animator;
@@ -63,7 +62,6 @@ public class PlayerMovement : MonoBehaviour
             jumps = 2;
         }
         GetComponent<ColorState>().onSwap += HandleColors;
-        player = GetComponent<IInputPlayer>();
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<Collider>();
@@ -137,8 +135,8 @@ public class PlayerMovement : MonoBehaviour
         xAxis = 0;
         zAxis = 0;
 
-        xAxis += InputManager.GetAxis(PlayerAxis.MoveHorizontal, player);
-        zAxis += InputManager.GetAxis(PlayerAxis.MoveVertical, player);
+        xAxis += InputManager.GetAxis(PlayerAxis.MoveHorizontal);
+        zAxis += InputManager.GetAxis(PlayerAxis.MoveVertical);
 
         // If the player falls off of the map then set the player on the last ledge
         if (transform.position.y < minimumY)
@@ -157,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
 
         #region Jump  
         // Handle a jump input
-        if (InputManager.GetButtonDown(PlayerButton.Jump, player) && jumpsAvailable > 0 && hasJumped < 2 && !cooldown)
+        if (InputManager.GetButtonDown(PlayerButton.Jump) && jumpsAvailable > 0 && hasJumped < 2 && !cooldown)
         {
             cooldown = true;
             StartCoroutine(endCooldown());
@@ -173,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (!grounded)
         {
-            if (!InputManager.GetButton(PlayerButton.Jump, player) || rb.velocity.y < -hangTime)
+            if (!InputManager.GetButton(PlayerButton.Jump) || rb.velocity.y < -hangTime)
                 jumpHeld = false;
 
             if (!jumpHeld) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallCoefficent, rb.velocity.z);
@@ -351,9 +349,9 @@ public class PlayerMovement : MonoBehaviour
     private void checkDetatch(Collision collision)
     {
         Vector3 dir = collision.contacts[0].normal /*+ cam.transform.forward*/ ;
-        dir +=   getDirFromInput(InputManager.GetAxis(PlayerAxis.MoveHorizontal, player), InputManager.GetAxis(PlayerAxis.MoveVertical, player)) / 2f;
+        dir +=   getDirFromInput(InputManager.GetAxis(PlayerAxis.MoveHorizontal), InputManager.GetAxis(PlayerAxis.MoveVertical)) / 2f;
         
-        if(InputManager.GetButtonDown(PlayerButton.Jump, player) && !detached )
+        if(InputManager.GetButtonDown(PlayerButton.Jump) && !detached )
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             rb.velocity = new Vector3(dir.x * wallJumpStrength, wallJumpHeightStrength * jumpStrength, dir.z * wallJumpStrength);

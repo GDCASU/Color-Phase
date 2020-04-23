@@ -8,7 +8,6 @@ public class KeyboardRemap : MonoBehaviour
 {
     PlayerInput.PlayerButton action;
     KeyCode button;
-    IInputPlayer player;
     int index;
     public string keyName;
     bool remaping;
@@ -54,13 +53,13 @@ public class KeyboardRemap : MonoBehaviour
             default:
                 break;
         }
-        button = GameObject.Find("Managers").GetComponent<InputManager>().buttons[index].keyboardButton;
-        keyName = GameObject.Find("Managers").GetComponent<InputManager>().buttons[index].keyboardButton.ToString();
+        //button = GameObject.Find("Managers").GetComponent<InputManager>().buttons[index].keyboardButton;
+       // keyName = GameObject.Find("Managers").GetComponent<InputManager>().buttons[index].keyboardButton.ToString();
     }
     public void SetButton(KeyCode passed)
     {
         List<string> keyboardCodes = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().keyboardCodes;
-        player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
+
         foreach (string key in keyboardCodes)
         {
             if (passed.ToString() == key)
@@ -68,7 +67,7 @@ public class KeyboardRemap : MonoBehaviour
                 return;
             }
         }
-        InputManager.RemapKeyboardButton(action,passed,player);
+        //InputManager.RemapKeyboardButton(action,passed,player);
         keyboardCodes.Remove(keyName);
         keyName = passed.ToString();
         keyboardCodes.Add(keyName);
