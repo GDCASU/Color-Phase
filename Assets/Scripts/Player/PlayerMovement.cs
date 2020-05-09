@@ -375,4 +375,7 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("Detach",true);
     }
 
+    public bool isStill() {
+       return grounded && rb.velocity == Vector3.zero && !inputJump && xAxis == 0 && zAxis == 0;
+    }
 }
