@@ -16,7 +16,7 @@ public class QuickSwapPickup : MonoBehaviour {
 	void OnDestroy() {
         // Create a new follower usually 
         if(PlayerColorController.singleton.GetComponent<QuickSwap>() == null ){
-            GameObject follower = Instantiate(Resources.Load("Prefabs/Player/SwapFollower") as GameObject);
+            GameObject follower = Instantiate(Resources.Load("SwapFollower") as GameObject);
             var followerColor = follower.GetComponent<ColorState>();
             followerColor.currentColor = colorValue;
             follower.transform.position = this.transform.position;
