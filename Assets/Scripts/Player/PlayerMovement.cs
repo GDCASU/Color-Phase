@@ -376,6 +376,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public bool isStill() {
-       return grounded && rb.velocity == Vector3.zero && !inputJump && xAxis == 0 && zAxis == 0;
+       return grounded && rb.velocity.magnitude < 0.001f && !inputJump && xAxis == 0f && zAxis == 0f;
     }
 }
