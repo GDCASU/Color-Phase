@@ -9,18 +9,18 @@ Experience a colorful puzzle-platformer experience in Colour Phase! Find and use
 [Steam (Coming soon!)]
 
 # Gameplay 
-![puzzle](/Showcase/puzzle.gif)
 
 ### Solve puzzles!
-![jump](/Showcase/jump.gif)
+![puzzle](/Showcase/puzzle.gif)
 
 ### Navigate platforming challenges!
+![jump](/Showcase/jump.gif)
+
+### Experiment with the power of ~colors~
 ![walljump](/Showcase/walljump.gif)
 
-### Experiment with the power of **colors**
+### Do things!
 ![box](/Showcase/box.gif)
 
-### Do things!
+### Theres a god damn grapplehook!
 ![grapple](/Showcase/grappling.gif)
-
-### Go places!
