@@ -67,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         playerCollider = GetComponent<Collider>();
         GetComponent<ColorState>().onSwap += YellowProperties;
+
+        initRespawnEffect();
     }
 
     private void Update () {
@@ -131,6 +133,53 @@ public class PlayerMovement : MonoBehaviour
     float xAxis = 0;
     float zAxis = 0;
 
+    public Vector3? spawnLoc = null;
+    const int squares = 4;
+
+    private RectTransform[] respawnBars = new RectTransform[squares];
+    public void initRespawnEffect () {
+        var HUD = cam.transform.GetChild(0).GetChild(0);
+        var sprite = Resources.Load("Sprites/RespawnBar") as GameObject;
+        for(int i = 0; i < squares; i++) {
+            var x = Instantiate(sprite, HUD);
+            var r = x.GetComponent<RectTransform>();
+            var tempH = 450/squares;
+            r.localPosition = new Vector2( r.localPosition.x - 3200, -220 + tempH * 0.5f + tempH * i);
+            r.sizeDelta = new Vector2(r.sizeDelta.x, tempH+10);
+            respawnBars[i] = r;
+            // temp. = -800
+        }
+    }
+    const int effectTime = 120;
+    private bool respawning = false;
+    public IEnumerator respawnEffect() {
+        respawning = true;
+        // reset them
+        for(int i = 0; i < respawnBars.Length; i++) {
+            var l = respawnBars[i].localPosition;
+            l.x = -1600;
+            respawnBars[i].localPosition = l;
+        }
+
+        // move them
+        for(int t = 0; t < effectTime; t++) {
+            float percentage = (float)t/(float)effectTime;
+            float c = percentage - 0.5f;
+            c = c * c;
+            for(int i = 0; i < respawnBars.Length; i++) {
+                var l = respawnBars[i].localPosition;
+                l.x += 6400 / effectTime + c * i * 15;
+                respawnBars[i].localPosition = l;
+            }
+            if ( t == effectTime / 3) {
+                rb.velocity = Vector3.zero;
+                transform.position = (Vector3)spawnLoc;
+            }
+            yield return new WaitForEndOfFrame();
+        }
+        respawning = false;
+    }
+
     /// <summary>
     /// This controls the basic aspects of the players ground and jump movement
     /// </summary>
@@ -144,12 +193,21 @@ public class PlayerMovement : MonoBehaviour
         zAxis += InputManager.GetAxis(PlayerAxis.MoveVertical);
 
         // If the player falls off of the map then set the player on the last ledge
-        if (transform.position.y < minimumY)
+        // Should this logic be in the movement script? no. Do I care? no.
+        if (transform.position.y < minimumY && !respawning)
         {
-            var f = ledgeMemory - transform.position; f.y = 0;
-            f.Normalize(); f.y = 20;
-            rb.velocity = f;
-            transform.position = ledgeMemory;
+            // only use bad ledge memory if we dont have a spawn location
+            if(spawnLoc == null) {
+                var dir = ledgeMemory - transform.position; 
+                dir.y = 0;
+                dir.Normalize();
+                var temp = dir;
+                temp.y = 20;
+                rb.velocity = temp;
+                transform.position = ledgeMemory + dir;
+            } else {
+                StartCoroutine(respawnEffect());
+            }
             resetJumpInfo();
         }
         if (grounded)
