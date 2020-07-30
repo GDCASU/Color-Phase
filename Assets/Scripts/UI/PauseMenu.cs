@@ -285,7 +285,7 @@ public class PauseMenu : MonoBehaviour
         xbox.transform.parent = settings.transform;
         xbox.GetComponent<RectTransform>().localPosition = new Vector2(275, 90 + (yPosition * passed));
         xbox.GetComponent<RectTransform>().localScale = Vector3.one;
-        //xbox.GetComponent<XboxRemap>().InitiateButton(passed);
+        xbox.GetComponent<XboxRemap>().InitiateButton(passed);
         string xb = xbox.GetComponent<XboxRemap>().keyName;
         xbox.GetComponentInChildren<Text>().text = xb;
         xboxCodes.Add(xb);
