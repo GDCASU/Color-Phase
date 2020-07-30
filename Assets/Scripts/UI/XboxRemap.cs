@@ -68,13 +68,16 @@ public class XboxRemap : MonoBehaviour
                 return;
             }
         }
-        PlayerAction actn = InputManager.playerButtons[action];
-        actn.xboxKey = passed;
-        InputManager.playerButtons[action] = actn;
-        xboxCodes.Remove(keyName);
-        keyName = passed.ToString();
-        xboxCodes.Add(keyName);
-        GetComponentInChildren<Text>().text = keyName;
+        if (InputManager.playerXboxButtons.ContainsKey(passed))
+        {
+            PlayerAction actn = InputManager.playerButtons[action];
+            actn.xboxKey = passed;
+            InputManager.playerButtons[action] = actn;
+            xboxCodes.Remove(keyName);
+            keyName = passed.ToString();
+            xboxCodes.Add(keyName);
+            GetComponentInChildren<Text>().text = keyName;
+        }        
     }
     public IEnumerator timerRemaping()
     {
