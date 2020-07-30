@@ -41,6 +41,7 @@ public class Grapple : MonoBehaviour
     private bool grounded;
 
     // Object to use in calcualtions
+    private PlayerMovement player;
     private Collider col;
     private Rigidbody rb;
     private ColorState state;
@@ -65,6 +66,7 @@ public class Grapple : MonoBehaviour
         state = GetComponent<ColorState>();
         animator = GetComponent<Animator>();
         arms = GetComponent<PlayerArmController>();
+        player = GetComponent<PlayerMovement>();
 
         // set up grapple hook line and effect
         line = gameObject.AddComponent<LineRenderer>();
@@ -107,7 +109,7 @@ public class Grapple : MonoBehaviour
             //Vector3.Distance(p.transform.position,transform.position)+100*V
 
             var dir = (t != null) ? Vector3.Normalize(t.transform.position - transform.position) : Vector3.zero;
-            if (t != null && Physics.Raycast(transform.position + dir/5+Vector3.up/2, dir, out r, hookRange) && r.transform == t.transform)
+            if (t != null && Physics.Raycast(transform.position, dir, out r, hookRange) && r.transform == t.transform)
             {
                 hit = r;
                 target = t.gameObject;
@@ -206,16 +208,16 @@ public class Grapple : MonoBehaviour
                 resetSwing = true;
                 rb.velocity *= 1.5f;
             }
-                GetComponent<PlayerMovement>().enabled = true;
-                rb.useGravity = true;
+            player.enabled = true;
+            rb.useGravity = true;
         }
         // This method is only called once the rope has shortedned to a length where the player does not touch the ground
         if (swinging && !grounded)
         {
             // Dissables playermovement and set the transform of the palyer to be based from the transform of the camera
             rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - 1, rb.velocity.z);
-            GetComponentInParent<PlayerMovement>().enabled = false;
-            transform.forward = gameObject.transform.parent.GetComponentInChildren<Camera>().transform.forward;
+            player.enabled = false;
+            transform.forward = Camera.main.transform.forward;
             // Gets the swinging direction by getting the cross product from the rope vector and the players transform
             Vector3 swingZDirection = Vector3.Cross(v, transform.right);
             Vector3 swingXDirection = Vector3.Cross(v, transform.forward);
@@ -264,7 +266,7 @@ public class Grapple : MonoBehaviour
         }
         else
         {
-            GetComponentInParent<PlayerMovement>().enabled = true;
+            player.enabled = true;
         }
 
         // reset input cache
@@ -313,7 +315,7 @@ public class Grapple : MonoBehaviour
     // Pull the player towards the object the grapple collided with
     private void GrapplePullPlayer()
     {
-        GetComponent<PlayerMovement>().enabled = false;
+        player.enabled = false;
         rb.useGravity = false;
         transform.position = Vector3.MoveTowards(transform.position, hookAnchor.position, pullPlayerSpeed);
 
