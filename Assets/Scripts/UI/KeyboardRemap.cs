@@ -6,7 +6,7 @@ using PlayerInput;
 
 public class KeyboardRemap : MonoBehaviour
 {
-    PlayerInput.PlayerButton action;
+    PlayerButton action;
     KeyCode button;
     int index;
     public string keyName;
@@ -39,22 +39,22 @@ public class KeyboardRemap : MonoBehaviour
         switch (index)
         {
             case 0:
-                action = PlayerInput.PlayerButton.Jump;
+                action = PlayerButton.Jump;
                 break;
             case 1:
-                action = PlayerInput.PlayerButton.Swap;
+                action = PlayerButton.Swap;
                 break;
             case 2:
-                action = PlayerInput.PlayerButton.PickUp;
+                action = PlayerButton.PickUp;
                 break;
             case 3:
-                action = PlayerInput.PlayerButton.Grapple;
+                action = PlayerButton.Grapple;
                 break;
             default:
                 break;
         }
-        //button = GameObject.Find("Managers").GetComponent<InputManager>().buttons[index].keyboardButton;
-       // keyName = GameObject.Find("Managers").GetComponent<InputManager>().buttons[index].keyboardButton.ToString();
+        button = InputManager.playerButtons[action].keyboardKey;
+        keyName = button.ToString();
     }
     public void SetButton(KeyCode passed)
     {
@@ -67,7 +67,9 @@ public class KeyboardRemap : MonoBehaviour
                 return;
             }
         }
-        //InputManager.RemapKeyboardButton(action,passed,player);
+        PlayerAction actn = InputManager.playerButtons[action];
+        actn.keyboardKey = passed;
+        InputManager.playerButtons[action]=actn;
         keyboardCodes.Remove(keyName);
         keyName = passed.ToString();
         keyboardCodes.Add(keyName);

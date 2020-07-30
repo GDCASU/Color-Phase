@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayerInput;
 using System.Linq;
 
 public class XboxRemap : MonoBehaviour
 {
-    PlayerInput.PlayerButton action;
+    PlayerButton action;
+    KeyCode button;
     int index;
     public string keyName;
     bool remaping;
@@ -14,16 +16,19 @@ public class XboxRemap : MonoBehaviour
     public void Update()
     {
 
-    }
-    /*
         if (remaping)
         {
-            if (InputManager.xboxControllers.FirstOrDefault().AnyButtonDown)
+            if (Input.anyKey)
             {
-                SetButton(InputManager.GetNextXboxButton(player));
-                remaping = false;
+                foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode)))
+                {
+                    if (Input.GetKeyDown(vKey))
+                    {
+                        SetButton(vKey);
+                        remaping = false;
+                    }
+                }
             }
-
         }
     }
     public void InitiateButton(int passed)
@@ -46,17 +51,16 @@ public class XboxRemap : MonoBehaviour
             default:
                 break;
         }
-        button = GameObject.Find("Managers").GetComponent<InputManager>().buttons[passed].xboxButton;
-        keyName = GameObject.Find("Managers").GetComponent<InputManager>().buttons[passed].xboxButton.ToString();
+        button = InputManager.playerButtons[action].xboxKey;
+        keyName = InputManager.playerXboxButtons[button];
     }
     public void Remaping()
     {
         StartCoroutine(timerRemaping());
     }
-    public void SetButton(XboxController.XboxButton passed)
+    public void SetButton(KeyCode passed)
     {
         List<string> xboxCodes = GameObject.Find("Player 1 Camera").GetComponentInChildren<PauseMenu>().xboxCodes;
-        player = GameObject.Find("PlayerDefault").GetComponentInChildren<IInputPlayer>();
         foreach (string xKey in xboxCodes)
         {
             if (passed.ToString() == xKey)
@@ -64,7 +68,9 @@ public class XboxRemap : MonoBehaviour
                 return;
             }
         }
-        InputManager.RemapXboxButton(action, passed, player);
+        PlayerAction actn = InputManager.playerButtons[action];
+        actn.xboxKey = passed;
+        InputManager.playerButtons[action] = actn;
         xboxCodes.Remove(keyName);
         keyName = passed.ToString();
         xboxCodes.Add(keyName);
@@ -77,6 +83,6 @@ public class XboxRemap : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         remaping = true;
-    } */
+    }
 }
 
