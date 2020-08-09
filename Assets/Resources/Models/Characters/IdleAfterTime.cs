@@ -11,7 +11,7 @@ public class IdleAfterTime : MonoBehaviour {
         player = PlayerColorController.singleton.GetComponent<PlayerMovement>();
 	}
 	
-	float t;
+	private float t;
 	void LateUpdate () {
         if(player.isStill()) {
          t+=Time.deltaTime;
@@ -25,4 +25,9 @@ public class IdleAfterTime : MonoBehaviour {
             t = 0;
         }
 	}
+
+    public void stopLongIdle () {
+        anim.Play("Idle");
+        t = 0;
+    }
 }
