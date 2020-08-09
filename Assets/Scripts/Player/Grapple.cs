@@ -109,13 +109,16 @@ public class Grapple : MonoBehaviour
             //Vector3.Distance(p.transform.position,transform.position)+100*V
 
             var dir = (t != null) ? Vector3.Normalize(t.transform.position - transform.position) : Vector3.zero;
-            if (t != null && Physics.Raycast(transform.position, dir, out r, hookRange) && r.transform == t.transform)
+            var newPos = (transform.position + dir/2 + new Vector3(0, 0.5f, 0));
+            var forDir = (t != null) ? Vector3.Normalize(t.transform.position - newPos) : Vector3.zero;
+            if (t != null && Physics.Raycast(newPos, forDir, out r, hookRange) && r.transform == t.transform)
             {
                 hit = r;
                 target = t.gameObject;
             }
-            else 
+            else {
                 target = null;
+            }
         }
         else {
             if(state.canGrappleBox || (canGrapple && !isGrappled)) {
@@ -393,6 +396,11 @@ public class Grapple : MonoBehaviour
         {
             line.SetPosition(0, handTransform.position);
             line.SetPosition(1, grappleAnchor.transform.position);
+        }
+
+        // Reset long idle
+        if(canGrapple && !isGrappled && animator.GetCurrentAnimatorStateInfo(0).IsName("SpecialIdle")) {
+            GetComponent<IdleAfterTime>().stopLongIdle();
         }
     }
 }
