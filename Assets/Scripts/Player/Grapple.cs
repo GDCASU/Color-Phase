@@ -99,7 +99,7 @@ public class Grapple : MonoBehaviour
 
             // This LINQ query filters for valid targets and then sorts by distance
             var t = GrappleTarget.targets
-                .Where(x => (x.neutral == true || (x.PushPull && state.canGrappleBox) || x.targetColor == state.currentColor)   // Is it a valid target
+                .Where(x => (x.neutral == true || (x.PushPull && state.canGrappleBox && x.targetColor == state.currentColor) || x.targetColor == state.currentColor)   // Is it a valid target
                     && Vector3.Distance(x.transform.position, transform.position) <= hookRange                                  // Is the target in range
                     && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0   // Is the target in front of the camera (filter out targets behind our view)
                     && OnScreen(x.transform.position))                                                                          // Is the target in screenspace
