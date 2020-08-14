@@ -130,9 +130,9 @@ public class PauseMenu : MonoBehaviour
     #region Title Methods
     public void StartGame()
     {
-        var latest = GameManager.latestUnlocked;
+        var latest = GameManager.lastLoaded;
         //SceneManager.LoadScene( (latest >= GameManager.totalLevels || latest < 1) ? 1 : GameManager.latestUnlocked);
-        SceneManager.LoadScene(1); // START ON THE FIRST LEVEL FOR DEMO BUILD
+        SceneManager.LoadScene(latest);
     }
     #endregion
 
@@ -265,7 +265,8 @@ public class PauseMenu : MonoBehaviour
         string name = scene.Substring(scene.LastIndexOf('/') + 1);
         name = name.Substring(0, name.Length - 6);
         button.GetComponentInChildren<Text>().text = name;
-
+        // Has the level been completed
+        button.transform.GetChild(1).gameObject.SetActive(GameManager.levelCompletion[index-1]);
     }
     public void buildControllerRemapUI(int passed)
     {

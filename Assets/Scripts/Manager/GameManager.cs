@@ -6,10 +6,12 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using UnityEngine.UI;
+using System.Linq;
+using System.Collections;
 
-/* Author:      Zachary Schmalz & Jacob Hann
+/* Authors:      Zachary Schmalz, Jacob Hann, Christian Gonzalez
  * Version:     1.1.2
- * Date:        April 4, 2019
+ * Date:        August 13, 2020
  * 
  * This manager handles game state, saving, and ensures that the other managers are avalible
  */
@@ -20,9 +22,19 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     private static GameManager singleton;
-    public static int latestUnlocked;
     const string saveName = "ColorPhase.dat";
-    public const int totalLevels = 12; // This needs to be updated with total levels (not scenes) in build 
+    public const int totalLevels = 23; // This needs to be updated with total levels (not scenes) in build 
+    public static bool [] levelCompletion = new bool[totalLevels];
+    public static int lastLoaded = 1;
+    [Serializable]
+    public struct SaveData {
+        public bool [] levelCompletion;
+        public int lastLoaded;
+        public SaveData(bool [] levelCompletion, int lastLoaded) {
+            this.levelCompletion = levelCompletion;
+            this.lastLoaded = lastLoaded;
+        }
+    }
     void Awake()
     {
         if (singleton == null)
@@ -44,12 +56,35 @@ public class GameManager : MonoBehaviour
         Debug.GeneralLog("GameManager Awake");
     }
 
+    void Start() {
+        // This really should be somewhere else but I dont care at this point
+        if(SceneManager.GetActiveScene().name == "Title") {
+            // Start/Continue Button
+            var btn = GameObject.Find("LoadGames").GetComponentInChildren<Text>();
+            // If we've completed any levels then continue
+            btn.text = levelCompletion.Any(level => level)
+                ? "Continue"
+                : "Start";
+        }
+    }
+
     static void updateSaveData (Scene scene, LoadSceneMode sceneMode) {
-        // ensure that we dont write numbers for the extra scenes (not levels)
-        if(scene.buildIndex > latestUnlocked && scene.buildIndex <= totalLevels) latestUnlocked = scene.buildIndex;
+        // check for the first incomplete level if we dont have a last opened
+        int firstIncompleteLevel = 0;
+        for(int i = 0; i < totalLevels; i++) {
+            if(levelCompletion[i]) {
+                firstIncompleteLevel = i + 1;
+                break;
+            }
+        }
+        if(firstIncompleteLevel != 0) {
+            lastLoaded = firstIncompleteLevel;
+        } else {
+            // write the last scene opened for "continue" option
+            lastLoaded = scene.buildIndex;
+        }
         // write to save file
-        SaveGame ();
-        Debug.Log("Saved\n"+latestUnlocked);
+        SaveGame();
     }
 
     static bool SaveGame () {
@@ -58,7 +93,7 @@ public class GameManager : MonoBehaviour
         BinaryFormatter formatter = new BinaryFormatter();
         try 
         {
-            formatter.Serialize(fs, latestUnlocked);
+            formatter.Serialize(fs, new SaveData(levelCompletion, lastLoaded));
         }
         catch (SerializationException e) 
         {
@@ -77,12 +112,12 @@ public class GameManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/" + saveName))
         {
             FileStream fs = File.Open(Application.persistentDataPath + "/" + saveName, FileMode.Open);
-            if(SceneManager.GetActiveScene().name=="Title")GameObject.Find("LoadGames").GetComponentInChildren<Text>().text = "Continue";
             try
             {
                 BinaryFormatter formatter = new BinaryFormatter();
-                latestUnlocked = (int)formatter.Deserialize(fs);
-                Debug.Log(latestUnlocked);
+                var loadedData = (SaveData)formatter.Deserialize(fs);
+                lastLoaded = loadedData.lastLoaded;
+                levelCompletion = loadedData.levelCompletion;
             }
             catch (SerializationException e)
             {
@@ -94,11 +129,7 @@ public class GameManager : MonoBehaviour
                 fs.Close();
             }
         }
-        else
-        {
-            GameObject.Find("LoadGames").GetComponentInChildren<Text>().text = "Start";
-        }
-        
+
         return loaded;
     }
 }
