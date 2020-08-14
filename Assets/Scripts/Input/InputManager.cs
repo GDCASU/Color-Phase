@@ -44,7 +44,7 @@ public class InputManager : MonoBehaviour {
         controller,
         keyboard
     }
-    public static InputMode inputMode = InputMode.both;
+    public static InputMode inputMode = InputMode.keyboard;
     [SerializeField]
     public static PlayerAction[] playerActions = new PlayerAction[7];
 
@@ -86,7 +86,7 @@ public class InputManager : MonoBehaviour {
         playerActions[1].xboxKey = KeyCode.Joystick1Button3;
         playerActions[2].keyboardKey = KeyCode.Mouse0;
         playerActions[2].xboxKey = KeyCode.Joystick1Button4;
-        playerActions[3].keyboardKey = KeyCode.Mouse0;
+        playerActions[3].keyboardKey = KeyCode.Mouse1;
         playerActions[3].xboxKey = KeyCode.Joystick1Button5;
         playerActions[4].keyboardKey = KeyCode.KeypadEnter;
         playerActions[4].xboxKey = KeyCode.Joystick1Button0;
