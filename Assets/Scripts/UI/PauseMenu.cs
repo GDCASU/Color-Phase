@@ -161,7 +161,7 @@ public class PauseMenu : MonoBehaviour
         
         //if(player!=null && player.InputMethod!=InputManager.InputMethod.XboxController) Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
+        Cursor.visible = true;
     }
     public void ResumeGame()
     {
