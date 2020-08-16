@@ -40,7 +40,7 @@ public class TimedMovement : MonoBehaviour {
         keyframes.Insert(0, new MovementKeyframe(transform, 0));
         for(int i = 0; i < keyframes.Count-1; i++) {
             var prev = keyframes[i]; var next = keyframes[i + 1];
-            for (float t=0; t<1; t += next.timeToReachMe / totalMovementScaling) {
+            for (float t=0; t<1; t += next.timeToReachMe / (totalMovementScaling * Time.deltaTime)) {
                 prev.InterpTransform(next, t, transform);
                 yield return null;
             }
@@ -51,7 +51,7 @@ public class TimedMovement : MonoBehaviour {
         while(true) {
             for(int i = 0; i < keyframes.Count; i++) {
                 var prev = keyframes[i % (keyframes.Count)]; var next = keyframes[ (i + 1) % (keyframes.Count) ];
-                for (float t=0; t<1; t += next.timeToReachMe / totalMovementScaling) {
+                for (float t=0; t<1; t += next.timeToReachMe / (totalMovementScaling * Time.deltaTime)) {
                     prev.InterpTransform(next, t, transform);
                     yield return null;
                 }

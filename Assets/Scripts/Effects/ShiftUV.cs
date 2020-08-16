@@ -20,7 +20,8 @@ public class ShiftUV : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UV_Offset = new Vector2(UV_Offset.x + U_Speed, UV_Offset.y + V_Speed);
+        var t = Time.deltaTime * 20;
+        UV_Offset = new Vector2(UV_Offset.x + U_Speed * t, UV_Offset.y + V_Speed * t);
         for (int i = 0; i < ObjectRender.materials.Length; i++)
         {
             ObjectRender.materials[i].SetTextureOffset("_MainTex", UV_Offset);

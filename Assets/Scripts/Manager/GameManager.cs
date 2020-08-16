@@ -30,11 +30,15 @@ public class GameManager : MonoBehaviour
     public struct SaveData {
         public bool [] levelCompletion;
         public int lastLoaded;
-        public SaveData(bool [] levelCompletion, int lastLoaded) {
+        [OptionalField(VersionAdded=2)]
+        public PauseMenu.OptionsData options;
+        public SaveData(bool [] levelCompletion, int lastLoaded, PauseMenu.OptionsData options) {
             this.levelCompletion = levelCompletion;
             this.lastLoaded = lastLoaded;
+            this.options = options;
         }
     }
+
     void Awake()
     {
         if (singleton == null)
@@ -69,20 +73,21 @@ public class GameManager : MonoBehaviour
     }
 
     static void updateSaveData (Scene scene, LoadSceneMode sceneMode) {
-        // check for the first incomplete level if we dont have a last opened
         int firstIncompleteLevel = 0;
-        for(int i = 0; i < totalLevels; i++) {
-            if(levelCompletion[i]) {
-                firstIncompleteLevel = i + 1;
-                break;
+        // if we're on the title screen or we've already completed this level
+        if(scene.buildIndex == 0 || levelCompletion[scene.buildIndex]) {
+            // check for the first incomplete level if we dont have a last opened
+            for(int i = 0; i < totalLevels; i++) {
+                if(levelCompletion[i]) {
+                    firstIncompleteLevel = i + 1;
+                    break;
+                }
             }
-        }
-        if(firstIncompleteLevel != 0) {
-            lastLoaded = firstIncompleteLevel;
         } else {
             // write the last scene opened for "continue" option
-            lastLoaded = scene.buildIndex;
+            firstIncompleteLevel = scene.buildIndex;
         }
+        lastLoaded = firstIncompleteLevel;
         // write to save file
         SaveGame();
     }
@@ -93,7 +98,7 @@ public class GameManager : MonoBehaviour
         BinaryFormatter formatter = new BinaryFormatter();
         try 
         {
-            formatter.Serialize(fs, new SaveData(levelCompletion, lastLoaded));
+            formatter.Serialize(fs, new SaveData(levelCompletion, lastLoaded, new PauseMenu.OptionsData()));
         }
         catch (SerializationException e) 
         {

@@ -19,6 +19,8 @@ public class PlayerCamControl : MonoBehaviour
     private Vector3 lastHitNormal;
     private float ticker = 25f;
 
+    public float upVector = 2f;
+
     //Camera restraint variables
     [SerializeField] private float minVertAngle = -20f;
     [SerializeField] private float maxVertAngle = 90f;
@@ -34,10 +36,10 @@ public class PlayerCamControl : MonoBehaviour
     void Update()
     {
         // layer mask for color and color ignore laeyrs (interact and barrier)
-        var layerMask = ~(1 << 20 | 1 << 21 | 1 << 22 | 1 << 23 | 1 << 25 | 1 << 26 | 1 << 27 | 1 << 28);
+        var layerMask = ~(1 << 20 | 1 << 21 | 1 << 22 | 1 << 23 | 1 << 25 | 1 << 26 | 1 << 27 | 1 << 28 | 1 << 29);
         RaycastHit hit;
         radius = MaxRadius+1;
-        if (Physics.Linecast(transform.position + Vector3.up * 2, getCamPosition(), out hit, layerMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Linecast(transform.position + Vector3.up * upVector, getCamPosition(), out hit, layerMask, QueryTriggerInteraction.Ignore))
         {
             radius = hit.distance - 0.2f;
             if (nextHitNormal != hit.normal)

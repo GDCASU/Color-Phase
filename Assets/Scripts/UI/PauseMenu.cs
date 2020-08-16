@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Linq;
 using UnityEngine.UI;
+using System.Runtime.Serialization;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -46,6 +47,14 @@ public class PauseMenu : MonoBehaviour
     public GameObject titleScreenCanvas;
     #endregion
 
+    // Options stuff
+    [Serializable]
+    public struct OptionsData {
+        public bool fullscreen;
+        public int resolution_x;
+        public int resolution_y;
+    }
+
     private void Start()
     {
         settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<SoundManager>().MasterVolume;
@@ -62,7 +71,7 @@ public class PauseMenu : MonoBehaviour
         keyboardCodes.Add("W");
         keyboardCodes.Add("S");
         keyboardCodes.Add("D");
-        keyboardCodes.Add("A ");
+        keyboardCodes.Add("A");
         if (SceneManager.GetActiveScene().name == "Title")
         {
             main = first;
@@ -262,7 +271,7 @@ public class PauseMenu : MonoBehaviour
         button.GetComponent<RectTransform>().localScale = Vector3.one;
         button.GetComponent<ButtonProperties>().SetScene(scene, this);
 
-        string name = scene.Substring(scene.LastIndexOf('/') + 1);
+        string name = scene.Substring(scene.LastIndexOf('/') + 3);
         name = name.Substring(0, name.Length - 6);
         button.GetComponentInChildren<Text>().text = name;
         // Has the level been completed
