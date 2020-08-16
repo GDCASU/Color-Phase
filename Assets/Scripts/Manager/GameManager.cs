@@ -71,23 +71,34 @@ public class GameManager : MonoBehaviour
                 : "Start";
         }
     }
-
-    static void updateSaveData (Scene scene, LoadSceneMode sceneMode) {
+    // We want to set last loaded to the current level UNLESS its beaten or is the title screen
+    // Otherwise 
+    public static void updateLastloaded(Scene scene) {
         int firstIncompleteLevel = 0;
         // if we're on the title screen or we've already completed this level
-        if(scene.buildIndex == 0 || levelCompletion[scene.buildIndex]) {
+        if(scene.buildIndex == 0 && levelCompletion[lastLoaded] || levelCompletion[scene.buildIndex-1]) {
             // check for the first incomplete level if we dont have a last opened
             for(int i = 0; i < totalLevels; i++) {
-                if(levelCompletion[i]) {
+                if(!levelCompletion[i]) {
                     firstIncompleteLevel = i + 1;
                     break;
                 }
-            }
+            } 
         } else {
             // write the last scene opened for "continue" option
-            firstIncompleteLevel = scene.buildIndex;
+            // if its title screen write the last loaded
+            firstIncompleteLevel = scene.buildIndex == 0 ? lastLoaded : scene.buildIndex;
         }
-        lastLoaded = firstIncompleteLevel;
+        // god this is just me giving up on thinking
+        if(scene.buildIndex == 0) {
+            // if we made it to the end 
+            lastLoaded = firstIncompleteLevel > 0 ? firstIncompleteLevel : lastLoaded;
+        } else {
+            lastLoaded = firstIncompleteLevel > 0 ? firstIncompleteLevel : scene.buildIndex;
+        }
+    }
+    static void updateSaveData (Scene scene, LoadSceneMode sceneMode) {
+        updateLastloaded(scene);
         // write to save file
         SaveGame();
     }
