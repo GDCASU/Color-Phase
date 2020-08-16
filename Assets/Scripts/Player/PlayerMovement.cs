@@ -403,6 +403,7 @@ public class PlayerMovement : MonoBehaviour
             detached = false;
             animator.SetBool("Detach",false);
             animator.SetTrigger("Stuck");
+            walljumpbuffer = true;
             
             transform.LookAt(new Vector3(transform.position.x - dir.x, transform.position.y, transform.position.z - dir.z));
         }
@@ -411,12 +412,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float wallJumpStrength = 10;
     private float wallJumpHeightStrength = 1.8f;
+    private bool walljumpbuffer = false;
     private void checkDetatch(Collision collision)
     {
         Vector3 dir = collision.contacts[0].normal /*+ cam.transform.forward*/ ;
         dir +=   getDirFromInput(InputManager.GetAxis(PlayerAxis.MoveHorizontal), InputManager.GetAxis(PlayerAxis.MoveVertical)) / 2f;
+
+        // prevents you from jumping off the first frame
+        walljumpbuffer &= InputManager.GetButton(PlayerButton.Jump);
         
-        if(InputManager.GetButtonDown(PlayerButton.Jump) && !detached )
+        if(InputManager.GetButton(PlayerButton.Jump) && !walljumpbuffer && !detached )
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             rb.velocity = new Vector3(dir.x * wallJumpStrength, wallJumpHeightStrength * jumpStrength, dir.z * wallJumpStrength);
