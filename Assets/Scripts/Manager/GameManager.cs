@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     public const int totalLevels = 23; // This needs to be updated with total levels (not scenes) in build 
     public static bool [] levelCompletion = new bool[totalLevels];
     public static int lastLoaded = 1;
+
+    public static UnityEngine.SceneManagement.Scene activeScene { get { return SceneManager.GetActiveScene(); } }
     [Serializable]
     public struct SaveData {
         public bool [] levelCompletion;
@@ -56,13 +58,18 @@ public class GameManager : MonoBehaviour
         LoadGame ();
 
         SceneManager.sceneLoaded += updateSaveData;
+        SceneManager.sceneLoaded += fixStupidFuckingPauseMenu;
 
         Debug.GeneralLog("GameManager Awake");
     }
 
+    static void fixStupidFuckingPauseMenu (Scene scene, LoadSceneMode sceneMode) { 
+        Time.timeScale = 1;
+    }
+
     void Start() {
         // This really should be somewhere else but I dont care at this point
-        if(SceneManager.GetActiveScene().name == "Title") {
+        if(activeScene.name == "Title") {
             // Start/Continue Button
             var btn = GameObject.Find("LoadGames").GetComponentInChildren<Text>();
             // If we've completed any levels then continue
@@ -76,7 +83,7 @@ public class GameManager : MonoBehaviour
     public static void updateLastloaded(Scene scene) {
         int firstIncompleteLevel = 0;
         // if we're on the title screen or we've already completed this level
-        if(scene.buildIndex == 0 && levelCompletion[lastLoaded] || levelCompletion[scene.buildIndex-1]) {
+        if(scene.buildIndex == 0 && levelCompletion[lastLoaded] || scene.buildIndex > 0 && levelCompletion[scene.buildIndex-1]) {
             // check for the first incomplete level if we dont have a last opened
             for(int i = 0; i < totalLevels; i++) {
                 if(!levelCompletion[i]) {

@@ -30,11 +30,13 @@ public class TimedMovement : MonoBehaviour {
     public bool loop=false;
     public float totalMovementScaling = 1f;
     private bool moving;
+    private int scene;
     public List<MovementKeyframe> keyframes = new List<MovementKeyframe>();
     void Start () { 
         if(loop) StartCoroutine( LoopingMovement() );
         else StartCoroutine( Movement() );
-        moving = true; 
+        moving = true;
+        scene = GameManager.activeScene.buildIndex;
     }
     IEnumerator Movement() {
         keyframes.Insert(0, new MovementKeyframe(transform, 0));
@@ -48,7 +50,7 @@ public class TimedMovement : MonoBehaviour {
     }
     IEnumerator LoopingMovement() {
         keyframes.Insert(0, new MovementKeyframe(transform.position, transform.rotation.eulerAngles, keyframes.Last().timeToReachMe,Curves.Lerp));
-        while(true) {
+        while(scene == GameManager.activeScene.buildIndex) {
             for(int i = 0; i < keyframes.Count; i++) {
                 var prev = keyframes[i % (keyframes.Count)]; var next = keyframes[ (i + 1) % (keyframes.Count) ];
                 for (float t=0; t<1; t += next.timeToReachMe / (totalMovementScaling * Time.deltaTime)) {
