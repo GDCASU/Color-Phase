@@ -160,20 +160,20 @@ public class PlayerMovement : MonoBehaviour
             l.x = -1600;
             respawnBars[i].localPosition = l;
         }
-
+        
+        bool hasMoved = false;
         // move them
-        for(int t = 0; t < effectTime; t++) {
+        for(float t = 0; t < effectTime; t+=(Time.deltaTime*50) ) {
             float percentage = (float)t/(float)effectTime;
-            float c = percentage - 0.5f;
-            c = c * c;
             for(int i = 0; i < respawnBars.Length; i++) {
                 var l = respawnBars[i].localPosition;
-                l.x += 6400 / effectTime + c * i * 15;
+                l.x = Mathf.Lerp(-1600, 6400, percentage) + i * 70;
                 respawnBars[i].localPosition = l;
             }
-            if ( t == effectTime / 3) {
+            if (!hasMoved && t >= effectTime / 3.5) {
                 rb.velocity = Vector3.zero;
                 transform.position = (Vector3)spawnLoc;
+                hasMoved = true;
             }
             yield return new WaitForEndOfFrame();
         }

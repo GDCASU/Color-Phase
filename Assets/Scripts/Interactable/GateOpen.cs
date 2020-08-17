@@ -7,6 +7,7 @@ public class GateOpen : MonoBehaviour
     public ButtonToggle[] buttonToggleScript;
     public float range = 3.5f;
     public float speed = 0.1f;
+    const float constTime = 100;
     public bool invertState = false;
     public bool startOpen = false;
     public bool orType = false;
@@ -42,14 +43,14 @@ public class GateOpen : MonoBehaviour
                 {
                     if (gateOffset < range)
                     {
-                        gateOffset = gateOffset + speed;
+                        gateOffset = gateOffset + speed * Time.deltaTime * constTime;
                     }
                 }
                 else
                 {
                     if (gateOffset > 0f)
                     {
-                        gateOffset = gateOffset - speed;
+                        gateOffset = gateOffset - speed * Time.deltaTime * constTime;
                     }
                 }
             }
@@ -59,14 +60,14 @@ public class GateOpen : MonoBehaviour
                 {
                     if (gateOffset < range)
                     {
-                        gateOffset = gateOffset + speed;
+                        gateOffset = gateOffset + speed * Time.deltaTime * constTime;
                     }
                 }
                 else
                 {
                     if (gateOffset > 0f)
                     {
-                        gateOffset = gateOffset - speed;
+                        gateOffset = gateOffset - speed * Time.deltaTime * constTime;
                     }
                 }
             }
@@ -85,14 +86,14 @@ public class GateOpen : MonoBehaviour
                 {
                     if (gateOffset > 0f)
                     {
-                        gateOffset = gateOffset - speed;
+                        gateOffset = gateOffset - speed * Time.deltaTime * constTime;
                     }
                 }
                 else
                 {
                     if (gateOffset < range)
                     {
-                        gateOffset = gateOffset + speed;
+                        gateOffset = gateOffset + speed * Time.deltaTime * constTime;
                     }
                 }
             }
@@ -102,14 +103,14 @@ public class GateOpen : MonoBehaviour
                 {
                     if (gateOffset > 0f)
                     {
-                        gateOffset = gateOffset - speed;
+                        gateOffset = gateOffset - speed * Time.deltaTime * constTime;
                     }
                 }
                 else
                 {
                     if (gateOffset < range)
                     {
-                        gateOffset = gateOffset + speed;
+                        gateOffset = gateOffset + speed * Time.deltaTime * constTime;
                     }
                 }
             }

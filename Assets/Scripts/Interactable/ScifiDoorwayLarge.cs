@@ -29,11 +29,11 @@ public class ScifiDoorwayLarge : MonoBehaviour {
     {
         if (open == false && move > 0f)
         {
-            move = move - 0.05f; // close door
+            move = move - 0.05f * Time.deltaTime * 50; // close door
         }
         if (open == true && move < 1.8f)
         {
-            move = move + 0.05f; // open door
+            move = move + 0.05f * Time.deltaTime * 50; // open door
         }
 
         if (open == false && move < 0f)
