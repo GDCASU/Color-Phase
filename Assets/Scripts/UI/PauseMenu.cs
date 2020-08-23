@@ -25,7 +25,8 @@ public class PauseMenu : MonoBehaviour
     public int currentPanel;
     int index;
     int numberOfScenes;
-    public GameObject settings;
+    public GameObject controlSettings;
+    public GameObject generalSettings;
     public GameObject selectLevel;
     private GameObject canvas;
     public GameObject main;
@@ -54,10 +55,18 @@ public class PauseMenu : MonoBehaviour
         public int resolution_x;
         public int resolution_y;
     }
-
+    public List<AudioSource> sfx = new List<AudioSource>();
+    private AudioSource music;
+    public static PauseMenu singleton;
     private void Start()
     {
-        settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<SoundManager>().MasterVolume;
+         if (singleton == null)
+            singleton = this;
+        else
+            Destroy(gameObject);
+        
+        //settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<SoundManager>().MusicMasterVolume;
+        music = GameObject.Find("Audio Source").GetComponent<AudioSource>();
         panels = new List<GameObject>();
         keyboardCodes = new List<string>();
         xboxCodes = new List<string>();
@@ -124,9 +133,14 @@ public class PauseMenu : MonoBehaviour
                 currentPanel = 0;
 
             }
-            else if(settings.activeInHierarchy)
+            else if(controlSettings.activeInHierarchy)
             {
-                settings.SetActive(false);
+                controlSettings.SetActive(false);
+                main.SetActive(true);
+            }
+            else if(generalSettings.activeInHierarchy)
+            {
+                generalSettings.SetActive(false);
                 main.SetActive(true);
             }
             else if(SceneManager.GetActiveScene().name != "Title")
@@ -178,6 +192,27 @@ public class PauseMenu : MonoBehaviour
         }
         HUD.SetActive(true);
     }
+    // Straight up fucking spagetti i will not fix this ass class 
+    public void Back() {
+        if(panels[currentPanel].activeInHierarchy)
+        {
+            panels[currentPanel].SetActive(false);
+            main.SetActive(true);
+            currentPanel = 0;
+
+        }
+        else if(controlSettings.activeInHierarchy)
+        {
+            controlSettings.SetActive(false);
+            main.SetActive(true);
+        }
+        else if(generalSettings.activeInHierarchy)
+        {
+            generalSettings.SetActive(false);
+            main.SetActive(true);
+        }
+        EventSystem.current.SetSelectedGameObject(main.transform.GetChild(0).gameObject);
+    }
     public void MainMenu()
     {
         SceneManager.LoadScene("Title");
@@ -198,11 +233,22 @@ public class PauseMenu : MonoBehaviour
         selectLevel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(panels[currentPanel].transform.GetChild(1).gameObject);
     }
-    public void Settings()
+    public void ControlSettings()
     {
         main.SetActive(false);
-        settings.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(settings.transform.GetChild(0).gameObject);
+        controlSettings.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(controlSettings.transform.GetChild(0).gameObject);
+    }
+
+    public void GeneralSettings()
+    {
+        main.SetActive(false);
+        generalSettings.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(generalSettings.transform.GetChild(0).gameObject);
+    }
+
+    public void SwitchControllerType(Dropdown change) {
+        InputManager.inputMode = (InputManager.InputMode) change.value;
     }
     public void nextLevels()
     {
@@ -221,9 +267,13 @@ public class PauseMenu : MonoBehaviour
         temp.panels[temp.currentPanel].SetActive(true);
         EventSystem.current.SetSelectedGameObject(temp.panels[temp.currentPanel].transform.GetChild(1).gameObject);
     }
-    public void SetVolume(float passed)
+    public void SetMusicVolume(float passed)
     {
-        GameObject.Find("Audio Source").GetComponent<AudioSource>().volume = passed;
+        music.volume = passed;
+    }
+    public void SetEffectsVolume(float passed)
+    {
+        sfx.ForEach(s => s.volume = passed);
     }
     public void BuildLevelsUI(int passed)
     {
@@ -248,6 +298,7 @@ public class PauseMenu : MonoBehaviour
                 temp.transform.SetParent(panels[currentPanel].transform);
                 temp.GetComponent<RectTransform>().localPosition = new Vector2(360, 0);
                 temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 180);
+                temp.transform.localScale = Vector3.one * 2;
             }
             if (index >= 10)
             {
@@ -255,6 +306,7 @@ public class PauseMenu : MonoBehaviour
                 temp.transform.SetParent(panels[currentPanel].transform);
                 temp.GetComponent<RectTransform>().localPosition = new Vector2(-360, 0);
                 temp.GetComponent<RectTransform>().localRotation = Quaternion.Euler(0, 0, 0);
+                temp.transform.localScale = Vector3.one * 2;
             }
         }
         scene = scenes[index];
@@ -279,12 +331,12 @@ public class PauseMenu : MonoBehaviour
     }
     public void buildControllerRemapUI(int passed)
     {
-        float yPosition = -90;
+        float yPosition = -60;
 
         Button keyboard = Instantiate(keyboardPrefab, Vector2.zero, Quaternion.identity);
-        keyboard.transform.parent = settings.transform;
-        keyboard.GetComponent<RectTransform>().localPosition = new Vector2(0, 90 + (yPosition * passed));
-        keyboard.GetComponent<RectTransform>().localScale = Vector3.one;
+        keyboard.transform.parent = controlSettings.transform;
+        keyboard.GetComponent<RectTransform>().localPosition = new Vector2(-70, 20 + (yPosition * passed));
+        keyboard.GetComponent<RectTransform>().localScale = Vector3.one * 0.729927f;
         keyboard.GetComponent<KeyboardRemap>().InitiateButton(passed);
         string key = keyboard.GetComponent<KeyboardRemap>().keyName;
         keyboard.GetComponentInChildren<Text>().text = key;
@@ -292,9 +344,9 @@ public class PauseMenu : MonoBehaviour
 
 
         Button xbox = Instantiate(xboxPrefab, Vector2.zero, Quaternion.identity);
-        xbox.transform.parent = settings.transform;
-        xbox.GetComponent<RectTransform>().localPosition = new Vector2(275, 90 + (yPosition * passed));
-        xbox.GetComponent<RectTransform>().localScale = Vector3.one;
+        xbox.transform.parent = controlSettings.transform;
+        xbox.GetComponent<RectTransform>().localPosition = new Vector2(220, 20 + (yPosition * passed));
+        xbox.GetComponent<RectTransform>().localScale = Vector3.one * 0.729927f;
         xbox.GetComponent<XboxRemap>().InitiateButton(passed);
         string xb = xbox.GetComponent<XboxRemap>().keyName;
         xbox.GetComponentInChildren<Text>().text = xb;

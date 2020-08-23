@@ -35,6 +35,7 @@ public class ButtonToggle : MonoBehaviour
     {
         stateChangeMemory = state;
         audioSource = GetComponent<AudioSource>();
+        PauseMenu.singleton.sfx.Add(audioSource);
         GetComponent<MeshRenderer>().material = state ? on : off;
         startPosition = transform.position;
     }
