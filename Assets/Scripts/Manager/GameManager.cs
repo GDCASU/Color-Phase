@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
 
     static void fixStupidFuckingPauseMenu (Scene scene, LoadSceneMode sceneMode) { 
         Time.timeScale = 1;
+        LoadingScene = false;
     }
 
     void Start() {
@@ -154,5 +155,43 @@ public class GameManager : MonoBehaviour
         }
 
         return loaded;
+    }
+
+    public static bool LoadingScene = false;
+
+    public static IEnumerator LoadScene(string SceneName) {
+        if(LoadingScene) yield break;
+        Debug.Log("Loading...");
+        LoadingScene = true;
+
+        // Hook into the UI
+        GameObject loadingCanvas;
+
+        Transform t = Camera.main.transform.Find("loadingCanvas");
+
+        if(t == null) {
+            // create new
+            loadingCanvas = Instantiate(Resources.Load("loadingCanvas"), Vector2.zero, Quaternion.identity) as GameObject;
+            loadingCanvas.transform.SetParent(Camera.main.transform);
+        } else {
+            loadingCanvas = t.gameObject;
+        }
+
+        var background = loadingCanvas.transform.GetChild(0).GetComponent<Image>();
+        background.color = new Color(0,0,0,0);
+
+        var text = loadingCanvas.transform.GetChild(1).GetComponent<Text>();
+        text.text = "Loading... ";
+
+        AsyncOperation loading = SceneManager.LoadSceneAsync(SceneName);
+
+        while(!loading.isDone) {
+            float current = Mathf.Clamp01(loading.progress / 0.9f);
+            Debug.Log(loading.progress);
+            text.text = "Loading... " + current + "%";
+            background.color = new Color(0,0,0, 0.25f + current * 3f);
+
+            yield return null;
+        }
     }
 }
