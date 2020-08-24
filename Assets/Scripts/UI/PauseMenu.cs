@@ -275,6 +275,7 @@ public class PauseMenu : MonoBehaviour
     {
         sfx.ForEach(s => s.volume = passed);
     }
+    
     public void BuildLevelsUI(int passed)
     {
         float xPosition = 160;
@@ -291,6 +292,7 @@ public class PauseMenu : MonoBehaviour
             panel.GetComponent<RectTransform>().localScale = Vector3.one;
             panel.GetComponent<RectTransform>().sizeDelta = new Vector2(canvasWidth, canvasHeight);
             panel.SetActive(false);
+            panel.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(Back);
             panels.Add(panel);
             if ((numberOfScenes - index) > 10)
             {
