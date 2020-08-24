@@ -22,7 +22,7 @@ public class ButtonProperties : MonoBehaviour
     public void SwitchScene()
     {
         if(pauseManager != null) pauseManager.ResumeGame();
-        SceneManager.LoadScene(scene);
+        StartCoroutine(GameManager.LoadScene(scene));
     }
 
 

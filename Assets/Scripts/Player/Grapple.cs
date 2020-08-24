@@ -103,7 +103,7 @@ public class Grapple : MonoBehaviour
                     && Vector3.Distance(x.transform.position, transform.position) <= hookRange                                  // Is the target in range
                     && Vector3.Dot(x.transform.position - Camera.main.transform.position, Camera.main.transform.forward) >= 0   // Is the target in front of the camera (filter out targets behind our view)
                     && OnScreen(x.transform.position))                                                                          // Is the target in screenspace
-                .OrderBy(p => Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f, 0.5f)))// Now order the targets by how close they are to the center of the screen
+                .OrderBy(p => 100 * Vector2.Distance(Camera.main.WorldToViewportPoint(p.transform.position), new Vector2(0.5f, 0.5f)) + Vector2.Distance(p.transform.position, transform.position))// Now order the targets by how close they are to the center of the screen
                 .FirstOrDefault();                                                                                              // Take the first of these
             // ADD THIS BACK TO ORDER QUERY LATER FOR SMOOTHING OVER DISTANCE
             //Vector3.Distance(p.transform.position,transform.position)+100*V

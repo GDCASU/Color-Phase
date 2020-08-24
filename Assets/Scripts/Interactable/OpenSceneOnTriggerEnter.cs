@@ -15,7 +15,7 @@ public class OpenSceneOnTriggerEnter : MonoBehaviour
             DontDestroyOnLoad(GameObject.Find("Managers"));
              // Mark completed
             GameManager.levelCompletion[SceneManager.GetActiveScene().buildIndex-1] = true;
-            SceneManager.LoadScene(sceneName);
+            StartCoroutine(GameManager.LoadScene(sceneName));
         }
     }
 }
