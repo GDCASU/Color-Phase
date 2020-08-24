@@ -58,12 +58,14 @@ public class PauseMenu : MonoBehaviour
     public List<AudioSource> sfx = new List<AudioSource>();
     private AudioSource music;
     public static PauseMenu singleton;
-    private void Start()
-    {
-         if (singleton == null)
+    private void Awake() {
+        if (singleton == null)
             singleton = this;
         else
             Destroy(gameObject);
+    }
+    private void Start()
+    {
         
         //settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<SoundManager>().MusicMasterVolume;
         music = GameObject.Find("Audio Source").GetComponent<AudioSource>();
@@ -116,6 +118,26 @@ public class PauseMenu : MonoBehaviour
             buildControllerRemapUI(x);
         }
         currentPanel = 0;
+
+        // setup the main setting menu
+        var resolutions = Screen.resolutions;
+
+        var resDropdown = generalSettings.transform.Find("ResolutionDropdown").GetComponent<Dropdown>();
+
+        resDropdown.ClearOptions();
+
+        var curRes = Screen.currentResolution;
+        var options = resolutions.Select((r, i) => {
+            string o = r.width + " x " + r.height;
+            if(r.width == curRes.width && r.height == curRes.height) resDropdown.value = i;
+            return o;
+        }).ToList();
+
+        resDropdown.AddOptions(options);
+        resDropdown.RefreshShownValue();
+
+        //
+        var qualityDropdown = generalSettings.transform.Find("QualityDropdown");
     }
 
     private void Update()
@@ -273,7 +295,9 @@ public class PauseMenu : MonoBehaviour
     }
     public void SetEffectsVolume(float passed)
     {
-        sfx.ForEach(s => s.volume = passed);
+        for(int i = 0; i < sfx.Count(); i++) {
+            sfx[i].volume = passed;
+        }
     }
     
     public void BuildLevelsUI(int passed)
@@ -355,6 +379,20 @@ public class PauseMenu : MonoBehaviour
         xboxCodes.Add(xb);
 
     }
+
+    public void SetQuality(int value) {
+        QualitySettings.SetQualityLevel(value);
+    }
+
+    public void SetFullScreen(bool f) {
+        Screen.fullScreen = f;
+    }
+
+    public void SetResolution(int i) {
+        var res = Screen.resolutions[i];
+        Screen.SetResolution(res.width, res.height, Screen.fullScreen);
+    }
+
     #endregion
 
 }
