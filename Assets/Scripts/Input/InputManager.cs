@@ -44,21 +44,21 @@ public class InputManager : MonoBehaviour {
         controller,
         keyboard
     }
-    public static InputMode inputMode = InputMode.keyboard;
+    public static InputMode inputMode = InputMode.both;
     [SerializeField]
     public static PlayerAction[] playerActions = new PlayerAction[7];
 
     public static Dictionary<KeyCode, string> playerXboxButtons = new Dictionary<KeyCode, string> {
-        {KeyCode.Joystick1Button0, "A"},
-        {KeyCode.Joystick1Button1, "B"},
-        {KeyCode.Joystick1Button2, "X"},
-        {KeyCode.Joystick1Button3, "Y"},
-        {KeyCode.Joystick1Button4,"Left Bumper"},
-        {KeyCode.Joystick1Button5, "Right Bumper"},
-        {KeyCode.Joystick1Button6, "Back"},
-        {KeyCode.Joystick1Button7, "Start"},
-        {KeyCode.Joystick1Button8, "L3"},
-        {KeyCode.Joystick1Button9, "R3"},
+        {KeyCode.JoystickButton0, "A"},
+        {KeyCode.JoystickButton1, "B"},
+        {KeyCode.JoystickButton2, "X"},
+        {KeyCode.JoystickButton3, "Y"},
+        {KeyCode.JoystickButton4,"Left Bumper"},
+        {KeyCode.JoystickButton5, "Right Bumper"},
+        {KeyCode.JoystickButton6, "Back"},
+        {KeyCode.JoystickButton7, "Start"},
+        {KeyCode.JoystickButton8, "L3"},
+        {KeyCode.JoystickButton9, "R3"},
     };
     public static Dictionary<PlayerButton, PlayerAction> playerButtons = new Dictionary<PlayerButton, PlayerAction> { };
     public static Dictionary<PlayerAxis, string > joyAxis = new Dictionary <PlayerAxis, string> {
@@ -81,19 +81,19 @@ public class InputManager : MonoBehaviour {
     void Awake()
     {
         playerActions[0].keyboardKey = KeyCode.Space;
-        playerActions[0].xboxKey = KeyCode.Joystick1Button0;
+        playerActions[0].xboxKey = KeyCode.JoystickButton0;
         playerActions[1].keyboardKey = KeyCode.LeftShift;
-        playerActions[1].xboxKey = KeyCode.Joystick1Button3;
+        playerActions[1].xboxKey = KeyCode.JoystickButton2;
         playerActions[2].keyboardKey = KeyCode.Mouse0;
-        playerActions[2].xboxKey = KeyCode.Joystick1Button4;
+        playerActions[2].xboxKey = KeyCode.JoystickButton4;
         playerActions[3].keyboardKey = KeyCode.Mouse1;
-        playerActions[3].xboxKey = KeyCode.Joystick1Button5;
+        playerActions[3].xboxKey = KeyCode.JoystickButton5;
         playerActions[4].keyboardKey = KeyCode.KeypadEnter;
-        playerActions[4].xboxKey = KeyCode.Joystick1Button0;
+        playerActions[4].xboxKey = KeyCode.JoystickButton0;
         playerActions[5].keyboardKey = KeyCode.Escape;
-        playerActions[5].xboxKey = KeyCode.Joystick1Button1;
+        playerActions[5].xboxKey = KeyCode.JoystickButton0;
         playerActions[6].keyboardKey = KeyCode.Escape;
-        playerActions[6].xboxKey = KeyCode.Joystick1Button7;
+        playerActions[6].xboxKey = KeyCode.JoystickButton1;
         playerButtons.Add(PlayerButton.Jump, playerActions[0]);
         playerButtons.Add(PlayerButton.Swap, playerActions[1]);
         playerButtons.Add(PlayerButton.PickUp, playerActions[2]);

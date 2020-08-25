@@ -72,11 +72,11 @@ public class GameManager : MonoBehaviour
         // This really should be somewhere else but I dont care at this point
         if(activeScene.name == "Title") {
             // Start/Continue Button
-            var btn = GameObject.Find("LoadGames").GetComponentInChildren<Text>();
+            var btn = GameObject.Find("LoadGame").GetComponent<Button>();
             // If we've completed any levels then continue
-            btn.text = levelCompletion.Any(level => level)
-                ? "Continue"
-                : "Start";
+            if(!levelCompletion.Any(level => level)) {
+                btn.image = Resources.Load("Sprites/NewGame") as Image;
+            }
         }
     }
     // We want to set last loaded to the current level UNLESS its beaten or is the title screen
