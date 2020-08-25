@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
     public const int totalLevels = 23; // This needs to be updated with total levels (not scenes) in build 
     public static bool [] levelCompletion = new bool[totalLevels];
     public static int lastLoaded = 1;
-
     public static UnityEngine.SceneManagement.Scene activeScene { get { return SceneManager.GetActiveScene(); } }
     [Serializable]
     public struct SaveData {
@@ -75,7 +74,7 @@ public class GameManager : MonoBehaviour
             var btn = GameObject.Find("LoadGame").GetComponent<Button>();
             // If we've completed any levels then continue
             if(!levelCompletion.Any(level => level)) {
-                btn.image = Resources.Load("Sprites/NewGame") as Image;
+                btn.image.sprite = Resources.LoadAll("Sprites/main menu spread")[4] as Sprite;
             }
         }
     }
@@ -111,7 +110,7 @@ public class GameManager : MonoBehaviour
         SaveGame();
     }
 
-    static bool SaveGame () {
+    public static bool SaveGame () {
         bool saved = true;
         FileStream fs = new FileStream(Application.persistentDataPath+"/"+saveName, FileMode.Create);
         BinaryFormatter formatter = new BinaryFormatter();
@@ -142,6 +141,7 @@ public class GameManager : MonoBehaviour
                 var loadedData = (SaveData)formatter.Deserialize(fs);
                 lastLoaded = loadedData.lastLoaded;
                 levelCompletion = loadedData.levelCompletion;
+                LoadOptionData(loadedData.options);
             }
             catch (SerializationException e)
             {
@@ -152,9 +152,38 @@ public class GameManager : MonoBehaviour
             {
                 fs.Close();
             }
+        } else {
+            options = GetOptionData();
         }
 
         return loaded;
+    }
+
+    public static PauseMenu.OptionsData options;
+
+    public static PauseMenu.OptionsData GetOptionData() {
+        var op = new PauseMenu.OptionsData();
+        op.fullscreen = Screen.fullScreen;
+        //op.keyboardMap = 
+        op.musicVolume = PauseMenu.musicVolume;
+        op.quality = QualitySettings.GetQualityLevel();
+        op.resolution_x = Screen.currentResolution.width;
+        op.resolution_y = Screen.currentResolution.height;
+        op.sfxVolume = PauseMenu.sfxVolume;
+        //op.controllerMap =
+        op.controlType = (int)InputManager.inputMode;
+
+        return op;
+    }
+
+    public static void LoadOptionData(PauseMenu.OptionsData data) {
+        //op.keyboardMap = 
+        //op.controllerMap =
+        PauseMenu.musicVolume = data.musicVolume;
+        PauseMenu.sfxVolume = data.sfxVolume;
+        QualitySettings.SetQualityLevel(data.quality);
+        Screen.SetResolution(data.resolution_x, data.resolution_y, data.fullscreen);
+        InputManager.inputMode = (InputManager.InputMode)data.controlType;
     }
 
     public static bool LoadingScene = false;
