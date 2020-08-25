@@ -67,7 +67,7 @@ public class ButtonToggle : MonoBehaviour
             if (color.currentColor == colorValue)
             {
                 // color.transform.Translate(Vector3.down * 0.07f);
-                offset = offset + 0.04f;
+                offset = offset + 0.04f * (Time.deltaTime * 50);
                 if (offset > 0.24f)
                 {
                     offset = 0.24f;
@@ -92,7 +92,7 @@ public class ButtonToggle : MonoBehaviour
 
             if ((offset > 0.0f) && onButton == 0)
             {
-                offset = offset - 0.01f;
+                offset = offset - 0.01f * (Time.deltaTime * 50);
             }
 
             if (onButton > 0)
