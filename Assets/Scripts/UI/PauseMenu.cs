@@ -165,6 +165,10 @@ public class PauseMenu : MonoBehaviour
         var sfxSlider = generalSettings.transform.Find("SFXSlider");
         sfxSlider.GetComponent<Slider>().value = pOptions.sfxVolume;
         SetEffectsVolume(pOptions.sfxVolume);
+
+        if(GameManager.activeScene.name != "Title") {
+            StartCoroutine(GameManager.FadeIn());
+        }
     }
 
     private void Update()

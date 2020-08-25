@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using System;
@@ -197,12 +198,7 @@ public class GameManager : MonoBehaviour
 
     public static bool LoadingScene = false;
 
-    public static IEnumerator LoadScene(string SceneName) {
-        if(LoadingScene) yield break;
-        Debug.Log("Loading...");
-        LoadingScene = true;
-
-        // Hook into the UI
+    public static GameObject GetLoadingCanvas () {
         GameObject loadingCanvas;
 
         Transform t = Camera.main.transform.Find("loadingCanvas");
@@ -213,21 +209,66 @@ public class GameManager : MonoBehaviour
             loadingCanvas.transform.SetParent(Camera.main.transform);
         } else {
             loadingCanvas = t.gameObject;
+            loadingCanvas.SetActive(true);
         }
+
+        return loadingCanvas;
+    }
+
+    public static IEnumerator FadeIn() {
+        // Hook into the UI
+        GameObject loadingCanvas = GetLoadingCanvas();
+
+        var background = loadingCanvas.transform.GetChild(0).GetComponent<Image>();
+        background.color = new Color(0,0,0,1);
+        var text = loadingCanvas.transform.GetChild(1).GetComponent<Text>();
+
+        var t = text.text.Length * 4;
+        // fade 
+        for(float i = 1.0f; i > 0.1f; i -= (Time.unscaledDeltaTime / (i*i*2f))) {
+            background.color = new Color(0,0,0, i);
+            if(t > 0) text.text = text.text.Substring(0, (--t) / 4);
+            yield return null;
+        }
+
+        loadingCanvas.SetActive(false);
+    }
+
+    public static IEnumerator LoadScene(string SceneName) {
+        if(LoadingScene) yield break;
+        Debug.Log("Loading...");
+        LoadingScene = true;
+
+        // Hook into the UI
+        GameObject loadingCanvas = GetLoadingCanvas();
 
         var background = loadingCanvas.transform.GetChild(0).GetComponent<Image>();
         background.color = new Color(0,0,0,0);
 
         var text = loadingCanvas.transform.GetChild(1).GetComponent<Text>();
+        text.text = "";
+
+        // this might cause problems 
+        if (SceneManager.GetActiveScene().name != "Title")
+        {
+            PlayerColorController.singleton.GetComponent<PlayerCamControl>().enabled = false;
+            PlayerColorController.singleton.GetComponent<PlayerMovement>().enabled = false;
+        }
+        Time.timeScale = 0;
+
+        // fade 
+        for(float i = 0; i < 1.1; i += Time.unscaledDeltaTime*1.5f) {
+            background.color = new Color(0,0,0, i);
+            yield return null;
+        }
+
         text.text = "Loading... ";
 
         AsyncOperation loading = SceneManager.LoadSceneAsync(SceneName);
 
         while(!loading.isDone) {
             float current = Mathf.Clamp01(loading.progress / 0.9f);
-            Debug.Log(loading.progress);
             text.text = "Loading... " + current + "%";
-            background.color = new Color(0,0,0, 0.25f + current * 3f);
 
             yield return null;
         }
