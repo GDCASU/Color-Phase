@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public static bool [] levelCompletion = new bool[totalLevels];
     public static int lastLoaded = 1;
     public static UnityEngine.SceneManagement.Scene activeScene { get { return SceneManager.GetActiveScene(); } }
+    // Version 3.0
     [Serializable]
     public struct SaveData {
         public bool [] levelCompletion;
@@ -116,7 +117,8 @@ public class GameManager : MonoBehaviour
         BinaryFormatter formatter = new BinaryFormatter();
         try 
         {
-            formatter.Serialize(fs, new SaveData(levelCompletion, lastLoaded, new PauseMenu.OptionsData()));
+            options = GetOptionData();
+            formatter.Serialize(fs, new SaveData(levelCompletion, lastLoaded, options));
         }
         catch (SerializationException e) 
         {
@@ -142,6 +144,7 @@ public class GameManager : MonoBehaviour
                 lastLoaded = loadedData.lastLoaded;
                 levelCompletion = loadedData.levelCompletion;
                 LoadOptionData(loadedData.options);
+                options = loadedData.options;
             }
             catch (SerializationException e)
             {
@@ -163,27 +166,33 @@ public class GameManager : MonoBehaviour
 
     public static PauseMenu.OptionsData GetOptionData() {
         var op = new PauseMenu.OptionsData();
-        op.fullscreen = Screen.fullScreen;
-        //op.keyboardMap = 
+        op.fullscreen = Screen.fullScreen; 
         op.musicVolume = PauseMenu.musicVolume;
         op.quality = QualitySettings.GetQualityLevel();
         op.resolution_x = Screen.currentResolution.width;
         op.resolution_y = Screen.currentResolution.height;
         op.sfxVolume = PauseMenu.sfxVolume;
-        //op.controllerMap =
         op.controlType = (int)InputManager.inputMode;
+
+        // Load options with keycodes
+        if(InputManager.playerButtons != null && InputManager.playerButtons.Count() == 7) {
+            op.playerControls = InputManager.playerButtons;
+        } else {
+            InputManager.ResetKeycodes();
+            op.playerControls = InputManager.playerButtons;
+            Debug.Log(InputManager.playerButtons.Count());
+        }
 
         return op;
     }
 
     public static void LoadOptionData(PauseMenu.OptionsData data) {
-        //op.keyboardMap = 
-        //op.controllerMap =
         PauseMenu.musicVolume = data.musicVolume;
         PauseMenu.sfxVolume = data.sfxVolume;
         QualitySettings.SetQualityLevel(data.quality);
         Screen.SetResolution(data.resolution_x, data.resolution_y, data.fullscreen);
         InputManager.inputMode = (InputManager.InputMode)data.controlType;
+        InputManager.playerButtons = data.playerControls;
     }
 
     public static bool LoadingScene = false;

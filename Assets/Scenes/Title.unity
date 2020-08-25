@@ -1955,6 +1955,7 @@ MonoBehaviour:
   first: {fileID: 594795596}
   titleScreenCanvas: {fileID: 393028725}
   sfx: []
+  music: {fileID: 0}
 --- !u!1001 &347448832
 Prefab:
   m_ObjectHideFlags: 0
@@ -2780,6 +2781,10 @@ Prefab:
         type: 2}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetFullScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 1527371673923626, guid: 554dcdfc0db714343ab0086d9ea70d4a, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 554dcdfc0db714343ab0086d9ea70d4a, type: 2}
@@ -8751,7 +8756,7 @@ GameObject:
   - component: {fileID: 1894537235}
   - component: {fileID: 1894537236}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: Player 1 Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

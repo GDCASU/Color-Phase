@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PlayerInput;
+using System;
 namespace PlayerInput {
     /// <summary>
     /// Enum for all Player axis actions (float vales)
@@ -20,6 +21,7 @@ namespace PlayerInput {
     /// <summary>
     /// Enum for all Player button actions (bool values)
     /// </summary>
+    [Serializable]
     public enum PlayerButton
     {
         Jump,
@@ -31,7 +33,7 @@ namespace PlayerInput {
         Pause,
         None,
     };
-
+    [Serializable]
     public struct PlayerAction 
     {
         public KeyCode keyboardKey;
@@ -45,6 +47,7 @@ public class InputManager : MonoBehaviour {
         keyboard
     }
     public static InputMode inputMode = InputMode.both;
+    // there is literally no reason for this to exist ffs
     [SerializeField]
     public static PlayerAction[] playerActions = new PlayerAction[7];
 
@@ -78,8 +81,8 @@ public class InputManager : MonoBehaviour {
         {PlayerAxis.UI_Horizontal, "KeyboardX"},
         {PlayerAxis.UI_Vertical, "KeyboardY"},
     };
-    void Awake()
-    {
+
+    public static void ResetKeycodes () {
         playerActions[0].keyboardKey = KeyCode.Space;
         playerActions[0].xboxKey = KeyCode.JoystickButton0;
         playerActions[1].keyboardKey = KeyCode.LeftShift;
@@ -91,27 +94,36 @@ public class InputManager : MonoBehaviour {
         playerActions[4].keyboardKey = KeyCode.KeypadEnter;
         playerActions[4].xboxKey = KeyCode.JoystickButton0;
         playerActions[5].keyboardKey = KeyCode.Escape;
-        playerActions[5].xboxKey = KeyCode.JoystickButton0;
+        playerActions[5].xboxKey = KeyCode.JoystickButton1;
         playerActions[6].keyboardKey = KeyCode.Escape;
-        playerActions[6].xboxKey = KeyCode.JoystickButton1;
-        playerButtons.Add(PlayerButton.Jump, playerActions[0]);
-        playerButtons.Add(PlayerButton.Swap, playerActions[1]);
-        playerButtons.Add(PlayerButton.PickUp, playerActions[2]);
-        playerButtons.Add(PlayerButton.Grapple, playerActions[3]);
-        playerButtons.Add(PlayerButton.UI_Submit, playerActions[4]);
-        playerButtons.Add(PlayerButton.UI_Cancel, playerActions[5]);
-        playerButtons.Add(PlayerButton.Pause, playerActions[6]);
+        playerActions[6].xboxKey = KeyCode.JoystickButton7;
+        playerButtons[PlayerButton.Jump] = playerActions[0];
+        playerButtons[PlayerButton.Swap] = playerActions[1];
+        playerButtons[PlayerButton.PickUp] = playerActions[2];
+        playerButtons[PlayerButton.Grapple] = playerActions[3];
+        playerButtons[PlayerButton.UI_Submit] = playerActions[4];
+        playerButtons[PlayerButton.UI_Cancel] = playerActions[5];
+        playerButtons[PlayerButton.Pause] = playerActions[6];
     }
     public static bool GetButtonDown(PlayerButton button) {
-        return Input.GetKeyDown((inputMode==InputMode.controller)? playerButtons[button].xboxKey : playerButtons[button].keyboardKey);
+        bool input = false;
+        input |= inputMode != InputMode.controller && Input.GetKeyDown(playerButtons[button].keyboardKey);
+        input |= inputMode != InputMode.keyboard && Input.GetKeyDown(playerButtons[button].xboxKey);
+        return input;
     }
 
     public static bool GetButtonUp (PlayerButton button) {
-        return Input.GetKeyUp((inputMode == InputMode.controller) ? playerButtons[button].xboxKey : playerButtons[button].keyboardKey);
+        bool input = false;
+        input |= inputMode != InputMode.controller && Input.GetKeyUp(playerButtons[button].keyboardKey);
+        input |= inputMode != InputMode.keyboard && Input.GetKeyUp(playerButtons[button].xboxKey);
+        return input;
     }
 
     public static bool GetButton (PlayerButton button) {
-        return Input.GetKey((inputMode == InputMode.controller) ? playerButtons[button].xboxKey : playerButtons[button].keyboardKey);
+        bool input = false;
+        input |= inputMode != InputMode.controller && Input.GetKey(playerButtons[button].keyboardKey);
+        input |= inputMode != InputMode.keyboard && Input.GetKey(playerButtons[button].xboxKey);
+        return input;
     }
     public static float GetAxis (PlayerAxis axis) {
         var mouse = mouseAxis.ContainsKey(axis) ? Input.GetAxis(mouseAxis[axis]) : 0;

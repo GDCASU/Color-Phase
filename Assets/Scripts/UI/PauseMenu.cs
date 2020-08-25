@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Linq;
 using UnityEngine.UI;
+using PlayerInput;
 using System.Runtime.Serialization;
 
 public class PauseMenu : MonoBehaviour
@@ -54,9 +55,19 @@ public class PauseMenu : MonoBehaviour
         public bool fullscreen;
         public int resolution_x;
         public int resolution_y;
+        public int quality;
+        public Dictionary<PlayerButton, PlayerAction> playerControls;
+        public float musicVolume;
+        public float sfxVolume;
+        public int controlType;
+        public float [] extraFloat; // padding
+        public bool [] extraBool; // padding
+        public string [] extraString; // padding
     }
     public List<AudioSource> sfx = new List<AudioSource>();
-    private AudioSource music;
+    public AudioSource music;
+    public static float musicVolume = 0.5f;
+    public static float sfxVolume = 0.5f;
     public static PauseMenu singleton;
     private void Awake() {
         if (singleton == null)
@@ -66,8 +77,6 @@ public class PauseMenu : MonoBehaviour
     }
     private void Start()
     {
-        
-        //settings.GetComponentInChildren<Slider>().value = GameObject.Find("Managers").GetComponent<SoundManager>().MusicMasterVolume;
         music = GameObject.Find("Audio Source").GetComponent<AudioSource>();
         panels = new List<GameObject>();
         keyboardCodes = new List<string>();
@@ -120,24 +129,42 @@ public class PauseMenu : MonoBehaviour
         currentPanel = 0;
 
         // setup the main setting menu
-        var resolutions = Screen.resolutions;
+        var pOptions = GameManager.options;
 
+        var resolutions = Screen.resolutions;
         var resDropdown = generalSettings.transform.Find("ResolutionDropdown").GetComponent<Dropdown>();
 
         resDropdown.ClearOptions();
-
-        var curRes = Screen.currentResolution;
         var options = resolutions.Select((r, i) => {
             string o = r.width + " x " + r.height;
-            if(r.width == curRes.width && r.height == curRes.height) resDropdown.value = i;
+            if(r.width == pOptions.resolution_x && r.height == pOptions.resolution_y) resDropdown.value = i;
             return o;
         }).ToList();
 
         resDropdown.AddOptions(options);
         resDropdown.RefreshShownValue();
 
-        //
+        // Set quality dropdown
         var qualityDropdown = generalSettings.transform.Find("QualityDropdown");
+        qualityDropdown.GetComponent<Dropdown>().value = pOptions.quality;
+
+        // fullscreen
+        var fullscreenToggle = generalSettings.transform.Find("FullscreenToggle");
+        fullscreenToggle.GetComponent<Toggle>().isOn = pOptions.fullscreen;
+        
+        // input type
+        var inputDropdown = controlSettings.transform.Find("InputDropdown");
+        inputDropdown.GetComponent<Dropdown>().value = pOptions.controlType;
+
+        // music
+        var musicSlider = generalSettings.transform.Find("MusicSlider");
+        musicSlider.GetComponent<Slider>().value = pOptions.musicVolume;
+        SetMusicVolume(pOptions.musicVolume);
+
+        // sfx
+        var sfxSlider = generalSettings.transform.Find("SFXSlider");
+        sfxSlider.GetComponent<Slider>().value = pOptions.sfxVolume;
+        SetEffectsVolume(pOptions.sfxVolume);
     }
 
     private void Update()
@@ -158,11 +185,13 @@ public class PauseMenu : MonoBehaviour
             else if(controlSettings.activeInHierarchy)
             {
                 controlSettings.SetActive(false);
+                GameManager.SaveGame();
                 main.SetActive(true);
             }
             else if(generalSettings.activeInHierarchy)
             {
                 generalSettings.SetActive(false);
+                GameManager.SaveGame();
                 main.SetActive(true);
             }
             else if(SceneManager.GetActiveScene().name != "Title")
@@ -226,11 +255,13 @@ public class PauseMenu : MonoBehaviour
         else if(controlSettings.activeInHierarchy)
         {
             controlSettings.SetActive(false);
+            GameManager.SaveGame();
             main.SetActive(true);
         }
         else if(generalSettings.activeInHierarchy)
         {
             generalSettings.SetActive(false);
+            GameManager.SaveGame();
             main.SetActive(true);
         }
         EventSystem.current.SetSelectedGameObject(main.transform.GetChild(0).gameObject);
@@ -292,12 +323,14 @@ public class PauseMenu : MonoBehaviour
     public void SetMusicVolume(float passed)
     {
         music.volume = passed;
+        musicVolume = passed;
     }
     public void SetEffectsVolume(float passed)
     {
         for(int i = 0; i < sfx.Count(); i++) {
             sfx[i].volume = passed;
         }
+        sfxVolume = passed;
     }
     
     public void BuildLevelsUI(int passed)
