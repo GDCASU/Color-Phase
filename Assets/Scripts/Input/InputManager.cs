@@ -79,7 +79,7 @@ public class InputManager : MonoBehaviour {
         {PlayerAxis.UI_Vertical, "KeyboardY"},
     };
     void Awake()
-    {       
+    {
         playerActions[0].keyboardKey = KeyCode.Space;
         playerActions[0].xboxKey = KeyCode.Joystick1Button0;
         playerActions[1].keyboardKey = KeyCode.LeftShift;

@@ -44,7 +44,7 @@ public class TimedMovement : MonoBehaviour {
             var prev = keyframes[i]; var next = keyframes[i + 1];
             for (float t=0; t<1; t += next.timeToReachMe / (totalMovementScaling * Time.deltaTime)) {
                 prev.InterpTransform(next, t, transform);
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
         }
     }
@@ -55,7 +55,7 @@ public class TimedMovement : MonoBehaviour {
                 var prev = keyframes[i % (keyframes.Count)]; var next = keyframes[ (i + 1) % (keyframes.Count) ];
                 for (float t=0; t<1; t += next.timeToReachMe / (totalMovementScaling * Time.deltaTime)) {
                     prev.InterpTransform(next, t, transform);
-                    yield return null;
+                    yield return new  WaitForFixedUpdate();
                 }
             }
         }
