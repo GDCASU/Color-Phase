@@ -223,14 +223,16 @@ public class GameManager : MonoBehaviour
         background.color = new Color(0,0,0,1);
         var text = loadingCanvas.transform.GetChild(1).GetComponent<Text>();
 
-        var t = text.text.Length * 4;
-        // fade 
-        for(float i = 1.0f; i > 0.1f; i -= (Time.unscaledDeltaTime / (i*i*2f))) {
+        var t = text.text.Length;
+        // fade
+        for(float i = 1.0f; i > 0.1f; i -= (Time.deltaTime / (i*i*i*5f))) {
             background.color = new Color(0,0,0, i);
-            if(t > 0) text.text = text.text.Substring(0, (--t) / 4);
-            yield return null;
+            var c = (2*(i*i)) - 1f; // scale to last half of fade
+            if (c >= 0) {
+                text.text = text.text.Substring(0, (int)Math.Floor(c * t));
+            }
+            yield return new WaitForEndOfFrame();
         }
-
         loadingCanvas.SetActive(false);
     }
 
