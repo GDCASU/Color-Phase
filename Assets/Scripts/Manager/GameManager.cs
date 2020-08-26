@@ -147,8 +147,9 @@ public class GameManager : MonoBehaviour
                 LoadOptionData(loadedData.options);
                 options = loadedData.options;
             }
-            catch (SerializationException e)
+            catch (Exception e)
             {
+                options = GetOptionData();
                 Debug.Log("Failed to load save. Reason: " + e.Message);
                 loaded = false;
             }
