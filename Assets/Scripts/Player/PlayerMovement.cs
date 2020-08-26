@@ -134,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
     float zAxis = 0;
 
     public Vector3? spawnLoc = null;
-    const int squares = 4;
+    const int squares = 6;
 
     private RectTransform[] respawnBars = new RectTransform[squares];
     public void initRespawnEffect () {
@@ -143,8 +143,8 @@ public class PlayerMovement : MonoBehaviour
         for(int i = 0; i < squares; i++) {
             var x = Instantiate(sprite, HUD);
             var r = x.GetComponent<RectTransform>();
-            var tempH = 450/squares;
-            r.localPosition = new Vector2( r.localPosition.x - 3200, -220 + tempH * 0.5f + tempH * i);
+            var tempH = 800/squares;
+            r.localPosition = new Vector2( r.localPosition.x - 3200, -400 + tempH * 0.5f + tempH * i);
             r.sizeDelta = new Vector2(r.sizeDelta.x, tempH+10);
             respawnBars[i] = r;
             // temp. = -800
