@@ -44,7 +44,7 @@ public class Teleport : MonoBehaviour
                 if (other.GetComponent<ColorState>().currentColor == colorValue || neutralColor == true)
                 {
 
-                    audioSource.PlayOneShot(teleporting, 1.0F);
+                    audioSource.PlayOneShot(teleporting);
 
                     //starts a countdown timer at 0.5 seconds
                     timer = 0.5;
