@@ -60,15 +60,15 @@ public class PlayerCamControl : MonoBehaviour
         // This is not used as part of the testing raycast
         // Note that we test the position directly out and then offset when *setting* the position only
         hitNormal = Vector3.Lerp(lastHitNormal, nextHitNormal, ticker);
-        ticker += 0.1f;
+        ticker += 5f * Time.deltaTime;
         ticker = Mathf.Clamp(ticker, 0, 1);
         radius = Mathf.Clamp(radius, MinRadius, MaxRadius);
     }
     void LateUpdate()
     {
         // Camera Angle Input
-        var xAxis = InputManager.GetAxis(PlayerAxis.CameraHorizontal) * Time.deltaTime * sensitivity * 2;
-        var yAxis = -InputManager.GetAxis(PlayerAxis.CameraVertical) * Time.deltaTime * sensitivity;
+        var xAxis = InputManager.GetAxis(PlayerAxis.CameraHorizontal) * Time.fixedDeltaTime * sensitivity * 2;
+        var yAxis = -InputManager.GetAxis(PlayerAxis.CameraVertical) * Time.fixedDeltaTime * sensitivity;
 
         cameraHorizAngle += xAxis;
         if (cameraVertAngle + yAxis > minVertAngle && cameraVertAngle + yAxis < maxVertAngle)
