@@ -241,7 +241,8 @@ public class Grapple : MonoBehaviour
             else if (rb.velocity.y < 0)
             {
                 // Checks if the player is looking towards the oposite side of the arch and pressing forwards
-                if (InputManager.GetAxis(PlayerAxis.MoveVertical) == 1 && Vector3.Angle(transform.forward, v) > 90f)
+                if (InputManager.GetAxis(PlayerAxis.MoveVertical) >= 0.95f && Vector3.Angle(transform.forward, v) > 90f
+                    || InputManager.GetAxis(PlayerAxis.MoveVertical) <= -0.95f && Vector3.Angle(transform.forward, v) < 90f)
                 {
                     // Applies a force
                     applySwingForce(swingZDirection, swingXDirection,z,x);
@@ -369,8 +370,8 @@ public class Grapple : MonoBehaviour
 
     public void applySwingForce( Vector3 swingZDirection, Vector3 swingXDirection, float z, float x)
     {
-        rb.AddForce(swingZDirection * z * swingSpeed);
-        rb.AddForce(swingXDirection * -x * swingStrafeSpeed);
+        rb.AddForce(swingZDirection * z * swingSpeed * Time.deltaTime * 44);
+        rb.AddForce(swingXDirection * -x * swingStrafeSpeed * Time.deltaTime * 44);
     }
     public void switchColors(GameColor a, GameColor b )
     {
