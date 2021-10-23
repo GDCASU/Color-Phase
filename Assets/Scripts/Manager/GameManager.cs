@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
+using UnityEngine.PostProcessing;
 
 /* Authors:      Zachary Schmalz, Jacob Hann, Christian Gonzalez
  * Version:     1.1.2
@@ -24,13 +25,13 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager singleton;
     const string saveName = "ColorPhase.dat";
-    public const int totalLevels = 23; // This needs to be updated with total levels (not scenes) in build 
+    public const int totalLevels = 25; // This needs to be updated with total levels (not scenes) in build 
     public static bool [] levelCompletion = new bool[totalLevels];
     public static int lastLoaded = 1;
     public static UnityEngine.SceneManagement.Scene activeScene { get { return SceneManager.GetActiveScene(); } }
     // Version 3.0
     [Serializable]
-    public struct SaveData {
+    public class SaveData {
         public bool [] levelCompletion;
         public int lastLoaded;
         [OptionalField(VersionAdded=2)]
@@ -60,8 +61,6 @@ public class GameManager : MonoBehaviour
 
         SceneManager.sceneLoaded += updateSaveData;
         SceneManager.sceneLoaded += fixStupidFuckingPauseMenu;
-
-        Debug.GeneralLog("GameManager Awake");
     }
 
     static void fixStupidFuckingPauseMenu (Scene scene, LoadSceneMode sceneMode) { 
@@ -142,6 +141,7 @@ public class GameManager : MonoBehaviour
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 var loadedData = (SaveData)formatter.Deserialize(fs);
+                if (loadedData.levelCompletion.Length != totalLevels+1) Array.Resize<bool>(ref loadedData.levelCompletion, totalLevels+1);
                 lastLoaded = loadedData.lastLoaded;
                 levelCompletion = loadedData.levelCompletion;
                 LoadOptionData(loadedData.options);
@@ -192,10 +192,67 @@ public class GameManager : MonoBehaviour
         PauseMenu.musicVolume = data.musicVolume;
         PauseMenu.sfxVolume = data.sfxVolume;
         QualitySettings.SetQualityLevel(data.quality);
+        SetPostProcessing(data.quality);
         Screen.SetResolution(data.resolution_x, data.resolution_y, data.fullscreen);
         InputManager.inputMode = (InputManager.InputMode)data.controlType;
         InputManager.playerButtons = data.playerControls;
     }
+
+    public static void SetPostProcessing(int quality) {
+        var pp = Camera.main.GetComponent<PostProcessingBehaviour>();
+        switch (quality) {
+            case 0:
+                QualitySettings.vSyncCount = 0;
+                pp.enabled = false;
+                break;
+            case 1:
+                QualitySettings.vSyncCount = 0;
+                pp.enabled = true;
+                pp.profile.antialiasing.enabled = false;
+                pp.profile.bloom.enabled = false;
+                pp.profile.chromaticAberration.enabled = false;
+                pp.profile.colorGrading.enabled = true;
+                pp.profile.ambientOcclusion.enabled = false;
+                break;
+            case 2:
+                QualitySettings.vSyncCount = 0;
+                pp.enabled = true;
+                pp.profile.antialiasing.enabled = false;
+                pp.profile.bloom.enabled = false;
+                pp.profile.chromaticAberration.enabled = false;
+                pp.profile.colorGrading.enabled = true;
+                pp.profile.ambientOcclusion.enabled = false;
+                break;
+            case 3:
+                QualitySettings.vSyncCount = 0;
+                pp.enabled = true;
+                pp.profile.antialiasing.settings = new AntialiasingModel.Settings{ method = AntialiasingModel.Method.Fxaa };
+                pp.profile.bloom.enabled = true;
+                pp.profile.chromaticAberration.enabled = true;
+                pp.profile.colorGrading.enabled = true;
+                pp.profile.ambientOcclusion.enabled = true;
+                break;
+            case 4:
+                QualitySettings.vSyncCount = 1;
+                pp.enabled = true;
+                pp.profile.antialiasing.settings = new AntialiasingModel.Settings{ method = AntialiasingModel.Method.Taa };
+                pp.profile.bloom.enabled = true;
+                pp.profile.chromaticAberration.enabled = true;
+                pp.profile.colorGrading.enabled = true;
+                pp.profile.ambientOcclusion.enabled = true;
+                break;
+            case 5:
+                QualitySettings.vSyncCount = 1;
+                pp.enabled = true;
+                pp.profile.antialiasing.settings = new AntialiasingModel.Settings{ method = AntialiasingModel.Method.Taa };
+                pp.profile.bloom.enabled = true;
+                pp.profile.chromaticAberration.enabled = true;
+                pp.profile.colorGrading.enabled = true;
+                pp.profile.ambientOcclusion.enabled = true;
+                break;
+        }
+    }
+
 
     public static bool LoadingScene = false;
 

@@ -5,6 +5,10 @@ using UnityEngine;
 public class Vents : MonoBehaviour
 {
     public float vent_strength = 0;
+    void Start () {
+		AudioSource audioSource = GetComponent<AudioSource>();
+        PauseMenu.singleton.sfx.Add(audioSource);
+	}
     
     private void OnTriggerStay(Collider other)
     {

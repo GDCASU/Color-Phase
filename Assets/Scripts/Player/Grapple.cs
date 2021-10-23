@@ -220,7 +220,7 @@ public class Grapple : MonoBehaviour
             // Dissables playermovement and set the transform of the palyer to be based from the transform of the camera
             rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - 1, rb.velocity.z);
             player.enabled = false;
-            transform.forward = Camera.main.transform.forward;
+            transform.forward = new Vector3 (Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z).normalized;
             // Gets the swinging direction by getting the cross product from the rope vector and the players transform
             Vector3 swingZDirection = Vector3.Cross(v, transform.right);
             Vector3 swingXDirection = Vector3.Cross(v, transform.forward);
@@ -241,11 +241,11 @@ public class Grapple : MonoBehaviour
             else if (rb.velocity.y < 0)
             {
                 // Checks if the player is looking towards the oposite side of the arch and pressing forwards
-                if (InputManager.GetAxis(PlayerAxis.MoveVertical) >= 0.95f && Vector3.Angle(transform.forward, v) > 90f
-                    || InputManager.GetAxis(PlayerAxis.MoveVertical) <= -0.95f && Vector3.Angle(transform.forward, v) < 90f)
+                if (z >= 0.85f && Vector3.Angle(transform.forward, v) > 90f
+                    || z <= -0.95f && Vector3.Angle(transform.forward, v) < 90f)
                 {
                     // Applies a force
-                    applySwingForce(swingZDirection, swingXDirection,z,x);
+                    applySwingForce(swingZDirection, swingXDirection,z * (z > 0 ? 1.5f : 1f),x);
                 }
                 // Prevents the player from swinging upward if its velocity is downwards 
                 else

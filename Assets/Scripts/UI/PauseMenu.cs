@@ -8,6 +8,7 @@ using System.Linq;
 using UnityEngine.UI;
 using PlayerInput;
 using System.Runtime.Serialization;
+using UnityEngine.PostProcessing;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class PauseMenu : MonoBehaviour
     int numberOfScenes;
     public GameObject controlSettings;
     public GameObject generalSettings;
+    public GameObject advancedSettings;
     public GameObject selectLevel;
     private GameObject canvas;
     public GameObject main;
@@ -128,29 +130,48 @@ public class PauseMenu : MonoBehaviour
         }
         currentPanel = 0;
 
+        SetCurrentOptions();
+
+        if(GameManager.activeScene.name != "Title") {
+            StartCoroutine(GameManager.FadeIn());
+        }
+    }
+
+    private void SetCurrentOptions() {
         // setup the main setting menu
         var pOptions = GameManager.options;
-
         var resolutions = Screen.resolutions;
         var resDropdown = generalSettings.transform.Find("ResolutionDropdown").GetComponent<Dropdown>();
 
         resDropdown.ClearOptions();
+        var weirdResolution = true;
         var options = resolutions.Select((r, i) => {
             string o = r.width + " x " + r.height;
-            if(r.width == pOptions.resolution_x && r.height == pOptions.resolution_y) resDropdown.value = i;
+            if(r.width == Screen.currentResolution.width && r.height == Screen.currentResolution.height) {
+                resDropdown.value = i;
+                weirdResolution = false;
+            }
             return o;
         }).ToList();
 
         resDropdown.AddOptions(options);
+        if (weirdResolution) {
+            resDropdown.AddOptions(new List<string>{Screen.currentResolution.width + " x " + Screen.currentResolution.height});
+            resDropdown.value = resolutions.Count();
+        }
         resDropdown.RefreshShownValue();
 
         // Set quality dropdown
         var qualityDropdown = generalSettings.transform.Find("QualityDropdown");
-        qualityDropdown.GetComponent<Dropdown>().value = pOptions.quality;
+        qualityDropdown.GetComponent<Dropdown>().value = QualitySettings.GetQualityLevel();
 
         // fullscreen
         var fullscreenToggle = generalSettings.transform.Find("FullscreenToggle");
-        fullscreenToggle.GetComponent<Toggle>().isOn = pOptions.fullscreen;
+        fullscreenToggle.GetComponent<Toggle>().isOn = Screen.fullScreen;
+
+        // vsync
+        var vsyncToggle = generalSettings.transform.Find("VSyncToggle");
+        vsyncToggle.GetComponent<Toggle>().isOn = QualitySettings.vSyncCount != 0;
         
         // input type
         var inputDropdown = controlSettings.transform.Find("InputDropdown");
@@ -166,9 +187,39 @@ public class PauseMenu : MonoBehaviour
         sfxSlider.GetComponent<Slider>().value = pOptions.sfxVolume;
         SetEffectsVolume(pOptions.sfxVolume);
 
-        if(GameManager.activeScene.name != "Title") {
-            StartCoroutine(GameManager.FadeIn());
+        // Set advance options
+        SetAdvanceOptions();
+    }
+
+    private void SetAdvanceOptions() {
+        // Advanced options 
+        var pp = Camera.main.GetComponent<PostProcessingBehaviour>();
+        var ppp = pp.profile;
+
+        var ppToggle = advancedSettings.transform.Find("PostProcessingToggle");
+        ppToggle.GetComponent<Toggle>().isOn = pp.enabled;
+
+        // anti aliasing
+        var aa = 0; // Default to aa is disabled, check if it is and if so what type
+        if (ppp.antialiasing.enabled){
+            if(ppp.antialiasing.settings.method == AntialiasingModel.Method.Fxaa) {
+                aa = 1;
+            }
         }
+        var aaDropdown = advancedSettings.transform.Find("AADropdown");
+        aaDropdown.GetComponent<Dropdown>().value = aa;
+
+        var bloomToggle = advancedSettings.transform.Find("BloomToggle");
+        bloomToggle.GetComponent<Toggle>().isOn = ppp.bloom.enabled;
+
+        var grainToggle = advancedSettings.transform.Find("GrainToggle");
+        grainToggle.GetComponent<Toggle>().isOn = ppp.grain.enabled;
+       
+        var cgToggle = advancedSettings.transform.Find("ColorGradingToggle");
+        cgToggle.GetComponent<Toggle>().isOn = ppp.colorGrading.enabled;
+
+        var aoToggle = advancedSettings.transform.Find("AmbientOcclusionToggle");
+        aoToggle.GetComponent<Toggle>().isOn = ppp.ambientOcclusion.enabled;
     }
 
     private void Update()
@@ -197,6 +248,12 @@ public class PauseMenu : MonoBehaviour
                 generalSettings.SetActive(false);
                 GameManager.SaveGame();
                 main.SetActive(true);
+            }
+            else if(advancedSettings.activeInHierarchy)
+            {
+                advancedSettings.SetActive(false);
+                GameManager.SaveGame();
+                generalSettings.SetActive(true);
             }
             else if(SceneManager.GetActiveScene().name != "Title")
             {
@@ -231,6 +288,8 @@ public class PauseMenu : MonoBehaviour
         //if(player!=null && player.InputMethod!=InputManager.InputMethod.XboxController) Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        InputManager.slowForPause = true;
     }
     public void ResumeGame()
     {
@@ -246,29 +305,39 @@ public class PauseMenu : MonoBehaviour
             playerUI.enabled = true;
         }
         HUD.SetActive(true);
+
+        InputManager.slowForPause = false;
     }
     // Straight up fucking spagetti i will not fix this ass class 
     public void Back() {
-        if(panels[currentPanel].activeInHierarchy)
+        if(panels.Any() && panels[currentPanel].activeInHierarchy)
         {
             panels[currentPanel].SetActive(false);
             main.SetActive(true);
             currentPanel = 0;
-
+            EventSystem.current.SetSelectedGameObject(main.transform.GetChild(0).gameObject);
         }
         else if(controlSettings.activeInHierarchy)
         {
             controlSettings.SetActive(false);
             GameManager.SaveGame();
             main.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(main.transform.GetChild(0).gameObject);
         }
         else if(generalSettings.activeInHierarchy)
         {
             generalSettings.SetActive(false);
             GameManager.SaveGame();
             main.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(main.transform.GetChild(0).gameObject);
         }
-        EventSystem.current.SetSelectedGameObject(main.transform.GetChild(0).gameObject);
+        else if(advancedSettings.activeInHierarchy)
+        {
+            advancedSettings.SetActive(false);
+            GameManager.SaveGame();
+            generalSettings.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(generalSettings.transform.GetChild(0).gameObject);
+        }
     }
     public void MainMenu()
     {
@@ -300,8 +369,17 @@ public class PauseMenu : MonoBehaviour
     public void GeneralSettings()
     {
         main.SetActive(false);
+        // Reset all sliders and shit 
+        SetCurrentOptions();
         generalSettings.SetActive(true);
         EventSystem.current.SetSelectedGameObject(generalSettings.transform.GetChild(0).gameObject);
+    }
+
+     public void AdvancedSettings()
+    {
+        generalSettings.SetActive(false);
+        advancedSettings.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(advancedSettings.transform.GetChild(0).gameObject);
     }
 
     public void SwitchControllerType(Dropdown change) {
@@ -397,7 +475,7 @@ public class PauseMenu : MonoBehaviour
         float yPosition = -60;
 
         Button keyboard = Instantiate(keyboardPrefab, Vector2.zero, Quaternion.identity);
-        keyboard.transform.parent = controlSettings.transform;
+        keyboard.transform.SetParent(controlSettings.transform);
         keyboard.GetComponent<RectTransform>().localPosition = new Vector2(-70, 20 + (yPosition * passed));
         keyboard.GetComponent<RectTransform>().localScale = Vector3.one * 0.729927f;
         keyboard.GetComponent<KeyboardRemap>().InitiateButton(passed);
@@ -419,15 +497,58 @@ public class PauseMenu : MonoBehaviour
 
     public void SetQuality(int value) {
         QualitySettings.SetQualityLevel(value);
+        GameManager.SetPostProcessing(value);
+        SetAdvanceOptions();
     }
 
     public void SetFullScreen(bool f) {
         Screen.fullScreen = f;
     }
 
+    public void SetVsync(bool f) {
+        QualitySettings.vSyncCount = f ? 1 : 0;
+    }
+
     public void SetResolution(int i) {
         var res = Screen.resolutions[i];
         Screen.SetResolution(res.width, res.height, Screen.fullScreen);
+    }
+
+    // Advanced options
+    public void SetPostProcessing (bool f) {
+        Camera.main.GetComponent<PostProcessingBehaviour>().enabled = f;
+    }
+
+    public void SetAntiAliasing(int i) {
+        switch(i){
+            case 0:
+                Camera.main.GetComponent<PostProcessingBehaviour>().profile.antialiasing.enabled = false;
+                break;
+            case 1:
+                Camera.main.GetComponent<PostProcessingBehaviour>().profile.antialiasing.enabled = true;
+                Camera.main.GetComponent<PostProcessingBehaviour>().profile.antialiasing.settings = new AntialiasingModel.Settings{ method = AntialiasingModel.Method.Fxaa };
+                break;
+            case 2:
+                Camera.main.GetComponent<PostProcessingBehaviour>().profile.antialiasing.enabled = true;
+                Camera.main.GetComponent<PostProcessingBehaviour>().profile.antialiasing.settings = new AntialiasingModel.Settings{ method = AntialiasingModel.Method.Taa };
+                break;
+        }
+    }
+
+    public void SetBloom (bool f) {
+        Camera.main.GetComponent<PostProcessingBehaviour>().profile.bloom.enabled = f;
+    }
+
+    public void SetGrain (bool f) {
+        Camera.main.GetComponent<PostProcessingBehaviour>().profile.grain.enabled = f;
+    }
+
+    public void SetColorGrading (bool f) {
+        Camera.main.GetComponent<PostProcessingBehaviour>().profile.colorGrading.enabled = f;
+    }
+
+    public void SetAmbientOcclusion (bool f) {
+        Camera.main.GetComponent<PostProcessingBehaviour>().profile.ambientOcclusion.enabled = f;
     }
 
     #endregion

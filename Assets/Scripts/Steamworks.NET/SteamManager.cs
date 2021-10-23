@@ -3,9 +3,9 @@
 // Where that dedication is not recognized you are granted a perpetual,
 // irrevocable license to copy and modify this file as you see fit.
 //
-// Version: 1.0.9
+// Version: 1.0.12
 
-#if UNITY_ANDROID || UNITY_IOS || UNITY_TIZEN || UNITY_TVOS || UNITY_WEBGL || UNITY_WSA || UNITY_PS4 || UNITY_WII || UNITY_XBOXONE || UNITY_SWITCH
+#if !(UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX || STEAMWORKS_WIN || STEAMWORKS_LIN_OSX)
 #define DISABLESTEAMWORKS
 #endif
 
@@ -44,9 +44,21 @@ public class SteamManager : MonoBehaviour {
 	}
 
 	protected SteamAPIWarningMessageHook_t m_SteamAPIWarningMessageHook;
+
+	[AOT.MonoPInvokeCallback(typeof(SteamAPIWarningMessageHook_t))]
 	protected static void SteamAPIDebugTextHook(int nSeverity, System.Text.StringBuilder pchDebugText) {
 		Debug.LogWarning(pchDebugText);
 	}
+
+#if UNITY_2019_3_OR_NEWER
+	// In case of disabled Domain Reload, reset static members before entering Play Mode.
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+	private static void InitOnPlayMode()
+	{
+		s_EverInitialized = false;
+		s_instance = null;
+	}
+#endif
 
 	protected virtual void Awake() {
 		// Only one instance of SteamManager at a time!
@@ -68,11 +80,11 @@ public class SteamManager : MonoBehaviour {
 		DontDestroyOnLoad(gameObject);
 
 		if (!Packsize.Test()) {
-			Debug.LogError(this);
+			Debug.LogError("Package size not correct");
 		}
 
 		if (!DllCheck.Test()) {
-			Debug.LogError(this);
+			Debug.LogError("DLL check failed");
 		}
 
 		try {
@@ -82,13 +94,13 @@ public class SteamManager : MonoBehaviour {
 			// Once you get a Steam AppID assigned by Valve, you need to replace AppId_t.Invalid with it and
 			// remove steam_appid.txt from the game depot. eg: "(AppId_t)480" or "new AppId_t(480)".
 			// See the Valve documentation for more information: https://partner.steamgames.com/doc/sdk/api#initialization_and_shutdown
-			if (SteamAPI.RestartAppIfNecessary(AppId_t.Invalid)) {
+			if (SteamAPI.RestartAppIfNecessary((AppId_t)956540)) {
 				Application.Quit();
 				return;
 			}
 		}
 		catch (System.DllNotFoundException e) { // We catch this exception here, as it will be the first occurrence of it.
-			Debug.LogError(this);
+			Debug.LogError("steam dll not found");
 
 			Application.Quit();
 			return;
@@ -105,7 +117,7 @@ public class SteamManager : MonoBehaviour {
 		// https://partner.steamgames.com/doc/sdk/api#initialization_and_shutdown
 		m_bInitialized = SteamAPI.Init();
 		if (!m_bInitialized) {
-			Debug.LogError(this);
+			Debug.LogError("Cannot determine App ID");
 
 			return;
 		}

@@ -125,9 +125,49 @@ public class InputManager : MonoBehaviour {
         input |= inputMode != InputMode.keyboard && Input.GetKey(playerButtons[button].xboxKey);
         return input;
     }
+    private static float cameraSmoothX = 0;
+    private static float cameraSmoothY = 0;
+    private static float smoothCamera(float cur, ref float smooth) {
+        if( cur > 0) {
+            if(smooth >=0 ) {
+                smooth += Time.deltaTime * 5f * ( 0.04f + ( Mathf.Abs(smooth - 0.5f)));
+            } else {
+                smooth = 0;
+                cur = 0;
+            }
+            return Mathf.Clamp(cur, 0f, smooth);
+        } else if (cur < 0) {
+            if(smooth <= 0 ) {
+                smooth += Time.deltaTime * -5f * ( 0.04f + ( Mathf.Abs(-smooth - 0.5f)));
+            } else {
+                smooth = 0;
+                cur = 0;
+            }
+            return Mathf.Clamp(cur, smooth, 0f);
+        } else {
+            smooth = 0;
+            return 0;
+        }
+    }
+
+    public static bool slowForPause = false;
     public static float GetAxis (PlayerAxis axis) {
         var mouse = mouseAxis.ContainsKey(axis) ? Input.GetAxis(mouseAxis[axis]) : 0;
         var controller = joyAxis.ContainsKey(axis) ? Input.GetAxis(joyAxis[axis]) : 0;
+
+        // clamp values on controller for dead zones
+        if(controller > 0) {
+            if (controller < 0.2f) controller = 0;
+            if (controller > 0.85f) controller = 1;
+        } else {
+             if (controller > -0.2f) controller = 0;
+            if (controller < -0.85f) controller = -1;
+        }
+
+        if(axis == PlayerAxis.CameraHorizontal) controller = 1.25f * smoothCamera(controller, ref cameraSmoothX);
+        if(axis == PlayerAxis.CameraVertical) controller = 1.25f * smoothCamera(controller, ref cameraSmoothY);
+
+        if(slowForPause) controller *= 0.001f;
         
         return (inputMode == InputMode.both && controller != 0) || inputMode == InputMode.controller ? controller : mouse;
     }

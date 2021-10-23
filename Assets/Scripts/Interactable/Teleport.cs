@@ -17,8 +17,9 @@ public class Teleport : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        PauseMenu.singleton.sfx.Add(audioSource);
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        audioSource = audioSources[0];
+        PauseMenu.singleton.sfx.AddRange(audioSources);
         timer = 0;
     }
 
